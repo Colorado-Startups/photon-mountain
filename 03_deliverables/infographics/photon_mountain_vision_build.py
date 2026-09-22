@@ -235,11 +235,15 @@ def corridor_map(geojson_path):
     _, yb = proj(-105.1, 39.75 + mi / 69.0)
     px = abs(ya - yb)
     bx, by = W - PAD - px, H - 26
+    # Every coordinate is formatted. An unformatted float here emitted its full
+    # repr, which varied in the last bits between runs, so the generated file
+    # never matched itself after a rebuild. That defeats the point of a
+    # generated deliverable: you cannot tell drift from noise.
     o.append(f'<g stroke="{MUTED}" stroke-width="2" fill="none">'
-             f'<path d="M{bx:.0f},{by} L{bx+px:.0f},{by}"/>'
-             f'<path d="M{bx:.0f},{by-6} L{bx:.0f},{by+6}"/>'
-             f'<path d="M{bx+px:.0f},{by-6} L{bx+px:.0f},{by+6}"/></g>')
-    o.append(f'<text class="scale" x="{bx+px/2:.0f}" y="{by-12}" text-anchor="middle">5 MILES</text>')
+             f'<path d="M{bx:.0f},{by:.0f} L{bx+px:.0f},{by:.0f}"/>'
+             f'<path d="M{bx:.0f},{by-6:.0f} L{bx:.0f},{by+6:.0f}"/>'
+             f'<path d="M{bx+px:.0f},{by-6:.0f} L{bx+px:.0f},{by+6:.0f}"/></g>')
+    o.append(f'<text class="scale" x="{bx+px/2:.0f}" y="{by-12:.0f}" text-anchor="middle">5 MILES</text>')
     o.append("</svg>")
     return "\n      ".join(o), counts, len(sites)
 
