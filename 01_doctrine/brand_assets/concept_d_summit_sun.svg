@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Photon Mountain · mark concept D "Summit Sun" · review draft 2026-07-05 -->
+  <!-- The peak in front of a rising light: alpenglow behind the summit -->
+  <rect width="200" height="200" fill="#131A33"/>
+  <circle cx="100" cy="100" r="55" fill="#FF5A36"/>
+  <polygon points="30,165 100,85 170,165" fill="#F6F7FB"/>
+</svg>

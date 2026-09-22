@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photon Mountain</title>
+<!-- Brand fonts load from Google Fonts when online (e.g. opened directly in a browser).
+     In the sandboxed Cowork artifact, network is blocked, so the named-font + system
+     fallbacks below render instead. Canonical families: Space Grotesk / Inter / Space Mono. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  color-scheme: light;
+  /* Photon Mountain v1, locked 2026-07-05. Values mirror 04_tools/brand_tokens.py,
+     which is checked against 01_doctrine/brand_identity.md by its --self-test.
+     The old variable names are kept so the layout below needs no rewrite; each
+     now points at its Photon Mountain role. */
+  --paper:#F6F7FB;        /* Snowfield */
+  --ink:#131A33;          /* Summit Night */
+  --stone:#545B6B;        /* Granite */
+  --white:#FFFFFF;
+  --gold:#FF5A36;         /* Alpenglow, the signature accent */
+  --goldink:#C43C1C;      /* Alpenglow as text on light */
+  --violet:#7B5CFF;       /* Laser Violet, data and secondary */
+  --violetdeep:#5636D6;   /* Violet as text on light */
+  --violetbright:#8F75FF; /* Violet as text on dark */
+  --tint:#FFE9E2;         /* Dawn Tint */
+  --ever:#131A33; --pine:#131A33;      /* dark panels */
+  --turq:#8F75FF;         /* was teal; now Violet Bright. Its only use is the
+                             core-city captions, which sit on the dark corridor
+                             panel: the on-light violet scores 2.37 there, the
+                             on-dark one 5.03. */
+  --mist:#D9DBDE;         /* derived hairline rule */
+  --paperdim:#B8BAC2;     /* derived: body copy on a dark panel */
+  --stonelight:#D5D6DA;   /* derived: secondary label on a dark panel */
+
+  --serif:'Space Grotesk', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono:'Space Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  line-height:1.45;
+}
+.wrap{
+  max-width:880px;
+  margin:0 auto;
+  padding:22px 18px 30px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* ---------------- HEADER ---------------- */
+.header{
+  background:var(--ink);
+  border-radius:16px;
+  padding:26px 26px 28px;
+  color:var(--paper);
+}
+.eyebrow{
+  font-weight:700;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  color:var(--gold);
+  margin:0 0 14px;
+  text-transform:uppercase;
+}
+.lockup{
+  font-weight:600;
+  font-size:.86rem;
+  margin:0 0 10px;
+  display:flex;
+  align-items:center;
+  gap:.5em;
+  flex-wrap:wrap;
+}
+.lockup .from{color:var(--stonelight);}
+.lockup .arrow{color:var(--gold);font-weight:700;}
+.lockup .to{color:var(--paper);}
+.title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:clamp(2.5rem,8vw,3.4rem);
+  line-height:1.02;
+  margin:0 0 12px;
+  letter-spacing:-.01em;
+}
+.lede{
+  font-family:var(--serif);
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--paperdim);
+  margin:0;
+  max-width:62ch;
+}
+
+/* ---------------- CORRIDOR / WHAT IT IS ---------------- */
+.corridor{
+  position:relative;
+  background:var(--ever);
+  border-radius:14px;
+  padding:20px 22px 26px;
+  overflow:hidden;
+  color:var(--paper);
+}
+.corridor .ridge{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  width:100%; height:54px;
+  display:block;
+}
+.corridor .label{
+  font-weight:700; font-size:.72rem; letter-spacing:.14em;
+  color:var(--gold); text-transform:uppercase; margin:0 0 8px;
+}
+.corridor .explainer{
+  font-size:.95rem; color:var(--paper); margin:0 0 22px; max-width:64ch; line-height:1.5;
+}
+.corridor .explainer .dim{color:var(--paperdim);}
+
+.tier{position:relative; z-index:2; margin-bottom:20px;}
+.tier:last-of-type{margin-bottom:6px;}
+.tier-head{
+  display:flex; align-items:baseline; gap:11px; margin-bottom:13px; flex-wrap:wrap;
+}
+.tier-tag{
+  font-weight:700; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ever); background:var(--gold); padding:3px 10px; border-radius:20px; white-space:nowrap;
+}
+.tier-tag.alt{color:var(--gold); background:transparent; border:1px solid var(--gold);}
+.tier-def{font-size:.8rem; color:var(--paperdim); line-height:1.4; flex:1 1 260px;}
+
+/* core nodes */
+.nodes{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  z-index:2;
+  padding:2px 4% 0;
+}
+.nodes::before{
+  content:"";
+  position:absolute;
+  top:11px; left:12%; right:12%;
+  height:1.5px;
+  background:var(--gold);
+  opacity:.85;
+  z-index:0;
+}
+.node{
+  position:relative; z-index:1;
+  flex:1 1 0; text-align:center; min-width:0;
+}
+.node .dot{width:18px;height:18px;margin:0 auto 11px;display:block;}
+.node .city{font-weight:700; font-size:.84rem; color:var(--paper); margin:0 0 3px;}
+.node .role{font-size:.72rem; color:var(--turq); line-height:1.25; margin:0;}
+
+/* greater ring */
+.greater-cities{
+  font-weight:600; font-size:.96rem; color:var(--paper); line-height:1.7; margin:0;
+}
+.greater-cities .sep{color:var(--gold); padding:0 5px;}
+
+/* ---------------- PILLARS ---------------- */
+.pillars{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.pillar{
+  background:var(--white);
+  border:1px solid var(--mist);
+  border-radius:12px;
+  padding:18px 16px 16px;
+  display:flex;
+  flex-direction:column;
+}
+.pillar .glyph{height:34px;margin-bottom:12px;}
+.pillar h3{
+  font-weight:700; font-size:.82rem; letter-spacing:.04em;
+  color:var(--ink); margin:0 0 8px; text-transform:uppercase;
+}
+.pillar p{
+  font-size:.82rem; color:var(--stone); margin:0 0 16px; line-height:1.45;
+}
+.pillar .stat{
+  margin-top:auto;
+  display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+}
+.pillar .stat .big{
+  font-family:var(--serif); font-weight:700; font-size:1.55rem;
+  color:var(--goldink); line-height:1;
+}
+.pillar .stat .lab{
+  font-size:.72rem; color:var(--stone); line-height:1.25; flex:1 1 90px;
+}
+
+/* ---------------- COMPARISON ---------------- */
+.compare{
+  background:var(--paper);
+  border:1px solid var(--stone);
+  border-left:4px solid var(--gold);
+  border-radius:12px;
+  padding:18px 22px 20px;
+}
+.compare .heads{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+  margin-bottom:6px;
+}
+.compare .heads .h-sv{
+  font-weight:700; font-size:.74rem; letter-spacing:.08em; color:var(--stone);
+  text-transform:uppercase;
+}
+.compare .heads .h-pm{
+  font-weight:700; font-size:.74rem; letter-spacing:.08em; color:var(--goldink);
+  text-transform:uppercase; text-align:right;
+}
+.compare .heads .h-mid{width:84px;}
+.compare .row{
+  display:grid;
+  grid-template-columns:1fr 84px 1fr;
+  align-items:center;
+  gap:10px;
+  padding:9px 0;
+  border-top:1px solid var(--mist);
+}
+.compare .row:first-of-type{border-top:none;}
+.compare .row .sv{
+  font-size:.86rem; color:var(--stone);
+}
+.compare .row .pm{
+  font-size:.86rem; font-weight:600; color:var(--ink); text-align:right;
+}
+.compare .row .mid{
+  font-size:.62rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--stonelight); text-align:center; line-height:1.1;
+}
+
+/* ---------------- STAT BAND ---------------- */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.stat-card{
+  background:var(--ink);
+  border-radius:9px;
+  padding:14px 13px 15px;
+  color:var(--paperdim);
+}
+.stat-card .num{
+  font-family:var(--serif); font-weight:700; font-size:1.45rem;
+  color:var(--gold); line-height:1; margin:0 0 8px;
+}
+.stat-card .cap{
+  font-size:.68rem; line-height:1.3; color:var(--paperdim); margin:0;
+}
+
+/* ---------------- FOOTER ---------------- */
+.footer{padding:6px 4px 0;text-align:center;}
+.footer .rule{height:1px;background:var(--gold);margin:6px 0 16px;}
+.footer .kicker{
+  font-family:var(--serif); font-style:italic; font-size:1.02rem;
+  color:var(--ink); margin:0 auto 18px; max-width:60ch; line-height:1.45;
+}
+.footer .motto{
+  display:inline-flex; align-items:center; gap:9px;
+  font-weight:700; font-size:1rem; color:var(--pine); margin-bottom:8px;
+}
+.footer .motto .flag{width:21px;height:14px;border-radius:1px;display:block;}
+.footer .org{
+  font-size:.82rem; color:var(--stone); margin:0 0 14px;
+}
+.footer .sources{
+  font-family:var(--mono); font-size:.64rem; color:var(--stone);
+  line-height:1.55; margin:0 auto; max-width:80ch; text-align:center;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width:720px){
+  .pillars{grid-template-columns:1fr;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  /* core nodes become a vertical rail */
+  .nodes{flex-direction:column;align-items:stretch;gap:0;padding:0;}
+  .nodes::before{
+    top:9px; bottom:9px; left:9px; right:auto;
+    width:1.5px; height:auto;
+  }
+  .node{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    column-gap:14px;
+    text-align:left;
+    padding:9px 0;
+  }
+  .node .dot{margin:0;grid-row:1 / span 2;align-self:start;}
+  .node .city{margin:0;align-self:center;}
+  .node .role{align-self:center;}
+}
+@media (max-width:430px){
+  .header{padding:22px 18px 22px;}
+  .compare{padding:16px 16px 16px;}
+  .compare .heads{grid-template-columns:1fr 1fr;}
+  .compare .heads .h-mid{display:none;}
+  .compare .row{grid-template-columns:1fr 1fr;row-gap:2px;}
+  .compare .row .mid{
+    grid-column:1 / -1; order:-1; text-align:left; margin-bottom:1px;
+  }
+  .compare .row .pm{text-align:left;}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <!-- HEADER -->
+  <header class="header">
+    <p class="eyebrow">Colorado &nbsp;&middot;&nbsp; The next era of compute</p>
+    <p class="lockup"><span class="from">Silicon Valley</span><span class="arrow">&gt;</span><span class="to">Photon Mountain</span></p>
+    <h1 class="title">Photon Mountain</h1>
+    <p class="lede">Silicon Valley was named for the material of the last era. Photon Mountain is named for the medium of the next, light. Along Colorado&rsquo;s Front Range, one corridor is building the AI age out of photons: light-based chips, renewable energy, and quantum systems.</p>
+  </header>
+
+  <!-- WHAT IT IS + THE TWO TIERS -->
+  <section class="corridor">
+    <p class="label">What is Photon Mountain</p>
+    <p class="explainer">Photon Mountain is a real place, the Colorado Front Range corridor where the AI age gets built out of light. A photon is the particle of light, so one name holds both halves of the work: <span class="dim">the photonic chips Colorado can manufacture and the quantum science it can run. It is two rings, a dense core of labs and fabs and a greater ring of cities around it.</span></p>
+
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag">Core</span>
+        <span class="tier-def">The dense cluster of Boulder, Golden, Arvada, and Denver. The labs, the fabs, and the metro hub of the corridor.</span>
+      </div>
+      <div class="nodes">
+        <div class="node">
+          <svg class="dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#FF5A36"/><circle cx="12" cy="12" r="2.8" fill="#131A33"/><g stroke="#FF5A36" stroke-width="1"><line x1="17" y1="7" x2="20" y2="4"/><line x1="7" y1="7" x2="4" y2="4"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="17" y1="17" x2="20" y2="20"/></g></svg>
+          <p class="city">Boulder</p>
+          <p class="role">Light science + chip fab</p>
+        </div>
+        <div class="node">
+          <svg class="dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#FF5A36"/><circle cx="12" cy="12" r="2.8" fill="#131A33"/><g stroke="#FF5A36" stroke-width="1"><line x1="17" y1="7" x2="20" y2="4"/><line x1="7" y1="7" x2="4" y2="4"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="17" y1="17" x2="20" y2="20"/></g></svg>
+          <p class="city">Golden</p>
+          <p class="role">Quantum minds + renewable energy</p>
+        </div>
+        <div class="node">
+          <svg class="dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#FF5A36"/><circle cx="12" cy="12" r="2.8" fill="#131A33"/><g stroke="#FF5A36" stroke-width="1"><line x1="17" y1="7" x2="20" y2="4"/><line x1="7" y1="7" x2="4" y2="4"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="17" y1="17" x2="20" y2="20"/></g></svg>
+          <p class="city">Arvada</p>
+          <p class="role">Photonic-chip fab &middot; 2026</p>
+        </div>
+        <div class="node">
+          <svg class="dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="#FF5A36"/><circle cx="12" cy="12" r="2.8" fill="#131A33"/><g stroke="#FF5A36" stroke-width="1"><line x1="17" y1="7" x2="20" y2="4"/><line x1="7" y1="7" x2="4" y2="4"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="17" y1="17" x2="20" y2="20"/></g></svg>
+          <p class="city">Denver</p>
+          <p class="role">The hub</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head">
+        <span class="tier-tag alt">Greater</span>
+        <span class="tier-def">The Front Range ring around the core, where the corridor&rsquo;s companies and workforce spread out.</span>
+      </div>
+      <p class="greater-cities">Lafayette<span class="sep">&middot;</span>Louisville<span class="sep">&middot;</span>Broomfield<span class="sep">&middot;</span>Westminster<span class="sep">&middot;</span>Longmont</p>
+    </div>
+
+    <svg class="ridge" viewBox="0 0 800 54" preserveAspectRatio="none" aria-hidden="true">
+      <polygon fill="#131A33" points="0,54 0,30 96,10 192,27 304,3 416,23 528,7 640,25 720,12 800,27 800,54"/>
+    </svg>
+  </section>
+
+  <!-- PILLARS: chips / renewable energy / quantum (canonical Lead order) -->
+  <section class="pillars">
+    <article class="pillar">
+      <svg class="glyph" viewBox="0 0 34 34" aria-hidden="true">
+        <rect x="6" y="6" width="22" height="22" rx="3.5" fill="none" stroke="#C43C1C" stroke-width="1.6"/>
+        <rect x="12" y="12" width="10" height="10" rx="1.4" fill="#C43C1C"/>
+        <g stroke="#C43C1C" stroke-width="1.3">
+          <line x1="13" y1="3" x2="13" y2="6"/><line x1="17" y1="3" x2="17" y2="6"/><line x1="21" y1="3" x2="21" y2="6"/>
+          <line x1="13" y1="28" x2="13" y2="31"/><line x1="17" y1="28" x2="17" y2="31"/><line x1="21" y1="28" x2="21" y2="31"/>
+          <line x1="3" y1="13" x2="6" y2="13"/><line x1="3" y1="17" x2="6" y2="17"/><line x1="3" y1="21" x2="6" y2="21"/>
+          <line x1="28" y1="13" x2="31" y2="13"/><line x1="28" y1="17" x2="31" y2="17"/><line x1="28" y1="21" x2="31" y2="21"/>
+        </g>
+      </svg>
+      <h3>Photonic chips</h3>
+      <p>Chips that compute and move data with light, at far lower power. Colorado fabricates them today at NIST Boulder.</p>
+      <div class="stat"><span class="big">&gt;$13B</span><span class="lab">silicon photonics market by 2034</span></div>
+    </article>
+
+    <article class="pillar">
+      <svg class="glyph" viewBox="0 0 34 34" aria-hidden="true">
+        <circle cx="17" cy="17" r="5.5" fill="#C43C1C"/>
+        <g stroke="#C43C1C" stroke-width="1.6" stroke-linecap="round">
+          <line x1="17" y1="3" x2="17" y2="7.5"/><line x1="17" y1="26.5" x2="17" y2="31"/>
+          <line x1="3" y1="17" x2="7.5" y2="17"/><line x1="26.5" y1="17" x2="31" y2="17"/>
+          <line x1="7.1" y1="7.1" x2="10.3" y2="10.3"/><line x1="23.7" y1="23.7" x2="26.9" y2="26.9"/>
+          <line x1="7.1" y1="26.9" x2="10.3" y2="23.7"/><line x1="23.7" y1="10.3" x2="26.9" y2="7.1"/>
+        </g>
+      </svg>
+      <h3>Renewable energy</h3>
+      <p>Power is the constraint on the AI build. Golden&rsquo;s National Laboratory of the Rockies (formerly NREL) is the nation&rsquo;s renewable-energy lab.</p>
+      <div class="stat"><span class="big">100%</span><span class="lab">renewable-electricity goal by 2040 (Polis roadmap)</span></div>
+    </article>
+
+    <article class="pillar">
+      <svg class="glyph" viewBox="0 0 34 34" aria-hidden="true">
+        <circle cx="17" cy="17" r="3" fill="#C43C1C"/>
+        <circle cx="17" cy="17" r="11" fill="none" stroke="#C43C1C" stroke-width="1.4"/>
+        <circle cx="17" cy="6" r="2" fill="#C43C1C"/>
+        <circle cx="7.5" cy="22.5" r="2" fill="#C43C1C"/>
+        <circle cx="26.5" cy="22.5" r="2" fill="#C43C1C"/>
+      </svg>
+      <h3>Quantum systems</h3>
+      <p>The Elevate Quantum hub, and the nation&rsquo;s first quantum-engineering degree at Colorado School of Mines.</p>
+      <div class="stat"><span class="big">$127M+</span><span class="lab">federal and state investment to date</span></div>
+    </article>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="compare">
+    <div class="heads">
+      <div class="h-sv">Silicon Valley</div>
+      <div class="h-mid"></div>
+      <div class="h-pm">Photon Mountain</div>
+    </div>
+    <div class="row"><div class="sv">The computer age</div><div class="mid">Era</div><div class="pm">The AI age</div></div>
+    <div class="row"><div class="sv">Silicon, the material</div><div class="mid">Named for</div><div class="pm">Photon, the light</div></div>
+    <div class="row"><div class="sv">San Jose to Menlo Park</div><div class="mid">The place</div><div class="pm">Denver to Boulder</div></div>
+    <div class="row"><div class="sv">Microchips</div><div class="mid">Builds</div><div class="pm">Photonic chips, renewable energy, quantum</div></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="rule"></div>
+    <p class="kicker">Silicon Valley built the last era out of silicon. Photon Mountain builds the next out of light.</p>
+    <div class="motto">
+      <!-- Summit Sun: peak in front of a rising light. Disc r=7 centered at
+           (15,9); peak base 1.27x the diameter, apex a quarter radius above
+           the disc center, so the top rim shows and the lower rim is hidden. -->
+      <svg class="flag" viewBox="0 0 30 20" aria-hidden="true">
+        <circle cx="15" cy="9" r="7" fill="var(--gold)"/>
+        <path d="M 6.11 19 L 23.89 19 L 15 7.25 Z" fill="var(--ink)"/>
+      </svg>
+      <span>Build with light.</span>
+    </div>
+    <p class="org">Photon Mountain &nbsp;&middot;&nbsp; a Colorado Startups project in collaboration with Colorado AI</p>
+    <p class="sources">Sources: NIST; Elevate Quantum / Colorado OEDIT; Colorado School of Mines; National Laboratory of the Rockies (formerly NREL); Colorado Energy Office and Xcel Clean Energy Plan. NIST Boulder is an operating photonic-chip cleanroom; the Quantum Commons (Arvada) and CU Boulder fabs open in 2026. Colorado&rsquo;s 100% renewable-electricity target is a 2040 goal. 2025-2026.</p>
+  </footer>
+
+</main>
+</body>
+</html>

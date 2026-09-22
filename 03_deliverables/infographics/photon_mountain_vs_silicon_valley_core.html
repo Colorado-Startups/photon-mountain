@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The cores, side by side</title>
+<style>@import url('https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5/index.css');@import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5/index.css');@import url('https://cdn.jsdelivr.net/npm/@fontsource/space-mono@5/index.css');
+
+*{box-sizing:border-box;}
+body{margin:0;background:#F6F7FB;color:#131A33;
+  font-family:'Inter',system-ui,'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.wrap{padding:34px 40px 46px;}
+h1{font-family:'Space Grotesk',Georgia,serif;font-size:27px;font-weight:700;
+  letter-spacing:-0.3px;margin:0;line-height:1.18;}
+.sub{color:#545B6B;font-size:14px;margin-top:8px;max-width:760px;line-height:1.5;}
+.rule{height:3px;width:140px;border-radius:2px;margin:18px 0 28px;
+  background:linear-gradient(90deg,#E4E0FC,#CBC1FC,#7B5CFF);}
+.maps{display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap;}
+.phead{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:1.4px;
+  text-transform:uppercase;font-weight:600;margin-bottom:12px;color:#131A33;}
+.phead .s{display:block;font-size:11px;letter-spacing:0.3px;text-transform:none;
+  color:#545B6B;font-weight:400;margin-top:3px;}
+.map{position:relative;}
+.rgn{position:absolute;inset:0;pointer-events:none;}
+.dot{position:absolute;width:9px;height:9px;border-radius:50%;background:#131A33;
+  border:1.5px solid #F6F7FB;transform:translate(-50%,-50%);
+  box-shadow:0 0 0 1px rgba(19,26,51,0.25);}
+.dot.big{width:12px;height:12px;}
+.star{position:absolute;transform:translate(-50%,-50%);color:#FF5A36;font-size:23px;
+  line-height:1;-webkit-text-stroke:0.6px #C43C1C;}
+.label{position:absolute;transform:translate(-50%,-50%);
+  font-family:'Space Mono','SF Mono',Consolas,monospace;font-size:10px;color:#545B6B;
+  white-space:nowrap;pointer-events:none;
+  text-shadow:0 0 3px #F6F7FB,0 0 3px #F6F7FB,0 0 2px #F6F7FB,0 0 2px #F6F7FB;}
+.label.cap{font-size:11.5px;font-weight:700;color:#5636D6;}
+.leader{position:absolute;height:1px;background:#545B6B;opacity:0.5;
+  transform-origin:0 50%;pointer-events:none;}
+.footer{margin-top:40px;max-width:880px;}
+.sbwrap{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.sbar{height:9px;border-left:2px solid #131A33;border-right:2px solid #131A33;
+  border-bottom:2px solid #131A33;}
+.sblab{font-family:'Space Mono',Consolas,monospace;font-size:12px;color:#545B6B;}
+.legend{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:20px;font-size:13px;}
+.legend .it{display:flex;align-items:center;gap:8px;}
+.sw{width:15px;height:15px;border-radius:50%;border:1.5px solid #F6F7FB;
+  box-shadow:0 0 0 1px rgba(0,0,0,0.10);}
+.star-lg{color:#FF5A36;font-size:17px;line-height:1;-webkit-text-stroke:0.5px #C43C1C;}
+.caption{font-size:14px;line-height:1.66;color:#131A33;max-width:880px;}
+.caption b{color:#131A33;}
+.note{margin-top:18px;font-size:12.5px;line-height:1.6;color:#545B6B;max-width:880px;}
+.note b{color:#131A33;}
+.tagline{margin-top:26px;font-family:'Space Grotesk',sans-serif;font-size:13px;
+  font-weight:700;letter-spacing:0.3px;color:#131A33;}
+.method{font-family:'Space Mono',Consolas,monospace;font-size:10.5px;color:#545B6B;margin-top:5px;}
+.sizekey{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:2px 0 20px;font-size:13px;}
+.sizekey .it{display:flex;align-items:center;gap:7px;}
+.szc{display:inline-block;border-radius:50%;background:#131A33;border:1.2px solid #F6F7FB;
+  box-shadow:0 0 0 1px rgba(19,26,51,0.25);vertical-align:middle;}
+.szlab{color:#545B6B;font-size:12px;}
+</style></head><body><div class="wrap">
+<h1>The cores, side by side</h1>
+<div class="sub">Just the core of each region, the Boulder, Golden, Arvada, and Denver core against Palo Alto to San Jose, at the same scale, 8 pixels per mile.</div>
+<div class="rule"></div>
+<div class="maps">
+  <div class="panel"><div class="phead">Silicon Valley<span class="s">California</span></div><div class="map" style="width:273.6px;height:215.8px"><div class="rgn" style="clip-path:polygon(64.00px 72.00px, 64.03px 71.30px, 64.12px 70.61px, 64.27px 69.93px, 64.48px 69.26px, 64.75px 68.62px, 65.07px 68.00px, 65.45px 67.41px, 65.87px 66.86px, 66.34px 66.34px, 66.86px 65.87px, 67.41px 65.45px, 68.00px 65.07px, 68.62px 64.75px, 69.26px 64.48px, 69.93px 64.27px, 70.61px 64.12px, 71.30px 64.03px, 72.00px 64.00px, 72.70px 64.03px, 73.39px 64.12px, 74.07px 64.27px, 74.74px 64.48px, 91.71px 70.61px, 92.36px 70.88px, 204.95px 128.12px, 205.57px 128.44px, 206.16px 128.82px, 206.71px 129.24px, 207.23px 129.71px, 207.70px 130.23px, 208.12px 130.78px, 208.50px 131.37px, 208.82px 131.99px, 209.09px 132.63px, 209.30px 133.30px, 209.45px 133.98px, 209.54px 134.67px, 209.57px 135.37px, 209.54px 136.07px, 209.45px 136.76px, 209.30px 137.44px, 209.09px 138.11px, 208.82px 138.75px, 208.50px 139.37px, 208.12px 139.96px, 207.70px 140.51px, 207.23px 141.03px, 206.71px 141.50px, 206.16px 141.92px, 205.57px 142.30px, 204.95px 142.62px, 204.31px 142.89px, 203.64px 143.10px, 202.96px 143.25px, 202.27px 143.34px, 138.27px 151.73px, 137.58px 151.76px, 136.88px 151.73px, 136.19px 151.64px, 135.50px 151.49px, 134.84px 151.28px, 134.19px 151.01px, 133.58px 150.69px, 132.99px 150.31px, 132.43px 149.89px, 131.92px 149.42px, 131.45px 148.90px, 65.87px 77.14px, 65.45px 76.59px, 65.07px 76.00px, 64.75px 75.38px, 64.48px 74.74px, 64.27px 74.07px, 64.12px 73.39px, 64.03px 72.70px);background:#B5A6FD;box-shadow:inset 0 0 0 1px #C5B9FD55"></div><div class="dot" style="left:89.0px;top:78.1px;width:8.0px;height:8.0px;border-width:1.0px"></div><div class="dot" style="left:114.9px;top:108.9px;width:8.6px;height:8.6px;border-width:1.0px"></div><div class="dot" style="left:135.8px;top:118.5px;width:11.8px;height:11.8px;border-width:1.0px"></div><div class="dot" style="left:137.6px;top:143.8px;width:8.0px;height:8.0px;border-width:1.0px"></div><div class="dot" style="left:171.3px;top:126.6px;width:10.6px;height:10.6px;border-width:1.0px"></div><div class="dot" style="left:201.6px;top:135.4px;width:30.0px;height:30.0px;border-width:1.5px"></div><div class="dot" style="left:72.0px;top:72.0px;width:8.0px;height:8.0px;border-width:1.0px"></div><div class="leader" style="left:89.0px;top:78.1px;width:17.5px;transform:rotate(-136.57deg)"></div><div class="leader" style="left:114.9px;top:108.9px;width:13.1px;transform:rotate(-152.33deg)"></div><div class="leader" style="left:135.8px;top:118.5px;width:33.2px;transform:rotate(68.82deg)"></div><div class="leader" style="left:137.6px;top:143.8px;width:41.7px;transform:rotate(84.39deg)"></div><div class="leader" style="left:171.3px;top:126.6px;width:45.2px;transform:rotate(60.74deg)"></div><div class="leader" style="left:201.6px;top:135.4px;width:17.4px;transform:rotate(14.99deg)"></div><div class="leader" style="left:72.0px;top:72.0px;width:29.5px;transform:rotate(-124.86deg)"></div><div class="label" style="left:67.8px;top:58.1px">Palo Alto</div><div class="label" style="left:88.0px;top:94.8px">Mountain View</div><div class="label" style="left:150.9px;top:157.5px">Sunnyvale</div><div class="label" style="left:142.4px;top:193.3px">Cupertino</div><div class="label" style="left:197.9px;top:174.0px">Santa Clara</div><div class="label" style="left:246.8px;top:147.5px">San Jose</div><div class="label" style="left:49.5px;top:39.8px">Menlo Park</div></div></div>
+  <div class="panel"><div class="phead">Photon Mountain<span class="s">Colorado Front Range</span></div><div class="map" style="width:262.8px;height:296.2px"><div class="rgn" style="clip-path:polygon(64.00px 72.00px, 64.03px 71.30px, 64.12px 70.61px, 64.27px 69.93px, 64.48px 69.26px, 64.75px 68.62px, 65.07px 68.00px, 65.45px 67.41px, 65.87px 66.86px, 66.34px 66.34px, 66.86px 65.87px, 67.41px 65.45px, 68.00px 65.07px, 68.62px 64.75px, 69.26px 64.48px, 69.93px 64.27px, 70.61px 64.12px, 71.30px 64.03px, 72.00px 64.00px, 72.70px 64.03px, 73.39px 64.12px, 74.07px 64.27px, 74.74px 64.48px, 75.38px 64.75px, 76.00px 65.07px, 76.59px 65.45px, 77.14px 65.87px, 77.66px 66.34px, 78.13px 66.86px, 196.91px 219.10px, 197.34px 219.65px, 197.71px 220.24px, 198.03px 220.86px, 198.30px 221.51px, 198.51px 222.17px, 198.66px 222.85px, 198.75px 223.54px, 198.78px 224.24px, 198.75px 224.94px, 198.66px 225.63px, 198.51px 226.31px, 198.30px 226.98px, 198.03px 227.62px, 197.71px 228.24px, 197.34px 228.83px, 196.91px 229.38px, 196.44px 229.90px, 195.92px 230.37px, 195.37px 230.79px, 194.78px 231.17px, 194.16px 231.49px, 193.52px 231.76px, 192.85px 231.97px, 192.17px 232.12px, 191.48px 232.21px, 190.78px 232.24px, 190.08px 232.21px, 92.24px 223.21px, 91.55px 223.12px, 90.87px 222.97px, 90.21px 222.76px, 89.56px 222.49px, 88.94px 222.17px, 88.35px 221.80px, 87.80px 221.37px, 87.28px 220.90px, 86.81px 220.39px, 86.39px 219.83px, 86.01px 219.24px, 85.69px 218.62px, 85.42px 217.98px, 85.21px 217.31px, 85.06px 216.63px, 64.12px 73.39px, 64.03px 72.70px);background:#B5A6FD;box-shadow:inset 0 0 0 1px #C5B9FD55"></div><div class="dot" style="left:72.0px;top:72.0px;width:9.8px;height:9.8px;border-width:1.0px"></div><div class="dot" style="left:92.9px;top:215.2px;width:8.0px;height:8.0px;border-width:1.0px"></div><div class="dot" style="left:149.6px;top:189.1px;width:10.5px;height:10.5px;border-width:1.0px"></div><div class="dot" style="left:190.8px;top:224.2px;width:25.2px;height:25.2px;border-width:1.5px"></div><div class="leader" style="left:72.0px;top:72.0px;width:18.9px;transform:rotate(-117.77deg)"></div><div class="leader" style="left:92.9px;top:215.2px;width:16.6px;transform:rotate(129.79deg)"></div><div class="leader" style="left:149.6px;top:189.1px;width:9.9px;transform:rotate(27.38deg)"></div><div class="leader" style="left:190.8px;top:224.2px;width:23.4px;transform:rotate(38.57deg)"></div><div class="label" style="left:59.0px;top:47.3px">Boulder</div><div class="label" style="left:75.7px;top:236.0px">Golden</div><div class="label" style="left:173.8px;top:201.7px">Arvada</div><div class="label" style="left:219.1px;top:246.8px">Denver</div></div></div>
+</div>
+<div class="footer">
+  <div class="sbwrap"><div class="sbar" style="width:80px"></div><span class="sblab">10 miles, same scale on both maps</span></div>
+  <div class="legend"><div class="it"><span class="sw" style="background:#B5A6FD"></span>Core</div></div>
+  <div class="sizekey"><span class="szlab">Dot size = city population (2020 Census):</span><div class="it"><span class="szc" style="width:9.4px;height:9.4px"></span>100k</div><div class="it"><span class="szc" style="width:21.1px;height:21.1px"></span>500k</div><div class="it"><span class="szc" style="width:29.8px;height:29.8px"></span>1M</div></div>
+  <p class="caption">This is the comparison that counts. Strip away the suburbs and two cores are left, drawn at the same scale, each anchored by a major city. Silicon Valley has San Jose. Photon Mountain has Denver, with Boulder, Golden, and Arvada around it. The dots are scaled to population, so the anchors read at a glance. <b>Colorado already has a core and a city to anchor it. The work ahead is to fill in the density between.</b></p>
+  <p class="note"><b>Why Photon Mountain.</b> A photon is the quantum particle of light, one word for the photonic chips Colorado can make and the quantum science Colorado can run. Colorado's answer to the Valley.</p>
+  <div class="tagline">Build with light.</div>
+  <div class="method">Photon Mountain, a Colorado Startups project in collaboration with Colorado AI  /  built to scale, 8 pixels per mile, buffered convex-hull regions</div>
+</div></div></body></html>

@@ -1,0 +1,15 @@
+# Photon Mountain build dependencies.
+#
+# The doctrine tooling (04_tools/voice_lint.py, brand_tokens.py, marker_parity.py)
+# is standard library only, by design, so it runs anywhere with python3 and needs
+# nothing from this file. Only the deliverable build scripts in
+# 03_deliverables/infographics/ have third-party dependencies.
+#
+#   python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+#
+# See 03_deliverables/infographics/BUILD.md for the build commands.
+
+matplotlib>=3.9,<4      # photon_mountain_map_generator.py, and map_verify via it
+reportlab>=4.0,<6       # photon_mountain_build.py
+fonttools>=4.50         # only to re-cut the static brand fonts; see
+                        # 01_doctrine/brand_assets/fonts/README.md

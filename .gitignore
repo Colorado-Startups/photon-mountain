@@ -1,0 +1,19 @@
+# Local, operational, never pushed
+local/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Claude Code, per-user settings (never committed; see CONTRIBUTING.md)
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

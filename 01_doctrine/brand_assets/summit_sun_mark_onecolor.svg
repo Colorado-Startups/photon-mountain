@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Photon Mountain · Summit Sun mark · approved draft (locked 2026-07-05) -->
+  <!-- One-color rule: disc as outline, peak solid, single palette color -->
+  <circle cx="100" cy="100" r="55" fill="none" stroke="#131A33" stroke-width="8"/>
+  <polygon points="30,165 100,85 170,165" fill="#131A33"/>
+</svg>
