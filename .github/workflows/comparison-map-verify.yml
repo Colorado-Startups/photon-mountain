@@ -1,0 +1,47 @@
+name: comparison-map-verify
+
+# Independent geometry check on the Silicon Valley comparison maps: tier
+# membership, that every city sits inside its own blob and every enclosing
+# blob, that the blobs nest, and the real core diameters.
+#
+# It is indifferent to styling, which is exactly what makes it a good
+# regression test for a re-skin. When the pipeline was re-skinned on
+# 2026-09-22 it still returned 18.0 and 24.1 miles, which is how we knew the
+# change had touched presentation only.
+#
+# It needs matplotlib, because it imports the generator module, which imports
+# matplotlib at module level. That is the only reason this workflow installs
+# anything.
+
+on:
+  pull_request:
+    paths:
+      - '03_deliverables/infographics/**'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: comparison-map-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  geometry:
+    name: comparison map geometry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install build dependencies
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: Geometry check
+        working-directory: 03_deliverables/infographics
+        run: python3 photon_mountain_map_verify.py

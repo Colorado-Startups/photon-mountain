@@ -1,0 +1,21 @@
+# Dependabot, scoped to GitHub Actions only.
+#
+# There is deliberately no npm or pip ecosystem here. The doctrine tooling in
+# 04_tools/ is standard library by design, and the two build scripts pin their
+# dependencies in requirements.txt but are not a deployed application. Adding
+# a pip ecosystem would generate noise without reducing risk.
+#
+# Pinned action SHAs are the real reason this file exists: pinning is correct
+# for supply-chain safety, but a pinned SHA never updates itself. Dependabot
+# is what keeps the pins current.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "tooling"

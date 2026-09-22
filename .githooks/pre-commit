@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+# Photon Mountain pre-commit gate.
+#
+# ---------------------------------------------------------------------------
+# POLICY (decided 2026-09-22, after researching current practice)
+#
+#   BLOCK on em-dash.
+#     A literal character test with no false positives. "No em dashes, ever"
+#     is the one voice rule a machine can enforce perfectly, so it is enforced
+#     perfectly.
+#
+#   WARN on unattributed-figure, and on every style warning.
+#     voice_lint.py's own docstring calls the figure check a heuristic that
+#     "flags candidates for human review". Blocking on a heuristic trains
+#     people to reach for --no-verify, which costs more than it saves.
+#
+#   FAIL OPEN when the checker itself cannot run.
+#     A missing python3 or a missing script warns and lets the commit
+#     through. "Could not verify" is not the same as "verified and red".
+#
+# The rule of thumb behind this split: block on fast, deterministic,
+# auto-fixable things; warn on slow or probabilistic ones; put the real gate
+# server-side. That last part is why this hook matters more here than it
+# would elsewhere. While the repo is private on a Free org, GitHub will not
+# let CI be a required check, so this hook is the only gate that actually
+# stops anything.
+#
+# ESCAPE HATCH:  git commit --no-verify
+#     Deliberate, documented, and yours. A PreToolUse hook denies that flag
+#     to Claude (see .claude/settings.json), so the agent cannot route around
+#     the gate while you still can.
+#
+# ENABLE (once per clone):  git config core.hooksPath .githooks
+# ---------------------------------------------------------------------------
+
+set -uo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+VOICE_HOOK="$REPO_ROOT/.claude/hooks/pm-check-voice.sh"
+
+staged="$(git diff --cached --name-only --diff-filter=ACM)"
+[ -z "$staged" ] && exit 0
+
+blocked=0
+warned=0
+
+# --- 1. Secret scan -------------------------------------------------------
+# gitleaks if it is installed, skipped silently otherwise. The authoritative
+# gate is secret-scan.yml in CI; this is the earlier, local warning.
+if command -v gitleaks >/dev/null 2>&1; then
+  if ! gl_out="$(gitleaks git --staged --no-banner --redact=100 2>&1)"; then
+    warned=1
+    {
+      echo
+      echo "=============================================="
+      echo "pre-commit: POSSIBLE SECRET in the staged diff"
+      echo "=============================================="
+      echo "$gl_out" | tail -30
+      echo
+      echo "Advisory: the commit will proceed. Do NOT push until you have"
+      echo "confirmed this is not a real credential. If it is real, unstage"
+      echo "it and rotate the secret."
+    } >&2
+  fi
+fi
+
+# --- 2. Voice gate --------------------------------------------------------
+# Invoked as `bash <hook>`, never by exec bit, so a checkout or a sync that
+# strips the executable bit cannot silently disable the check.
+if [ -r "$VOICE_HOOK" ]; then
+  # Pass the staged prose through; the hook self-filters by extension.
+  prose=()
+  while IFS= read -r f; do
+    [ -n "$f" ] && prose+=("$REPO_ROOT/$f")
+  done <<< "$staged"
+
+  if [ "${#prose[@]}" -gt 0 ]; then
+    voice_out="$(bash "$VOICE_HOOK" "${prose[@]}" 2>&1)"
+    if [ -n "$voice_out" ]; then
+      # An em dash blocks. Everything else is advisory.
+      if printf '%s' "$voice_out" | grep -q "FAIL \[em-dash\]"; then
+        blocked=1
+        {
+          echo
+          echo "========================================"
+          echo "pre-commit: EM DASH in a staged file"
+          echo "========================================"
+          printf '%s\n' "$voice_out" | grep "em-dash"
+          echo
+          echo "The voice doctrine forbids em dashes. Use a comma, a"
+          echo "semicolon, a period, or parentheses."
+          echo
+          echo "This commit is blocked. To override anyway:"
+          echo "    git commit --no-verify"
+        } >&2
+      fi
+      if printf '%s' "$voice_out" | grep -qE "WARN \[|FAIL \[unattributed-figure\]"; then
+        warned=1
+        {
+          echo
+          echo "pre-commit: voice findings (advisory, not blocking):"
+          printf '%s\n' "$voice_out" | grep -E "WARN \[|unattributed-figure"
+          echo
+          echo "Figures should name a source or be labeled a goal. The check"
+          echo "is a heuristic, so wave through anything it misread."
+        } >&2
+      fi
+    fi
+  fi
+else
+  echo "pre-commit: $VOICE_HOOK not readable; skipping the voice check." >&2
+fi
+
+# --- 3. Gate self-tests, when a gate itself changed -----------------------
+# A broken gate is worse than no gate, so if 04_tools changed, prove the
+# gates still pass before the change can land.
+if printf '%s' "$staged" | grep -q "^04_tools/" && command -v python3 >/dev/null 2>&1; then
+  for tool in voice_lint brand_tokens marker_parity; do
+    script="$REPO_ROOT/04_tools/$tool.py"
+    [ -r "$script" ] || continue
+    if ! out="$(python3 "$script" --self-test 2>&1)"; then
+      blocked=1
+      {
+        echo
+        echo "pre-commit: $tool.py --self-test FAILED"
+        echo "$out" | tail -15
+        echo
+        echo "A gate that does not pass its own self-test cannot be trusted."
+        echo "This commit is blocked."
+      } >&2
+    fi
+  done
+fi
+
+if [ "$blocked" -eq 1 ]; then
+  exit 1
+fi
+if [ "$warned" -eq 1 ]; then
+  echo "pre-commit: warnings above, commit proceeding." >&2
+fi
+exit 0

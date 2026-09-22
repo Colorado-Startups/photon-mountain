@@ -1,0 +1,37 @@
+name: marker-parity
+
+# The corridor atlas ships as four files (GeoJSON, KML, HTML, JSX) that must
+# all carry the same 53 markers, name- and coordinate-identical. MAP_NOTES.md
+# shows that parity being confirmed by hand on every revision. This runs it.
+#
+# Not to be confused with comparison-map-verify.yml, which checks the Silicon
+# Valley comparison maps' geometry. Different files, different invariant, and
+# neither covers the other.
+
+on:
+  pull_request:
+    paths:
+      - '03_deliverables/maps/**'
+      - '04_tools/marker_parity.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: marker-parity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  parity:
+    name: corridor atlas parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+
+      - name: Four-file roster parity
+        run: python3 04_tools/marker_parity.py
