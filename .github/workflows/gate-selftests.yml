@@ -1,0 +1,59 @@
+name: gate-selftests
+
+# The gates check themselves.
+#
+# A gate that does not pass its own self-test cannot be trusted to check
+# anything else, so this workflow is meant to be BLOCKING once required checks
+# are available, unlike the advisory content checks.
+#
+# brand_tokens --self-test is the one worth understanding: it re-reads the
+# token block out of 01_doctrine/brand_identity.md and fails if the code and
+# the doctrine have drifted apart. It also re-derives every contrast ratio the
+# identity document states, and asserts that the accessibility gate still
+# rejects a known-bad pairing. That makes palette drift a test failure instead
+# of a silent, unreadable render.
+#
+# All three scripts are standard library only, by design, so there is nothing
+# to install and this job stays fast.
+
+on:
+  push:
+    paths:
+      - '04_tools/**'
+      - '01_doctrine/brand_identity.md'
+      - '01_doctrine/brand_assets/fonts/**'
+      - '.github/workflows/gate-selftests.yml'
+  pull_request:
+    paths:
+      - '04_tools/**'
+      - '01_doctrine/brand_identity.md'
+      - '01_doctrine/brand_assets/fonts/**'
+      - '.github/workflows/gate-selftests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gate-selftests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  selftests:
+    name: gate self-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+
+      - name: voice_lint.py
+        run: python3 04_tools/voice_lint.py --self-test
+
+      - name: brand_tokens.py
+        run: python3 04_tools/brand_tokens.py --self-test
+
+      - name: marker_parity.py
+        run: python3 04_tools/marker_parity.py --self-test

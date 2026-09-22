@@ -28,6 +28,13 @@ The two share subject matter but are separate projects with separate brands and 
 
 ```
 CLAUDE.md            This router
+AGENTS.md            Operating manual for AI agents and automated contributors
+CONTRIBUTING.md      Setup, the gates, branches, labels, licensing
+SECURITY.md          Reporting, what is in place, known gaps
+LICENSE              CC BY 4.0 (the prose)
+LICENSES/            MIT and ODbL 1.0 full texts
+LICENSING.md         The per-path scheme, and why the map data differs
+TRADEMARKS.md        What is reserved, and what you may do without asking
 README.md            What the project is
 project_context.md   Five-minute overview
 TRANSFER_PLAN.md     The spin-out plan and the full reference audit (founding record)
@@ -58,10 +65,18 @@ cowork_project_instructions.md  Mirror of the Cowork Settings > Instructions fie
     BUILD.md         How to regenerate, and what to check on every build
   maps/              The definitive corridor boundary and marker atlas
     MAP_NOTES.md     Method, sources, locked conventions; read before editing the map
-04_tools/
-  voice_lint.py      Deterministic voice lint (em dashes, sentence length, hedges, unattributed figures); --self-test built in
-  brand_tokens.py    The single source of brand values in code; --self-test checks it against brand_identity.md
-  skills/            pm-voice-check, pm-fact-guardrails, pm-task-closeout skill directories; install via Settings > Capabilities
+04_tools/            The gates, all standard library, all with --self-test
+  voice_lint.py      Em dashes, sentence length, hedges, unattributed figures
+  brand_tokens.py    The single source of brand values in code; checks itself against brand_identity.md
+  marker_parity.py   The corridor atlas's four files must carry the same 53 markers
+.claude/             Travels with the repo
+  skills/            pm-voice-check, pm-fact-guardrails, pm-task-closeout
+  hooks/             pm-check-voice.sh (the shared gate), pm-check-facts.sh, pm-guard-bypass.sh
+  commands/          /pm-voice-check, /pm-end-task
+  agents/            pm-voice-reviewer (the judgment half of the voice gate)
+  settings.json      Permissions and the PreToolUse bypass guard
+.githooks/pre-commit The enforcing gate while the repo is private
+.github/             Workflows, issue and PR templates, CODEOWNERS, dependabot
 requirements.txt     Build dependencies (the doctrine tooling needs none)
 local/               Gitignored operational files
 ```
@@ -69,7 +84,7 @@ local/               Gitignored operational files
 ## Status (updated 2026-09-22)
 
 - **Project system:** stood up 2026-07-05 (PT-2). The work queue is `00_project_system/tasks.md`; the task lifecycle is `00_project_system/task_protocol.md`; the instructions mirror carries a change counter per `00_project_system/instructions_guide.md`; memory conventions are in `00_project_system/operating_notes.md`. The plan and PT sequence stay in `project_system_plan.md`. PTs renumbered to execution order 2026-07-05. PT-6 closed 2026-09-22. Active: PT-8, the GitHub repo. Paul brought it forward from last on 2026-09-21.
-- **Tooling:** built 2026-07-05 (PT-3). `04_tools/voice_lint.py` is the deterministic voice lint (callable by hand and by skills; `--self-test` verifies it). The `pm-voice-check`, `pm-fact-guardrails`, and `pm-task-closeout` skills live in `04_tools/skills/` and install via Settings > Capabilities. `task_protocol.md` stays canonical; if pm-task-closeout ever disagrees with it, the protocol wins and the skill gets updated in the same session.
+- **Tooling:** built 2026-07-05 (PT-3). `04_tools/voice_lint.py` is the deterministic voice lint (callable by hand and by skills; `--self-test` verifies it). The `pm-voice-check`, `pm-fact-guardrails`, and `pm-task-closeout` skills moved to `.claude/skills/` on 2026-09-22, so they travel with the repo for everyone who clones it. Two more gates joined the lint: `brand_tokens.py` and `marker_parity.py`, both with self-tests. `task_protocol.md` stays canonical; if pm-task-closeout ever disagrees with it, the protocol wins and the skill gets updated in the same session.
 - **Deliverables:** on-brand and regenerating, as of 2026-09-22 (PT-6). Both build scripts import every color and font from `04_tools/brand_tokens.py`; neither hardcodes a brand value. The launch infographic and both comparison maps were regenerated in the locked identity. The geometry verifier passes with core diameters unchanged at 18.0 and 24.1 miles, which is the proof the re-skin touched styling only. Colorado AI's motto, flag, palette, fonts, and pillar framing are gone from every deliverable. How to rebuild, and what to check: `03_deliverables/infographics/BUILD.md`.
 - **Corridor map:** done 2026-07-05. The definitive boundary and marker atlas lives in `03_deliverables/maps/` (HTML, GeoJSON, KML, JSX; 53 markers, seven two-word categories). Method, sources, and every locked convention are in `03_deliverables/maps/MAP_NOTES.md`; read it before editing the map.
 - **Substance:** reframed 2026-07-06 (PT-5). The four Colorado AI seeds are now corridor substance in the locked voice, each with per-doc honesty guardrails and a dated source block (claims searched 2026-07-06). `lead_abundance.md` was archived 2026-07-06 and deleted 2026-09-22 as Colorado AI candidate-framework material. The three Photon Mountain-native docs got a freshness pass the same day. `02_substance/README.md` is the folder guide (formerly `SEED_README.md`, renamed 2026-07-06). Before any external use, re-run pm-fact-guardrails on the file; the roster's row-by-row re-verification stays a pre-publication step.

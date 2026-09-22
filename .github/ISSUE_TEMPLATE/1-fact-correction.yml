@@ -1,0 +1,63 @@
+name: Fact correction
+description: A corridor claim in this repository is wrong, stale, or missing its source.
+title: "[fact] "
+labels: ["fact-correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the most valuable issue you can file here.
+
+        The corridor's credibility is its honesty, so a wrong claim is a defect,
+        not a nitpick. The standing guardrails are in
+        `02_substance/corridor_facts_and_sources.md`.
+
+  - type: input
+    id: location
+    attributes:
+      label: Where is the claim
+      description: File path, and a line number or quoted sentence.
+      placeholder: "02_substance/photonics_why_and_how.md, the WHY this corridor section"
+    validations:
+      required: true
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: What the file says now
+      description: Quote it exactly.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem
+      options:
+        - Factually wrong
+        - Was true, now stale
+        - Figure has no source, or the wrong source
+        - The three clocks are blurred (operating / opening 2026 / horizon)
+        - Overclaims what the corridor has
+        - Naming (for example NLR not marked "formerly NREL" on first reference)
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: correction
+    attributes:
+      label: What it should say, and your source
+      description: >
+        A link to a primary source is worth more than a confident correction.
+        If you are not sure what the right figure is, say so; flagging a claim
+        as unverified is still useful.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: external
+    attributes:
+      label: Urgency
+      options:
+        - label: This claim is in something already published or sent externally.

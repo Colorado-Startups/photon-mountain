@@ -1,0 +1,53 @@
+name: Deliverable or tooling
+description: Something in the build pipeline, the maps, or the gate scripts is broken or should change.
+title: "[build] "
+labels: ["tooling"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For the deliverable pipeline, the corridor atlas, and the gate scripts.
+
+        Rebuild steps and the per-build checklist are in
+        `03_deliverables/infographics/BUILD.md`.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part
+      options:
+        - Launch infographic (PDF, PNG, or the hand-authored HTML)
+        - Silicon Valley comparison maps
+        - Corridor atlas (the four map files)
+        - Brand tokens or fonts
+        - Voice lint
+        - Marker parity
+        - CI workflow or the pre-commit hook
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, what you got.
+    validations:
+      required: true
+
+  - type: textarea
+    id: gates
+    attributes:
+      label: Gate output
+      description: >
+        If a gate failed, paste it. The useful lines are `brand_fonts=`,
+        `OVERFLOW`, `RESULT:`, and anything from a `--self-test`.
+      render: shell
+
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: Before filing
+      options:
+        - label: I ran `python3 04_tools/brand_tokens.py --self-test`.
+        - label: I confirmed the build reported `brand_fonts= True`, if this is a render problem.

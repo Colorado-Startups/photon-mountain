@@ -1,0 +1,15 @@
+# Photon Mountain code owners.
+#
+# Advisory while the repo is private: a Free-tier organization cannot enforce
+# CODEOWNERS review on a private repository. It becomes enforceable at PT-9,
+# when the repo goes public and rulesets turn on.
+
+* @paul-co-startups
+
+# The doctrine, the substance, and the gates are the places where a wrong
+# change is expensive and hard to notice later.
+/01_doctrine/   @paul-co-startups
+/02_substance/  @paul-co-startups
+/04_tools/      @paul-co-startups
+/.githooks/     @paul-co-startups
+/.claude/       @paul-co-startups

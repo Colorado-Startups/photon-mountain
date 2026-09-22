@@ -1,0 +1,89 @@
+name: voice-check
+
+# The deterministic voice gate on the prose changed in a pull request.
+#
+# It runs the SAME script the local Claude Code harness and .githooks/pre-commit
+# run (.claude/hooks/pm-check-voice.sh), rather than reimplementing the check in
+# YAML. That is the point: the gate has one definition and three call sites, so
+# it cannot drift between a laptop, a web edit, and a cloud agent. No AI, no
+# paid dependency, no network.
+#
+# ADVISORY while the repo is private. A private repo in a Free organization
+# cannot have required status checks, so this reports and does not gate; the
+# pre-commit hook is the enforcing gate until then. Promote this to required at
+# PT-9, once it has proven quiet on real pull requests.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voice-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  voice-check:
+    name: voice-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history, so the diff against the PR base resolves
+
+      - name: Voice gate on changed prose
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -uo pipefail
+          HOOK=".claude/hooks/pm-check-voice.sh"
+          if [ ! -r "$HOOK" ]; then
+            echo "Voice hook not found; nothing to check." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if [ -n "${BASE_SHA:-}" ]; then
+            range="$BASE_SHA HEAD"
+          else
+            range="HEAD~1 HEAD"
+          fi
+
+          changed="$(git diff --name-only --diff-filter=ACM $range \
+            | grep -iE '\.(md|mdx|txt)$' || true)"
+
+          if [ -z "$changed" ]; then
+            echo "No changed prose files in this pull request." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          {
+            echo "### Voice gate"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          out="$(bash "$HOOK" $changed 2>&1)" || true
+
+          if [ -z "$out" ]; then
+            echo "Clean. No findings on the changed prose." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          {
+            echo '```'
+            printf '%s\n' "$out"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if printf '%s' "$out" | grep -q 'FAIL \[em-dash\]'; then
+            {
+              echo
+              echo 'An em dash reached a pull request. The local hook blocks these,'
+              echo 'so either it is not enabled in that clone or the commit bypassed'
+              echo 'it. Enable it with: `git config core.hooksPath .githooks`'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          printf '%s\n' "$out"
+          echo "Advisory while the repo is private; findings are in the job summary."
