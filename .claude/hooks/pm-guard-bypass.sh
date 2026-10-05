@@ -23,6 +23,57 @@
 
 set -uo pipefail
 
+# --------------------------------------------------------------- self-test --
+# Seeds commands that must block and commands that must not, and fails if
+# either behaves wrong. The four "must not block" cases at the end are the
+# regressions that caught this hook's own author: an early version scanned the
+# whole command string and refused a heredoc that merely wrote documentation
+# mentioning the flag.
+#
+# This test used to live in a scratch directory. That directory is
+# session-scoped, so it evaporated and the gate was left untested. A test that
+# does not ship with the gate is not a test.
+if [ "${1:-}" = "--self-test" ]; then
+  self="${BASH_SOURCE[0]}"
+  python3 - "$self" <<'PY'
+import json, subprocess, sys
+
+hook = sys.argv[1]
+F = "--no-" + "verify"
+
+CASES = [
+    ("bare commit with the flag",       "git commit %s -m x" % F, 2),
+    ("push with the flag",              "git push %s" % F, 2),
+    ("flag after other args",           "git commit -m 'x' %s" % F, 2),
+    ("chained after cd",                "cd /tmp && git commit %s -m x" % F, 2),
+    ("normal commit",                   "git commit -m x", 0),
+    ("normal push",                     "git push origin main", 0),
+    ("unrelated command",               "ls -la", 0),
+    ("git status",                      "git status --short", 0),
+    ("heredoc documenting the flag",
+     "cat > doc.md <<'EOF'\nUse git commit %s to override.\nEOF" % F, 0),
+    ("echo mentioning the flag",
+     "echo 'run git commit %s if needed' > note.txt" % F, 0),
+    ("grep for the flag in docs",       "grep -rn '%s' .githooks/" % F, 0),
+    ("cat a file that contains it",     "cat .githooks/pre-commit", 0),
+]
+
+ok = True
+for label, cmd, want in CASES:
+    payload = json.dumps({"tool_name": "Bash", "tool_input": {"command": cmd}})
+    got = subprocess.run(["bash", hook], input=payload,
+                         capture_output=True, text=True).returncode
+    if got != want:
+        ok = False
+    print("self-test: %-34s exit=%d (want %d): %s"
+          % (label, got, want, "OK" if got == want else "FAIL"))
+
+print("self-test:", "PASS" if ok else "FAIL")
+sys.exit(0 if ok else 1)
+PY
+  exit $?
+fi
+
 payload="$(cat)"
 
 verdict="$(printf '%s' "$payload" | python3 -c '

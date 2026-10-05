@@ -112,8 +112,26 @@ else
 fi
 
 # --- 3. Gate self-tests, when a gate itself changed -----------------------
-# A broken gate is worse than no gate, so if 04_tools changed, prove the
-# gates still pass before the change can land.
+# A broken gate is worse than no gate, so if a gate changed, prove it still
+# passes its own self-test before the change can land.
+if printf '%s' "$staged" | grep -qE "^\.claude/hooks/|^04_tools/voice_exempt\.txt"; then
+  for shell_gate in pm-check-voice.sh pm-guard-bypass.sh; do
+    script="$REPO_ROOT/.claude/hooks/$shell_gate"
+    [ -r "$script" ] || continue
+    if ! out="$(bash "$script" --self-test 2>&1)"; then
+      blocked=1
+      {
+        echo
+        echo "pre-commit: $shell_gate --self-test FAILED"
+        echo "$out" | tail -15
+        echo
+        echo "A gate that does not pass its own self-test cannot be trusted."
+        echo "This commit is blocked."
+      } >&2
+    fi
+  done
+fi
+
 if printf '%s' "$staged" | grep -q "^04_tools/" && command -v python3 >/dev/null 2>&1; then
   for tool in voice_lint brand_tokens marker_parity; do
     script="$REPO_ROOT/04_tools/$tool.py"
