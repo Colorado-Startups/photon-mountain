@@ -96,10 +96,22 @@ if [ -r "$VOICE_HOOK" ]; then
       fi
       if printf '%s' "$voice_out" | grep -qE "WARN \[|FAIL \[unattributed-figure\]"; then
         warned=1
+        advisories="$(printf '%s\n' "$voice_out" | grep -E "WARN \[|unattributed-figure")"
+        total="$(printf '%s\n' "$advisories" | grep -c .)"
+        # Cap the dump. A dense revision log can produce ninety warnings in one
+        # commit, and a wall of text is not actionable: it buries the one
+        # finding worth acting on and teaches people to skip the output. Show
+        # unattributed figures first, since those are the ones that matter, then
+        # a sample of the rest with a count.
         {
           echo
-          echo "pre-commit: voice findings (advisory, not blocking):"
-          printf '%s\n' "$voice_out" | grep -E "WARN \[|unattributed-figure"
+          echo "pre-commit: $total voice finding(s), advisory, not blocking."
+          printf '%s\n' "$advisories" | grep "unattributed-figure" | head -10
+          printf '%s\n' "$advisories" | grep -v "unattributed-figure" | head -8
+          if [ "$total" -gt 18 ]; then
+            echo "    ... and $((total - 18)) more. Full list:"
+            echo "    python3 04_tools/voice_lint.py <file>"
+          fi
           echo
           echo "Figures should name a source or be labeled a goal. The check"
           echo "is a heuristic, so wave through anything it misread."
