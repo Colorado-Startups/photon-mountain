@@ -22,12 +22,14 @@ on:
       - '04_tools/**'
       - '01_doctrine/brand_identity.md'
       - '01_doctrine/brand_assets/fonts/**'
+      - '.claude/hooks/**'
       - '.github/workflows/gate-selftests.yml'
   pull_request:
     paths:
       - '04_tools/**'
       - '01_doctrine/brand_identity.md'
       - '01_doctrine/brand_assets/fonts/**'
+      - '.claude/hooks/**'
       - '.github/workflows/gate-selftests.yml'
   workflow_dispatch:
 
@@ -57,3 +59,15 @@ jobs:
 
       - name: marker_parity.py
         run: python3 04_tools/marker_parity.py --self-test
+
+      # The shared voice gate is a gate too, and it owns the exempt list. Its
+      # self-test asserts that every exempt pattern still matches a real file,
+      # so a renamed path cannot leave a dead exemption behind.
+      - name: pm-check-voice.sh
+        run: bash .claude/hooks/pm-check-voice.sh --self-test
+
+      # The bypass guard is a gate too. Its test used to live in a scratch
+      # directory, which is session-scoped, so it evaporated and left the gate
+      # untested. It ships with the hook now.
+      - name: pm-guard-bypass.sh
+        run: bash .claude/hooks/pm-guard-bypass.sh --self-test

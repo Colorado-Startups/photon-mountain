@@ -1,0 +1,30 @@
+# Files the voice gate does not check, and why.
+#
+# This list is data, not a regex buried in a shell script, so that adding an
+# exemption is a reviewable change and so the contract test can check it.
+#
+# An exempt list rots: a path gets renamed, the entry stops matching anything,
+# and the exemption silently becomes dead weight that still looks like policy.
+# `pm-check-voice.sh --self-test` asserts that every pattern below still
+# matches at least one real file, so a stale entry fails the gate's own test.
+#
+# Format: one shell glob per line, relative to the repository root. Blank lines
+# and lines starting with # are ignored. Every entry needs a reason on the
+# line above it.
+#
+# The bar for adding one: the file must have to contain a banned construction
+# in order to do its job. "It is inconvenient" is not a reason.
+
+# The voice doctrine has to show an em dash in order to forbid one.
+01_doctrine/voice.md
+
+# The structure standard quotes banned forms as examples of what not to write.
+01_doctrine/why_and_how_guide.md
+
+# Skill definitions quote the rules they enforce, including the banned forms.
+.claude/skills/*
+
+# Third-party license texts. Not ours to edit, and reformatting them would be
+# a licensing problem rather than a voice improvement.
+LICENSE
+LICENSES/*
