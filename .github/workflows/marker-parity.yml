@@ -13,6 +13,11 @@ on:
     paths:
       - '03_deliverables/maps/**'
       - '04_tools/marker_parity.py'
+  push:
+    branches: [main]
+    paths:
+      - '03_deliverables/maps/**'
+      - '04_tools/marker_parity.py'
   workflow_dispatch:
 
 permissions:

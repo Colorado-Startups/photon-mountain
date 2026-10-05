@@ -18,6 +18,11 @@ on:
     paths:
       - '03_deliverables/infographics/**'
       - 'requirements.txt'
+  push:
+    branches: [main]
+    paths:
+      - '03_deliverables/infographics/**'
+      - 'requirements.txt'
   workflow_dispatch:
 
 permissions:
