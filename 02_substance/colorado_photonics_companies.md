@@ -1,6 +1,30 @@
 # Colorado Photonics Companies (Computing-With-Light Corridor)
 
-*Working directory of Colorado companies that build with light. Compiled 2026-06-23 for Photon Mountain. Every entry was verified against company sites, the Colorado Photonics Industry Association directory, government sources, or credible news. Sources are linked per row.*
+*Working directory of Colorado companies that build with light. Compiled 2026-06-23 for Photon Mountain. Every entry was verified against company sites, the Colorado Photonics Industry Association directory, government sources, or credible news. Sources are linked per row. First row-by-row re-verification run 2026-10-05; coverage and findings are in the next section.*
+
+## Row-by-row re-verification, 2026-10-05
+
+The standing verification debt, run for the first time. Every row makes three claims: that the company exists, that it does what the row says, and that it is where the row says. Rows carrying a date, a status word, or a corporate-change word were searched individually, because those are the claims that go stale. Rows carrying only a stable description of what a company makes were checked for existence and Colorado presence.
+
+**Coverage.** 41 of 58 rows re-verified in this pass. The 17 not yet re-checked are large, stable institutions whose Colorado presence is not in question (the two Lockheed Martin entries, BAE, Sierra Nevada, Thorlabs, Menlo Systems, Areté, Sanborn, Merrick, ASD, Imatest, Electronic Materials, Colorado Concept Coatings, Epilog, RMI Laser, RMICO, OEwaves, IonQ, Pivot Energy, Namaste Solar). They are the lowest-risk rows and the next pass should still cover them.
+
+**One row removed.** VSK Energy. The announced Brighton plant was never built; the joint venture died in 2024. The roster counts what exists, not what was announced. The solar section carries the record instead.
+
+**Seven rows corrected.**
+
+- *Insight LiDAR and Insight Photonic Solutions* have been in Chapter 11 since 2024-06-06, still unconfirmed in late 2026. Boulder became Broomfield, and Core became Ring.
+- *Infleqtion* went public on the NYSE in February 2026 and opened a Louisville center in August 2026.
+- *Blue Canyon Technologies* is being sold by RTX to MDA Space, with closing expected by the end of 2026.
+- *Colorado Thin Films* moved from Denver to Centennial, so Core became Statewide. Its suspected ESCO affiliation was not supported.
+- *Mesa Quantum* was described as making optical atomic clocks. It makes vapor-cell atomic clocks with laser interrogation, which is a different thing.
+- *Momentum Optics* was credited with metalens work it does not do, apparently confused with Oblate Optics.
+- *KMLabs* was credited with a ytterbium fiber-laser line that Thorlabs bought in 2019.
+
+**One row flagged.** Lever Photonics. A registry aggregator shows the Inc. withdrawn in September 2025 while the company still appears as a CPIA member, which reads as a restructuring rather than a closure. Unresolved.
+
+**Two candidates for the next pass.** Oblate Optics, a Longmont-area meta-optics maker found while correcting Momentum Optics. Google Quantum AI's neutral-atom program, started in Boulder in March 2026.
+
+**What this pass confirms about the method.** Four of the seven corrections were overclaims rather than stale facts: a term of art used loosely, a capability attributed to the wrong company, a divested product line, and a guessed corporate affiliation. Freshness checking alone would not have caught any of them.
 
 ## How to read this
 
@@ -95,7 +119,7 @@ In scope is light-based quantum only. The boundary matters: companies whose qubi
 | Mesa Quantum | Boulder (Core) | HQ | Chip-scale atomic clocks and miniaturized quantum sensors for GPS-free timing. Vapor-cell atomic core with laser interrogation and readout, which is the photonic tie. Not an optical atomic clock in the strict sense: the company's own materials say vapor cells and atomic clocks, never an optical reference transition. Raised $11.8M in September 2026, per the company's announcement and CU Boulder Venture Partners. | [mesaquantum.com](https://mesaquantum.com/) |
 | OEwaves | Boulder (Core) | Office (HQ Pasadena, CA) | Ultra-low-noise lasers and opto-electronic oscillators (whispering-gallery-mode resonators) for quantum timing and sensing. Colorado presence as an incubator tenant. Also tagged lasers. | [oewaves.com](https://www.oewaves.com/) |
 | IonQ (Boulder R&D lab) | Boulder (Core) | Office (HQ College Park, MD) | Boulder lab dedicated to photonic interconnects and quantum networking. The networking entangles separate computers by generating and detecting photons. Note: IonQ's qubits are trapped ions; the photonic part is the networking layer. | [ionq.com](https://www.ionq.com/) |
-| Infleqtion (formerly ColdQuanta) | Boulder (Core) | HQ | Neutral-atom quantum computing plus optical atomic clocks. The qubit is an atom, but per the company more than 90% of the system is photonic and laser subsystems, moving onto photonic-integrated circuits. Included with that caveat. Also tagged lasers and sensors. | [infleqtion.com](https://infleqtion.com/) |
+| Infleqtion (formerly ColdQuanta) | Boulder and Louisville (Core and Ring) | HQ (NYSE: INFQ) | Neutral-atom quantum computing plus optical atomic clocks. The qubit is an atom, but per the company more than 90% of the system is photonic and laser subsystems, moving onto photonic-integrated circuits. Included with that caveat. Also tagged lasers and sensors. **Went public 2026-02-17** via a SPAC merger with Churchill Capital Corp X, trading on the NYSE as INFQ, which the company describes as the first public listing for a neutral-atom quantum company. Opened the Colorado Quantum Innovation Center in Louisville in August 2026, and recent releases are datelined Louisville rather than Boulder, so the center of gravity has shifted across the corridor. Separately, Google Quantum AI started a competing neutral-atom program in Boulder in March 2026, led from a JILA lab. | [infleqtion.com](https://infleqtion.com/) |
 
 *Also serving quantum, listed under their primary category: Vescent (combs and lasers), Octave Photonics (nonlinear PIC combs), QPIC (quantum PIC fab), Stable Laser Systems (clock lasers). Lightwave Logic also serves it (electro-optic-polymer PICs, via a 2026 MOU with QPICs).*
 
