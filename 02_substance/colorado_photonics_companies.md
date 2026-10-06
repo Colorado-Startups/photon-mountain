@@ -6,11 +6,11 @@
 
 The standing verification debt, run for the first time. Every row makes three claims: that the company exists, that it does what the row says, and that it is where the row says. Rows carrying a date, a status word, or a corporate-change word were searched individually, because those are the claims that go stale. Rows carrying only a stable description of what a company makes were checked for existence and Colorado presence.
 
-**Coverage.** 41 of 58 rows re-verified in this pass. The 17 not yet re-checked are large, stable institutions whose Colorado presence is not in question (the two Lockheed Martin entries, BAE, Sierra Nevada, Thorlabs, Menlo Systems, Areté, Sanborn, Merrick, ASD, Imatest, Electronic Materials, Colorado Concept Coatings, Epilog, RMI Laser, RMICO, OEwaves, IonQ, Pivot Energy, Namaste Solar). They are the lowest-risk rows and the next pass should still cover them.
+**Coverage.** 45 of 58 rows re-verified in this pass. The 13 not yet re-checked are large, stable institutions whose Colorado presence is not in question: the two Lockheed Martin entries, BAE, Sierra Nevada, Menlo Systems, Areté, Sanborn, Merrick, ASD, Imatest, Electronic Materials, Colorado Concept Coatings, Epilog, RMI Laser, RMICO, Pivot Energy, and Namaste Solar. They are the lowest-risk rows and the next pass should still cover them.
 
 **One row removed.** VSK Energy. The announced Brighton plant was never built; the joint venture died in 2024. The roster counts what exists, not what was announced. The solar section carries the record instead.
 
-**Seven rows corrected.**
+**Ten rows corrected.**
 
 - *Insight LiDAR and Insight Photonic Solutions* have been in Chapter 11 since 2024-06-06, still unconfirmed in late 2026. Boulder became Broomfield, and Core became Ring.
 - *Infleqtion* went public on the NYSE in February 2026 and opened a Louisville center in August 2026.
@@ -19,12 +19,15 @@ The standing verification debt, run for the first time. Every row makes three cl
 - *Mesa Quantum* was described as making optical atomic clocks. It makes vapor-cell atomic clocks with laser interrogation, which is a different thing.
 - *Momentum Optics* was credited with metalens work it does not do, apparently confused with Oblate Optics.
 - *KMLabs* was credited with a ytterbium fiber-laser line that Thorlabs bought in 2019.
+- *Thorlabs* has consolidated its Colorado site into the Lafayette-based Colorado Center for Innovation, so Core became Ring.
+- *Vexlum* paused its Broomfield expansion over tariff uncertainty, stated publicly in December 2025. The office exists; the growth does not.
+- *IonQ's* Boulder lab was described as dedicated to photonic interconnects. It opened in May 2026 for quantum computing R&D and ion-trap chip testing; the interconnect milestone was announced from Maryland.
 
 **One row flagged.** Lever Photonics. A registry aggregator shows the Inc. withdrawn in September 2025 while the company still appears as a CPIA member, which reads as a restructuring rather than a closure. Unresolved.
 
 **Two candidates for the next pass.** Oblate Optics, a Longmont-area meta-optics maker found while correcting Momentum Optics. Google Quantum AI's neutral-atom program, started in Boulder in March 2026.
 
-**What this pass confirms about the method.** Four of the seven corrections were overclaims rather than stale facts: a term of art used loosely, a capability attributed to the wrong company, a divested product line, and a guessed corporate affiliation. Freshness checking alone would not have caught any of them.
+**What this pass confirms about the method.** Five of the ten corrections were overclaims rather than stale facts: a term of art used loosely, a capability attributed to the wrong company, a divested product line, and a guessed corporate affiliation. Freshness checking alone would not have caught any of them.
 
 ## How to read this
 
@@ -63,7 +66,7 @@ The honest read: Colorado's strength here is optical interconnects and electro-o
 | RMI Laser | Lafayette (Ring) | HQ | DPSS and fiber laser marking and etching systems and integration. Sister company to Rocky Mountain Instrument. | [rmilaser.com](https://rmilaser.com/about-rmi/) |
 | KMLabs (Kapteyn-Murnane Laboratories) | Boulder (Core) | HQ | Ultrafast (femtosecond) Ti:sapphire lasers and tabletop coherent EUV / soft-X-ray sources. JILA/CU spinout, 1994. The ytterbium fiber-laser line is no longer theirs: Thorlabs acquired those assets in October 2019, so the remaining business is Ti:sapphire and EUV high-harmonic generation. Active through 2026 on a DOE Phase II award for power-scaling ultrafast amplifiers. Also tagged sensors and quantum. | [kmlabs.com](https://www.kmlabs.com/) |
 | XUV Lasers | Fort Collins (Statewide) | HQ | Compact extreme-ultraviolet and soft-X-ray lasers, commercializing capillary-discharge laser technology from CSU. | [xuvlasers.com](http://www.xuvlasers.com/About.html) |
-| Vexlum | Broomfield (Ring) | Office (HQ Finland) | High-power, narrow-linewidth VECSEL laser systems for quantum technology. US subsidiary, roots in a NIST-Boulder collaboration. | [vexlum.com](https://vexlum.com/) |
+| Vexlum | Broomfield (Ring) | Office (HQ Finland) | High-power, narrow-linewidth VECSEL laser systems for quantum technology. US subsidiary, roots in a NIST-Boulder collaboration. **US expansion paused:** the president of Vexlum US said at the Colorado Business Economic Outlook Forum in December 2025 that tariff uncertainty had put the Broomfield expansion on hold, with costs passed to customers who are often on fixed research grants. The office exists; the growth does not. No later update found. | [vexlum.com](https://vexlum.com/) |
 | nLIGHT (nLIGHT Defense Systems, formerly Nutronics) | Longmont (Ring) | Facility (HQ Camas, WA) | Coherent beam combining and beam control for high-energy laser weapons. Roughly doubling Longmont capacity in 2026. | [optics.org](https://optics.org/news/10/11/22) |
 | Lockheed Martin | Littleton (Waterton) and Boulder (Core) | Facility (HQ Bethesda, MD) | Directed-energy / laser-weapon work, and space optical/imaging instruments, at large Colorado campuses. The Colorado-specific laser share is not fully public. Also tagged sensors. | [lockheedmartin.com](https://www.lockheedmartin.com/en-us/capabilities/directed-energy.html) |
 | Areté Associates | Longmont (Ring) | Office (HQ Northridge, CA) | Laser and electro-optic sensing, lidar, and remote-sensing R&D. | [CPIA directory](https://members.coloradophotonics.org/directory/Details/arete-associates-2677740) |
@@ -118,7 +121,7 @@ In scope is light-based quantum only. The boundary matters: companies whose qubi
 | Xairos Systems | Arvada (Core) | HQ | Entangled-photon "Quantum Time Transfer" to synchronize clocks over fiber and free-space optical links. Genuinely photonic. Also tagged sensors. | [xairos.com](https://www.xairos.com/) |
 | Mesa Quantum | Boulder (Core) | HQ | Chip-scale atomic clocks and miniaturized quantum sensors for GPS-free timing. Vapor-cell atomic core with laser interrogation and readout, which is the photonic tie. Not an optical atomic clock in the strict sense: the company's own materials say vapor cells and atomic clocks, never an optical reference transition. Raised $11.8M in September 2026, per the company's announcement and CU Boulder Venture Partners. | [mesaquantum.com](https://mesaquantum.com/) |
 | OEwaves | Boulder (Core) | Office (HQ Pasadena, CA) | Ultra-low-noise lasers and opto-electronic oscillators (whispering-gallery-mode resonators) for quantum timing and sensing. Colorado presence as an incubator tenant. Also tagged lasers. | [oewaves.com](https://www.oewaves.com/) |
-| IonQ (Boulder R&D lab) | Boulder (Core) | Office (HQ College Park, MD) | Boulder lab dedicated to photonic interconnects and quantum networking. The networking entangles separate computers by generating and detecting photons. Note: IonQ's qubits are trapped ions; the photonic part is the networking layer. | [ionq.com](https://www.ionq.com/) |
+| IonQ (Boulder R&D lab) | Boulder (Core) | Office (HQ College Park, MD) | Boulder lab opened May 2026: 22,000 sq ft over two floors at the Boulder 38 campus, per IonQ, for quantum computing R&D and semiconductor ion-trap chip testing, with a quantum computer to be installed. The photonic-interconnect milestone of April 2026 was announced from College Park, not Boulder, so do not describe the Boulder lab as dedicated to interconnects. The networking entangles separate computers by generating and detecting photons. Note: IonQ's qubits are trapped ions; the photonic part is the networking layer. | [ionq.com](https://www.ionq.com/) |
 | Infleqtion (formerly ColdQuanta) | Boulder and Louisville (Core and Ring) | HQ (NYSE: INFQ) | Neutral-atom quantum computing plus optical atomic clocks. The qubit is an atom, but per the company more than 90% of the system is photonic and laser subsystems, moving onto photonic-integrated circuits. Included with that caveat. Also tagged lasers and sensors. **Went public 2026-02-17** via a SPAC merger with Churchill Capital Corp X, trading on the NYSE as INFQ, which the company describes as the first public listing for a neutral-atom quantum company. Opened the Colorado Quantum Innovation Center in Louisville in August 2026, and recent releases are datelined Louisville rather than Boulder, so the center of gravity has shifted across the corridor. Separately, Google Quantum AI started a competing neutral-atom program in Boulder in March 2026, led from a JILA lab. | [infleqtion.com](https://infleqtion.com/) |
 
 *Also serving quantum, listed under their primary category: Vescent (combs and lasers), Octave Photonics (nonlinear PIC combs), QPIC (quantum PIC fab), Stable Laser Systems (clock lasers). Lightwave Logic also serves it (electro-optic-polymer PICs, via a 2026 MOU with QPICs).*
@@ -142,7 +145,7 @@ Colorado's deepest bench is precision optics, coatings, and electro-optic and no
 | Electronic Materials, Inc. (EMI) | Breckenridge (Statewide) | HQ | UV-, thermal-, and visible-cure optical adhesives, epoxies, and encapsulants for optical and optoelectronic assembly. | [emiuv.com](https://emiuv.com/) |
 | Intlvac Thin Films | Fort Collins (Statewide) | Facility (parent Canada) | Thin-film deposition and etch equipment, plus fiber-optic and diamond-IR coating services. Equipment maker first. | [CPIA directory](https://members.coloradophotonics.org/directory/Details/intlvac-thin-films-3269710) |
 | Cinnabar Optics | Erie (Statewide) | HQ | Optical engineering consulting and fast-turn prototype optical systems and lasers. | [cinnabaroptics.com](https://cinnabaroptics.com/) |
-| Thorlabs (Boulder) | Boulder (Core) | Office (HQ Newton, NJ) | Vertically integrated photonics components, Boulder operation. | [CPIA directory](https://coloradophotonics.org/member/thorlabs-2/) |
+| Thorlabs (Colorado Center for Innovation) | Lafayette (Ring) | Office (HQ Newton, NJ) | Vertically integrated photonics components. The Colorado site is now branded the Thorlabs Colorado Center for Innovation and listed in Lafayette, working on high-power femtosecond lasers, quantum light sources, low-noise electronics, and optics. It began as the Boulder team that came with Thorlabs' 2019 purchase of KMLabs' fiber-laser assets; older directories still carry the Boulder address, so Core became Ring. | [CPIA directory](https://coloradophotonics.org/member/thorlabs-2/) |
 
 ---
 
