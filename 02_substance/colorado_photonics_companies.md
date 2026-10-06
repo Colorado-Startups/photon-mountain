@@ -6,7 +6,7 @@
 
 The standing verification debt, run for the first time. Every row makes three claims: that the company exists, that it does what the row says, and that it is where the row says. Rows carrying a date, a status word, or a corporate-change word were searched individually, because those are the claims that go stale. Rows carrying only a stable description of what a company makes were checked for existence and Colorado presence.
 
-**Coverage.** 45 of 58 rows re-verified in this pass. The 13 not yet re-checked are large, stable institutions whose Colorado presence is not in question: the two Lockheed Martin entries, BAE, Sierra Nevada, Menlo Systems, Areté, Sanborn, Merrick, ASD, Imatest, Electronic Materials, Colorado Concept Coatings, Epilog, RMI Laser, RMICO, Pivot Energy, and Namaste Solar. They are the lowest-risk rows and the next pass should still cover them.
+**Coverage.** 41 of the 58 rows re-verified in this pass, counted against the roster rather than tallied by hand, because an earlier draft of this block said 45 and was wrong. The 17 not yet re-checked are large, stable institutions whose Colorado presence is not in question: Epilog Laser, RMI Laser, Lockheed Martin, Areté Associates, Menlo Systems, Sanborn Map Company, Merrick & Company, ASD, Imatest, BAE Systems Space & Mission Systems, Lockheed Martin Space, Sierra Nevada, RMICO, Colorado Concept Coatings, Electronic Materials, Pivot Energy, and Namaste Solar. They are the lowest-risk rows and the next pass should still cover them.
 
 **One row removed.** VSK Energy. The announced Brighton plant was never built; the joint venture died in 2024. The roster counts what exists, not what was announced. The solar section carries the record instead.
 
