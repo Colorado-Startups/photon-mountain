@@ -13,8 +13,9 @@ name: gate-selftests
 # rejects a known-bad pairing. That makes palette drift a test failure instead
 # of a silent, unreadable render.
 #
-# All three scripts are standard library only, by design, so there is nothing
-# to install and this job stays fast.
+# The three Python scripts are standard library only, by design, so there is
+# nothing to install and this job stays fast. The shell gates need only bash,
+# git and that same python3.
 
 on:
   push:
@@ -23,6 +24,7 @@ on:
       - '01_doctrine/brand_identity.md'
       - '01_doctrine/brand_assets/fonts/**'
       - '.claude/hooks/**'
+      - '.githooks/**'
       - '.github/workflows/gate-selftests.yml'
   pull_request:
     paths:
@@ -30,6 +32,7 @@ on:
       - '01_doctrine/brand_identity.md'
       - '01_doctrine/brand_assets/fonts/**'
       - '.claude/hooks/**'
+      - '.githooks/**'
       - '.github/workflows/gate-selftests.yml'
   workflow_dispatch:
 
@@ -71,3 +74,10 @@ jobs:
       # untested. It ships with the hook now.
       - name: pm-guard-bypass.sh
         run: bash .claude/hooks/pm-guard-bypass.sh --self-test
+
+      # The pre-commit hook is the only gate that blocks anything while the
+      # repo is private. Its self-test commits seeded files in throwaway
+      # repositories, through copies of the hook, pm-check-voice.sh and the
+      # lint, and checks what blocks, what warns and proceeds, and what passes.
+      - name: .githooks/pre-commit
+        run: bash .githooks/pre-commit --self-test
