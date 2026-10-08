@@ -12,8 +12,8 @@ The project's whole value is that its claims are true. Read that sentence again 
 
 ## The rules that are not negotiable
 
-1. **No em dashes, ever.** Commas, semicolons, periods, or parentheses. The pre-commit hook blocks on this, and it is the one voice rule enforced mechanically because it has no false positives.
-2. **Never invent a figure, an institution, or a quote.** If you cannot attribute it, do not write it. A figure with no source is a defect.
+1. **No em dashes, ever.** Commas, semicolons, periods, or parentheses. An en dash with a space on each side reads as one, so it is out too. The pre-commit hook blocks on both; they are the voice rules it enforces by blocking, because they have no false positives.
+2. **Never invent a figure, an institution, or a quote.** If you cannot attribute it, do not write it. A figure with no source is a defect. The lint only warns on an unattributed figure, because its detection is a heuristic. Treat that warning as a defect to fix, not a suggestion.
 3. **Search before stating any current status.** The corridor moves in real time. Do not recall a status from training data or from earlier in a conversation; check it.
 4. **Keep the three clocks apart.** What operates today, what opens in 2026, and what is on the horizon are three different claims. NIST Boulder's cleanroom operates. The Arvada photonic-IC fab opens. Photonic compute is emerging, not shipping at scale. Blurring these is the most damaging mistake available here.
 5. **No Colorado AI carryover.** Photon Mountain does not use that project's motto ("AI to serve all Coloradans"), its three-pillar framing, its logo, its palette (turquoise, pine green, flag gold), or its fonts (IBM Plex, Work Sans, JetBrains Mono). This was violated for months in the deliverables before anyone noticed, so it is worth checking rather than assuming.
@@ -37,6 +37,7 @@ git config core.hooksPath .githooks
 
 ## Things that will surprise you
 
+- **`04_tools/voice_lint.py` is a synced copy.** Claude-OS owns it, and `.claude-os-managed.json` records the sync. Do not edit it here. An in-place edit reads as `modified` to `claude_os_sync.py status`, and the next sync refuses to overwrite it without `--force`. Change it in Claude-OS and re-sync.
 - **`photon_mountain_map_verify.py` does not check the corridor map.** It checks the Silicon Valley comparison maps' geometry. The corridor atlas is checked by `04_tools/marker_parity.py`. An earlier version of the operating notes got this wrong and misled a planning session.
 - **The build scripts' y axis increases downward.** Every primitive renders at `PAGE_H - y`. "Above" means a smaller y. A shape drawn with the intuitive convention comes out upside down.
 - **The two violets are not interchangeable.** Violet Deep is for text on light grounds, Violet Bright for text on dark. Getting this backwards scores 2.37 against WCAG AA's 4.5 floor and looks completely plausible. `brand_tokens.check_pairing` raises on it; do not work around that.

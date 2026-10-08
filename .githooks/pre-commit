@@ -2,17 +2,21 @@
 # Photon Mountain pre-commit gate.
 #
 # ---------------------------------------------------------------------------
-# POLICY (decided 2026-09-22, after researching current practice)
+# POLICY (decided 2026-09-22, after researching current practice; rerouted
+# 2026-10-08 when voice_lint.py was adopted from Claude-OS)
 #
-#   BLOCK on em-dash.
-#     A literal character test with no false positives. "No em dashes, ever"
-#     is the one voice rule a machine can enforce perfectly, so it is enforced
-#     perfectly.
+#   BLOCK on any FAIL finding from the voice lint.
+#     This hook routes; it does not grade. voice_lint.py decides every grade,
+#     and pm-check-voice.sh exits 1 only when the lint printed a FAIL. This
+#     hook blocks on that exit code and names no check, so a regrade upstream
+#     needs no edit here. As of 2026-10-08 the FAIL checks are em-dash and
+#     spaced-en-dash: literal character tests with no false positives.
 #
-#   WARN on unattributed-figure, and on every style warning.
-#     voice_lint.py's own docstring calls the figure check a heuristic that
-#     "flags candidates for human review". Blocking on a heuristic trains
-#     people to reach for --no-verify, which costs more than it saves.
+#   WARN on every WARN finding.
+#     As of 2026-10-08 that is unattributed-figure, ai-tell, hedge-word and
+#     sentence-length. voice_lint.py's own docstring calls them heuristics.
+#     Blocking on a heuristic trains people to reach for --no-verify, which
+#     costs more than it saves.
 #
 #   FAIL OPEN when the checker itself cannot run.
 #     A missing python3 or a missing script warns and lets the commit
@@ -76,27 +80,28 @@ if [ -r "$VOICE_HOOK" ]; then
 
   if [ "${#prose[@]}" -gt 0 ]; then
     voice_out="$(bash "$VOICE_HOOK" "${prose[@]}" 2>&1)"
+    voice_status=$?
     if [ -n "$voice_out" ]; then
-      # An em dash blocks. Everything else is advisory.
-      if printf '%s' "$voice_out" | grep -q "FAIL \[em-dash\]"; then
+      # Exit 1 blocks. pm-check-voice.sh returns it only for a real FAIL
+      # finding, never for a crash. Everything else is advisory.
+      if [ "$voice_status" -eq 1 ]; then
         blocked=1
         {
           echo
           echo "========================================"
-          echo "pre-commit: EM DASH in a staged file"
+          echo "pre-commit: voice FAIL in a staged file"
           echo "========================================"
-          printf '%s\n' "$voice_out" | grep "em-dash"
+          printf '%s\n' "$voice_out" | grep -E ':[0-9]+: FAIL \['
           echo
-          echo "The voice doctrine forbids em dashes. Use a comma, a"
-          echo "semicolon, a period, or parentheses."
+          echo "Each finding above says what to change."
           echo
           echo "This commit is blocked. To override anyway:"
           echo "    git commit --no-verify"
         } >&2
       fi
-      if printf '%s' "$voice_out" | grep -qE "WARN \[|FAIL \[unattributed-figure\]"; then
+      if printf '%s' "$voice_out" | grep -qE ':[0-9]+: WARN \['; then
         warned=1
-        advisories="$(printf '%s\n' "$voice_out" | grep -E "WARN \[|unattributed-figure")"
+        advisories="$(printf '%s\n' "$voice_out" | grep -E ':[0-9]+: WARN \[')"
         total="$(printf '%s\n' "$advisories" | grep -c .)"
         # Cap the dump. A dense revision log can produce ninety warnings in one
         # commit, and a wall of text is not actionable: it buries the one
@@ -113,9 +118,16 @@ if [ -r "$VOICE_HOOK" ]; then
             echo "    python3 04_tools/voice_lint.py <file>"
           fi
           echo
-          echo "Figures should name a source or be labeled a goal. The check"
-          echo "is a heuristic, so wave through anything it misread."
+          echo "Warnings are heuristics, so wave through anything the lint"
+          echo "misread. A figure still needs a source or a goal label; the"
+          echo "lint warns on it, but the rule does not soften."
         } >&2
+      fi
+      # The gate's own notices, such as a could-not-verify after a crash. It
+      # fails open, so without this line the skip would be silent.
+      if printf '%s\n' "$voice_out" | grep -q '^pm-check-voice: '; then
+        warned=1
+        printf '%s\n' "$voice_out" | grep '^pm-check-voice: ' >&2
       fi
     fi
   fi

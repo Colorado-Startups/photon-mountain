@@ -76,6 +76,8 @@ Plus `.githooks/pre-commit`, issue and PR templates, `CODEOWNERS`, `dependabot.y
 
 **Pre-commit policy**, set after research into current practice. Block on `em-dash`, a literal character test with no false positives. Warn on `unattributed-figure`, which the lint's own docstring calls a heuristic. Fail open when the script or Python is missing, because "could not verify" is not "verified and red". Advertise `--no-verify` in the failure message. A `PreToolUse` hook denies `--no-verify` to Claude while leaving it available to Paul, so the human keeps the judgment call and the agent cannot route around the gate.
 
+*Amended 2026-10-08.* `voice_lint.py` was adopted from Claude-OS, which regraded `spaced-en-dash` to FAIL and `unattributed-figure` to WARN. The hook now blocks on any FAIL the lint assigns and no longer names `em-dash`, so the lint alone owns the grades. Figures still warn, as decided above. A spaced en dash now blocks too.
+
 ### Step 5 · The Claude layer
 
 `.claude/` carrying the three pm- skills moved from `04_tools/skills/`, two hooks wrapping `voice_lint.py`, two slash commands, and one reviewer subagent. CI invokes the same hook scripts, so the gate has one definition and three call sites. Those are the local harness, the pre-commit hook, and CI. Hooks are invoked as `bash <hook>`, never by exec bit, so a checkout that strips the bit cannot silently disable them.

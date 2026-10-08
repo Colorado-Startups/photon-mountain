@@ -30,13 +30,25 @@
 #   bash pm-check-voice.sh --self-test
 #
 # Exit codes:
-#   0  nothing to say, or only warnings
-#   1  at least one FAIL finding (an em dash, or an unattributed figure)
-#   2  could not run the check at all
+#   0  no FAIL finding: clean, warnings only, or the check could not run.
+#      Could-not-run fails open and says so on stderr.
+#   1  at least one FAIL finding, as graded by voice_lint.py
 #
-# The caller decides what a non-zero exit means. The pre-commit hook blocks on
-# an em dash but only warns on an unattributed figure, because the figure rule
-# is a heuristic by voice_lint.py's own description. See .githooks/pre-commit.
+# This script grades nothing. voice_lint.py decides every grade, and the
+# "Built-in checks" table in its docstring lists them; its --self-test holds
+# that table to the code. As of 2026-10-08 the FAIL checks are em-dash and
+# spaced-en-dash. unattributed-figure, ai-tell, hedge-word and sentence-length
+# warn. voice_lint.py is a copy synced from Claude-OS (.claude-os-managed.json
+# records it), so a regrade happens there and needs no edit here.
+#
+# Exit 1 is normalized. A crash inside voice_lint.py also exits 1, but prints
+# no FAIL finding, so it would otherwise look like a doctrine violation. This
+# script returns 1 only when the lint exited 1 and printed a FAIL finding, so
+# every caller can route on the exit code without parsing the output.
+#
+# The caller decides what exit 1 means. The pre-commit hook blocks on it and
+# shows warnings as advisory. CI notes it in the job summary. See
+# .githooks/pre-commit and .github/workflows/voice-check.yml.
 
 set -uo pipefail
 
@@ -126,7 +138,17 @@ run_check() {
   if [ -n "$output" ]; then
     echo "$output"
   fi
-  return "$status"
+
+  if [ "$status" -eq 0 ]; then
+    return 0
+  fi
+  if [ "$status" -eq 1 ] && printf '%s\n' "$output" | grep -qE ':[0-9]+: FAIL \['; then
+    return 1
+  fi
+  # Non-zero with no FAIL finding is a crash, not a verdict. Fail open, loudly.
+  echo "pm-check-voice: voice_lint.py exited $status without a FAIL finding;" \
+       "could not verify, skipping." >&2
+  return 0
 }
 
 # --------------------------------------------------------------- self-test --
@@ -139,6 +161,8 @@ self_test() {
 
   printf '# Bad\n\nA line with an em dash %s here.\n' "$(printf '\xe2\x80\x94')" > "$tmp/bad.md"
   printf '# Clean\n\nThis line is plain and direct.\n' > "$tmp/clean.md"
+  printf '# Warn\n\nThis line is arguably fine.\n' > "$tmp/warn.md"
+  printf '# Crash\n\nNot UTF-8: \xff\xfe\n' > "$tmp/crash.md"
   printf 'not prose\n' > "$tmp/thing.py"
 
   run_check "$tmp/bad.md" >/dev/null 2>&1
@@ -153,6 +177,24 @@ self_test() {
     echo "self-test: known-clean sample passes: OK"
   else
     ok=1; echo "self-test: known-clean sample raised a finding: FAIL"
+  fi
+
+  # A warning is advisory. It must print and still exit 0.
+  local warn_out
+  warn_out="$(run_check "$tmp/warn.md" 2>/dev/null)"
+  if [ "$?" -eq 0 ] && printf '%s\n' "$warn_out" | grep -qE ':[0-9]+: WARN \['; then
+    echo "self-test: warning-only sample prints and exits 0: OK"
+  else
+    ok=1; echo "self-test: warning-only sample did not print and exit 0: FAIL"
+  fi
+
+  # A crash in the lint exits 1 with no FAIL finding. That is could-not-verify,
+  # so it must fail open rather than read as a doctrine violation.
+  run_check "$tmp/crash.md" >/dev/null 2>&1
+  if [ "$?" -eq 0 ]; then
+    echo "self-test: a lint crash fails open: OK"
+  else
+    ok=1; echo "self-test: a lint crash blocked like a FAIL: FAIL"
   fi
 
   run_check "$tmp/thing.py" >/dev/null 2>&1
