@@ -158,9 +158,18 @@ def build_figure_re(extra_nouns=()):
     )
 
 
+# A hedge word that also starts a plain phrase gets a negative lookahead here,
+# so the phrase never matches. "Rather than" is contrast, not hedging, and the
+# house rules use it themselves; a bare "rather" still flags.
+HEDGE_NOT_FOLLOWED_BY = {
+    "rather": r"(?!\s+than\b)",
+}
+
+
 def compile_hedges(words):
     return [
-        (w, re.compile(r"\b" + re.escape(w).replace(r"\ ", r"\s+") + r"\b",
+        (w, re.compile(r"\b" + re.escape(w).replace(r"\ ", r"\s+") + r"\b"
+                       + HEDGE_NOT_FOLLOWED_BY.get(w.lower(), ""),
                        re.IGNORECASE))
         for w in words
     ]
@@ -351,6 +360,7 @@ SELF_TEST_CLEAN = (
     "The industry association has cited on the order of 250 photonics "
     "companies statewide; confirm the current figure before publishing.\n"
     "Reaching 10,000 photonics workers is a goal, not a count.\n"
+    "Count signed letters rather than estimates.\n"
 )
 
 # The default grade of every built-in check, written out apart from
@@ -410,6 +420,14 @@ def self_test():
         ok = False
     else:
         print("self-test: clean sample raises nothing: OK")
+
+    # "Rather than" is contrast, and the house rules use it themselves. The
+    # clean sample above carries one; a bare "rather" must still hedge.
+    ok = check(
+        any(f[2] == "hedge-word"
+            for f in lint_text("The plan is rather ambitious.\n")),
+        'a bare "rather" still flags as a hedge',
+    ) and ok
 
     if __doc__:
         ok = check(

@@ -1,9 +1,9 @@
 {
   "files": {
     "04_tools/voice_lint.py": {
-      "sha256": "b454fea814313a4d606aacad269d8c479e523b098a5a4354bb6498e19416b9bf",
+      "sha256": "2540192fded1a16ae80857653c0bff058eb3e5832345ea952cbd5a13a5d00dd2",
       "source": "tools/voice_lint.py",
-      "synced_at": "2026-10-08T12:22:46"
+      "synced_at": "2026-10-08T14:01:37"
     }
   },
   "generated_by": "Claude-OS claude_os_sync.py",
