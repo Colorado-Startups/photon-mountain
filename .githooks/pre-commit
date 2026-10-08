@@ -19,8 +19,13 @@
 #     costs more than it saves.
 #
 #   FAIL OPEN when the checker itself cannot run.
-#     A missing python3 or a missing script warns and lets the commit
-#     through. "Could not verify" is not the same as "verified and red".
+#     A missing python3, a missing script, or a crash inside the lint warns
+#     and lets the commit through. "Could not verify" is not the same as
+#     "verified and red".
+#
+#   A dash counts even inside inline code or a link. voice_lint.py reads the
+#     raw line for both dash checks; only a fenced code block skips them. A
+#     file that has to show the character goes on 04_tools/voice_exempt.txt.
 #
 # The rule of thumb behind this split: block on fast, deterministic,
 # auto-fixable things; warn on slow or probabilistic ones; put the real gate
