@@ -5,6 +5,7 @@ The mechanical and honesty rules below carried over from Colorado AI and stay in
 ## Mechanical rules
 
 - **No em dashes, ever.** Use commas, semicolons, periods, or parentheses.
+- **No spaced en dashes either.** A spaced en dash reads as an em dash, so the house rule (`~/.claude/rules/writing-and-gates.md`) bans it too, and the gate blocks it. An unspaced en dash in a range, such as 3–4, is fine.
 - One idea per sentence. Say it once. Plain and direct over clever.
 - Affirmative framing. Describe what the corridor builds and can build, not what it lacks.
 
