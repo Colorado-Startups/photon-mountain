@@ -30,10 +30,13 @@ python3 "<project folder>/04_tools/voice_lint.py" "<target file>"
 The script is deterministic and needs no network. It reports, with line numbers:
 
 - `em-dash` (FAIL): any em dash.
-- `unattributed-figure` (FAIL): a figure with no attribution cue and no goal label.
-- `spaced-en-dash`, `sentence-length`, `hedge-word` (WARN).
+- `spaced-en-dash` (FAIL): an en dash with a space on each side, which reads as an em dash.
+- `unattributed-figure` (WARN): a figure with no attribution cue and no goal label.
+- `ai-tell`, `sentence-length`, `hedge-word` (WARN).
 
-Treat every FAIL as a required fix. Treat every WARN as a prompt: confirm it is fine or fix it. The figure check is a heuristic; if a flagged figure is attributed in a way the script missed, wave it through and say so in the report.
+The script owns these grades. It is a copy synced from Claude-OS, and the "Built-in checks" table in its docstring is the canonical list. If this list and that table disagree, the table wins; update this list in the same session.
+
+Treat every FAIL as a required fix. Treat every WARN as a prompt: confirm it is fine or fix it. The figure check warns because it is a heuristic, not because the rule is soft. Every figure still needs a source or a goal label. If a flagged figure is attributed in a way the script missed, wave it through and say so in the report.
 
 ## Pass 2: judgment (the checklist)
 

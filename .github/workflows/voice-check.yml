@@ -65,7 +65,11 @@ jobs:
             echo
           } >> "$GITHUB_STEP_SUMMARY"
 
-          out="$(bash "$HOOK" $changed 2>&1)" || true
+          # Exit 1 means at least one FAIL finding. The hook normalizes it, so
+          # a crash in the lint never reads as one. Route on the code, not on
+          # check names: the lint owns the grades.
+          status=0
+          out="$(bash "$HOOK" $changed 2>&1)" || status=$?
 
           if [ -z "$out" ]; then
             echo "Clean. No findings on the changed prose." >> "$GITHUB_STEP_SUMMARY"
@@ -78,10 +82,10 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-          if printf '%s' "$out" | grep -q 'FAIL \[em-dash\]'; then
+          if [ "$status" -eq 1 ]; then
             {
               echo
-              echo 'An em dash reached a pull request. The local hook blocks these,'
+              echo 'A FAIL finding reached a pull request. The local hook blocks these,'
               echo 'so either it is not enabled in that clone or the commit bypassed'
               echo 'it. Enable it with: `git config core.hooksPath .githooks`'
             } >> "$GITHUB_STEP_SUMMARY"
