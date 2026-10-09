@@ -48,7 +48,9 @@
 #
 # The caller decides what exit 1 means. The pre-commit hook blocks on it and
 # shows warnings as advisory. CI notes it in the job summary. See
-# .githooks/pre-commit and .github/workflows/voice-check.yml.
+# .githooks/pre-commit and .github/workflows/voice-check.yml. The pre-commit
+# hook's own --self-test holds that routing to account through real commits,
+# so a change to the exit codes here fails that test, not just this one.
 
 set -uo pipefail
 

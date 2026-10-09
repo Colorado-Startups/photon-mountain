@@ -46,15 +46,19 @@ Three scripts, all with `--self-test`:
 
 Plus `03_deliverables/infographics/photon_mountain_map_verify.py`, which checks the **comparison maps'** geometry and needs matplotlib. It does not check the corridor atlas; `marker_parity.py` does.
 
+The three shell gates take `--self-test` too: `.githooks/pre-commit`, `.claude/hooks/pm-check-voice.sh`, and `.claude/hooks/pm-guard-bypass.sh`. CI runs all six in `gate-selftests.yml`.
+
 ### What blocks and what warns
 
-The pre-commit hook **blocks** on any FAIL finding from the voice lint. As of 2026-10-08 that means an em dash, or an en dash with a space on each side, which reads as one. Both are literal character tests with no false positives, so they are enforced absolutely.
+The pre-commit hook **blocks** on any FAIL finding from the voice lint. As of 2026-10-08 that means an em dash, or an en dash with a space on each side, which reads as one. Both are literal character tests with no false positives, so they are enforced absolutely. A dash counts even inside inline code or a link; only a fenced code block skips it. A file that has to show the character goes on `04_tools/voice_exempt.txt`, with a reason.
 
 It **warns** on everything else the lint finds: unattributed figures, AI tells, hedges, and long sentences. Each of those checks is a heuristic by the lint's own description, and blocking on a heuristic just teaches people to bypass the hook. A figure warning still needs an answer, because rule 2 below does not soften.
 
 The grades live in `voice_lint.py`, not in the hook. The hook blocks on the grade the lint assigns, so a regrade needs no hook edit. `voice_lint.py` is a synced copy of a shared lint, and `.claude-os-managed.json` records the sync. Do not edit it here; propose a change in an issue.
 
-It **fails open** if it cannot run at all. A missing interpreter is not a doctrine violation.
+It **fails open** if it cannot run at all. A missing interpreter, or a crash inside the lint, is not a doctrine violation. The hook says it could not verify and lets the commit through.
+
+The hook **tests itself**. `bash .githooks/pre-commit --self-test` commits seeded files in throwaway repositories, through copies of the hook, `pm-check-voice.sh` and the lint. It checks that each dash blocks, that a figure warns and proceeds, and that a lint crash proceeds with a notice. The hook runs that test itself whenever a commit stages any of the four files it copies, and CI runs it too.
 
 The escape hatch is `git commit --no-verify`, documented in the hook's own failure message. It is yours to use with judgment. A `PreToolUse` hook denies it to Claude, so the agent cannot route around a gate it dislikes while you still can.
 

@@ -4,8 +4,9 @@
 # PreToolUse hook on Bash. Reads the tool call as JSON on stdin and exits 2 to
 # block, which sends the message on stderr back to Claude.
 #
-# The reasoning: .githooks/pre-commit blocks on an em dash and documents the
-# bypass flag as the deliberate override. That override is a human judgment
+# The reasoning: .githooks/pre-commit blocks on a FAIL from the voice lint (an
+# em dash, or a spaced en dash) and documents the bypass flag as the
+# deliberate override. That override is a human judgment
 # call and should stay one. An agent that can bypass the gate whenever the
 # gate objects does not really have a gate. So the flag stays available in
 # Paul's own terminal, where this hook does not run, and is refused here.
@@ -138,11 +139,12 @@ fi
 cat >&2 <<'MSG'
 Blocked: the pre-commit bypass flag is not available to Claude here.
 
-.githooks/pre-commit blocks on an em dash, which is the one voice rule that
-can be enforced mechanically without false positives. Overriding it is a human
-judgment call, so that flag is reserved for Paul's own terminal.
+.githooks/pre-commit blocks on an em dash or a spaced en dash. Both are literal
+character tests with no false positives, so a machine can enforce them.
+Overriding one is a human judgment call, so that flag is reserved for Paul's
+own terminal.
 
-Fix the finding instead: replace the em dash with a comma, a semicolon, a
+Fix the finding instead: replace the dash with a comma, a semicolon, a
 period, or parentheses. If you believe the gate is genuinely wrong, say so and
 let Paul make the call.
 MSG

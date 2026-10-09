@@ -39,7 +39,10 @@ they block. The rest are heuristics, so they warn. A project that wants a
 different grade sets it in its rules file, for example
 "severity": {"unattributed-figure": "FAIL"}.
 
-Skipped: fenced code blocks, inline code spans, and URLs.
+Skipped: fenced code blocks, by every check. Inline code spans and URLs
+are skipped by every check except the two dash checks, which read the raw
+line, so a dash inside backticks or a link still blocks. A file that has
+to show the character belongs on the project's exempt list instead.
 
 Rules file (JSON, all keys optional):
   {
@@ -361,6 +364,9 @@ SELF_TEST_CLEAN = (
     "companies statewide; confirm the current figure before publishing.\n"
     "Reaching 10,000 photonics workers is a goal, not a count.\n"
     "Count signed letters rather than estimates.\n"
+    # An unspaced en dash in a range must not match. spaced-en-dash blocks,
+    # so it has to stay this narrow.
+    "See sections 3" + EN_DASH + "4 for the method.\n"
 )
 
 # The default grade of every built-in check, written out apart from
@@ -427,6 +433,23 @@ def self_test():
         any(f[2] == "hedge-word"
             for f in lint_text("The plan is rather ambitious.\n")),
         'a bare "rather" still flags as a hedge',
+    ) and ok
+
+    # The docstring's "Skipped" note, held to the code. The dash checks read
+    # the raw line, so backticks and links do not hide a dash; only a fenced
+    # block does.
+    raw_line = lint_text(
+        "Run `a " + EM_DASH + " b` now.\n"
+        "See [a " + EN_DASH + " b](https://example.com) now.\n"
+    )
+    ok = check(
+        graded(raw_line, "em-dash") == {"FAIL"}
+        and graded(raw_line, "spaced-en-dash") == {"FAIL"},
+        "a dash in inline code or a link still flags",
+    ) and ok
+    ok = check(
+        not lint_text("```\nRun a " + EM_DASH + " b " + EN_DASH + " c.\n```\n"),
+        "a fenced block skips every check",
     ) and ok
 
     if __doc__:
