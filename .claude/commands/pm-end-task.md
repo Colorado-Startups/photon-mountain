@@ -9,11 +9,11 @@ updated in the same session.
 Work through it in order:
 
 1. **Gates.** Run `/pm-voice-check` on everything written or edited. Run pm-fact-guardrails on
-   anything carrying current-status claims. Nothing tests on the MacBook Air, so the rest run in
-   the cloud, by name from `.github/cloud-test.json`
-   (`gh workflow run cloud-test.yml -f ref=<branch> -f script=<name>`), or as the pull request's
-   own CI. If `04_tools/` changed, run `selftests`. If the corridor atlas changed, run
-   `check:marker-parity`. If the comparison maps changed, run `verify:comparison-maps`.
+   anything carrying current-status claims. If `04_tools/` changed, run all three self-tests:
+   `voice_lint.py`, `brand_tokens.py`, `marker_parity.py`. If the corridor atlas changed, run
+   `marker_parity.py` against it. If the comparison maps changed, run `photon_mountain_map_verify.py`
+   in the cloud, since it needs matplotlib:
+   `gh workflow run cloud-test.yml --ref <branch> -f script=verify:comparison-maps`.
 2. **Record.** Add a dated entry to the Done section of `00_project_system/tasks.md`. Say what
    changed, what was decided, and what was found. A close-out entry that only says "done" is
    worthless six months later.

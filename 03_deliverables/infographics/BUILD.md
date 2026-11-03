@@ -28,20 +28,20 @@ The first three scripts are stdlib plus one third-party library each, pinned in 
 Brand colors and fonts come from `04_tools/brand_tokens.py`. No script here hardcodes a hex value or a font name. Confirm the tokens still agree with the identity doc before a build:
 
 ```bash
-gh workflow run cloud-test.yml -f ref=<branch> -f script=selftest:brand-tokens
+python3 04_tools/brand_tokens.py --self-test
 ```
 
 The seven brand TTFs live in `01_doctrine/brand_assets/fonts/`, with their provenance and the commands that cut them in the README there. If a font file is missing, `photon_mountain_build.py` prints `brand_fonts= False` and silently falls back to core PDF fonts, so check that line on every run.
 
 ## Regenerate
 
-Dispatch the entry, then download what it wrote. The outputs come back as a run artifact, kept 7 days (cloud-test/README.md in Colorado-Startups/.github). Commit the regenerated files from the artifact.
+Dispatch the entry, then download what it wrote. The outputs come back as a run artifact, kept 7 days (cloud-test/README.md in Colorado-Startups/.github). Commit the regenerated files from the artifact. A dispatch reads the allowlist from `main`, and `--ref` picks the branch whose code it renders.
 
 ```bash
-gh workflow run cloud-test.yml -f ref=<branch> -f script=render:infographic-png
-gh workflow run cloud-test.yml -f ref=<branch> -f script=render:comparison-maps
-gh workflow run cloud-test.yml -f ref=<branch> -f script=verify:comparison-maps
-gh workflow run cloud-test.yml -f ref=<branch> -f script=render:vision
+gh workflow run cloud-test.yml --ref <branch> -f script=render:infographic-png
+gh workflow run cloud-test.yml --ref <branch> -f script=render:comparison-maps
+gh workflow run cloud-test.yml --ref <branch> -f script=verify:comparison-maps
+gh workflow run cloud-test.yml --ref <branch> -f script=render:vision
 gh run list --workflow cloud-test.yml --limit 4
 gh run download <id>
 ```

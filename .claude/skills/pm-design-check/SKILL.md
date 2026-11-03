@@ -95,10 +95,8 @@ The voice doctrine does not stop at prose. It governs what a picture asserts.
 
 ## Handoffs
 
-- **Token drift**: `brand_tokens.py --self-test`, in the cloud, since nothing tests on the
-  MacBook Air: `gh workflow run cloud-test.yml -f ref=<branch> -f script=selftest:brand-tokens`.
-  Run it first; if the tokens no longer match the identity doc, every later finding is
-  unreliable.
+- **Token drift**: `python3 04_tools/brand_tokens.py --self-test`. Run it first; if the
+  tokens no longer match the identity doc, every later finding is unreliable.
 - **Contrast math and WCAG**: the `design:accessibility-review` skill, when the session
   has it. When it does not, compute the ratios directly and say that you did.
 - **Prose**: `pm-voice-check`.

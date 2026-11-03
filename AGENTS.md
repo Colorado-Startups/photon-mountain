@@ -21,24 +21,17 @@ The project's whole value is that its claims are true. Read that sentence again 
 
 ## Before you open a pull request
 
-**Compute:** nothing tests, builds, renders or uses a GPU on the MacBook Air; it runs in CI or on cloud compute (`.github/workflows/cloud-test.yml` here). House rule: `~/.claude/rules/compute.md` (canonical: Claude-OS `rules/compute.md`), which wins any disagreement.
+**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: `~/.claude/rules/compute.md` (canonical: Claude-OS `rules/compute.md`), which wins any disagreement.
 
-The voice lint is a lint of the files you changed, not a test, so it stays local. The pre-commit hook runs it on every commit, and you can run it by hand:
+Run the gates. They are fast, they need no network, and two of the three are standard library only.
 
 ```bash
 python3 04_tools/voice_lint.py <files you changed>
+python3 04_tools/brand_tokens.py --self-test
+python3 04_tools/marker_parity.py          # if you touched 03_deliverables/maps/
 ```
 
-The self-tests, the atlas parity check, the comparison map geometry check and the renders run in the cloud. Dispatch one by its name in `.github/cloud-test.json`, then read the run:
-
-```bash
-gh workflow run cloud-test.yml -f ref=<your branch> -f script=selftests
-gh workflow run cloud-test.yml -f ref=<your branch> -f script=check:marker-parity   # if you touched 03_deliverables/maps/
-gh run list --workflow cloud-test.yml --limit 1
-gh run view <id>
-```
-
-The ref must contain `.github/cloud-test.json`, so a branch cut before the caller landed on `main` needs `main` merged in. `gate-selftests.yml`, `marker-parity.yml` and `comparison-map-verify.yml` also run on their own on a pull request that touches their paths. To rebuild a deliverable, see `03_deliverables/infographics/BUILD.md`.
+The comparison map geometry check and the deliverable renders need matplotlib or reportlab, so they run in the cloud, by a name in `.github/cloud-test.json`. `03_deliverables/infographics/BUILD.md` has the commands.
 
 Enable the local hooks once per clone, or the pre-commit gate will not run for you at all:
 

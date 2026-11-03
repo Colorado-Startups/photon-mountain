@@ -41,14 +41,6 @@
 #
 # ENABLE (once per clone):  git config core.hooksPath .githooks
 #
-# NO TESTS IN THE HOOK (2026-11-02). Nothing tests, builds or renders on the
-#     MacBook Air (Paul, 2026-11-02), so this hook runs no self-test, build or
-#     render. It keeps the two cheap guards below: the secret scan and the
-#     voice gate on staged files. Every gate's self-test runs in CI
-#     (gate-selftests.yml), and .github/workflows/cloud-test.yml runs any of
-#     them, or a render, on dispatch. Until 2026-11-02 a section 3 here ran
-#     the self-tests whenever a commit staged a gate file.
-#
 # SELF-TEST:  bash .githooks/pre-commit --self-test
 #     Commits seeded files through this hook and checks what blocks and what
 #     proceeds. Its call sites are listed where it is defined, below.
@@ -68,10 +60,11 @@ set -uo pipefail
 # Its call sites, as wired:
 #   1. .github/workflows/gate-selftests.yml, on a push or pull request that
 #      touches .githooks/, .claude/hooks/ or 04_tools/. FIRES.
-#   2. .github/workflows/cloud-test.yml, as selftest:pre-commit or selftests
-#      in .github/cloud-test.json. WAITS for someone to dispatch it, except
-#      that a pull request changing that workflow or its allowlist runs
-#      selftests once.
+#   2. Section 3 of this hook, when a commit stages any of the four files.
+#      FIRES, once the clone has set core.hooksPath.
+#   3. .github/workflows/cloud-test.yml, as selftest:pre-commit or selftests
+#      in .github/cloud-test.json. WAITS for a dispatch, except that a pull
+#      request changing that workflow or its allowlist runs selftests once.
 #
 # Written for the bash 3.2 that ships with macOS: no ${var,,}, no mapfile, no
 # associative arrays.
@@ -272,6 +265,66 @@ if [ -r "$VOICE_HOOK" ]; then
   fi
 else
   echo "pre-commit: $VOICE_HOOK not readable; skipping the voice check." >&2
+fi
+
+# --- 3. Gate self-tests, when a gate itself changed -----------------------
+# A broken gate is worse than no gate, so if a gate changed, prove it still
+# passes its own self-test before the change can land.
+if printf '%s' "$staged" | grep -qE "^\.claude/hooks/|^04_tools/voice_exempt\.txt"; then
+  for shell_gate in pm-check-voice.sh pm-guard-bypass.sh; do
+    script="$REPO_ROOT/.claude/hooks/$shell_gate"
+    [ -r "$script" ] || continue
+    if ! out="$(bash "$script" --self-test 2>&1)"; then
+      blocked=1
+      {
+        echo
+        echo "pre-commit: $shell_gate --self-test FAILED"
+        echo "$out" | tail -15
+        echo
+        echo "A gate that does not pass its own self-test cannot be trusted."
+        echo "This commit is blocked."
+      } >&2
+    fi
+  done
+fi
+
+# This hook's own self-test runs when any of the four files it copies is
+# staged, not only this one. The test drives the whole chain, and the chain
+# can break from either end: on 2026-10-08 a regrade in voice_lint.py alone
+# would have let a FAIL through this hook unblocked and unprinted. It needs
+# python3 for the lint, so without one it is skipped like the tools below.
+if printf '%s' "$staged" \
+    | grep -qE '^\.githooks/|^\.claude/hooks/pm-check-voice\.sh$|^04_tools/voice_(lint\.py|exempt\.txt)$' \
+    && command -v python3 >/dev/null 2>&1; then
+  if ! out="$(bash "$REPO_ROOT/.githooks/pre-commit" --self-test 2>&1)"; then
+    blocked=1
+    {
+      echo
+      echo "pre-commit: .githooks/pre-commit --self-test FAILED"
+      printf '%s\n' "$out" | grep -v ': OK$' | head -40
+      echo
+      echo "A gate that does not pass its own self-test cannot be trusted."
+      echo "This commit is blocked."
+    } >&2
+  fi
+fi
+
+if printf '%s' "$staged" | grep -q "^04_tools/" && command -v python3 >/dev/null 2>&1; then
+  for tool in voice_lint brand_tokens marker_parity; do
+    script="$REPO_ROOT/04_tools/$tool.py"
+    [ -r "$script" ] || continue
+    if ! out="$(python3 "$script" --self-test 2>&1)"; then
+      blocked=1
+      {
+        echo
+        echo "pre-commit: $tool.py --self-test FAILED"
+        echo "$out" | tail -15
+        echo
+        echo "A gate that does not pass its own self-test cannot be trusted."
+        echo "This commit is blocked."
+      } >&2
+    fi
+  done
 fi
 
 if [ "$blocked" -eq 1 ]; then
