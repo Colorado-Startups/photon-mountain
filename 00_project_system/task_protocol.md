@@ -23,7 +23,7 @@ The verification gate before anything ships or the task is called done:
 - **Voice check.** No em dashes anywhere in new or edited text; plain sentences; one idea per sentence (per `01_doctrine/voice.md`).
 - **Honesty check.** Every figure attributed or labeled a goal; operating versus opening-2026 versus horizon framing correct; "formerly NREL" on first reference; Colorado Photonics Industry Association figures attributed to the association; photonic compute framed as emerging.
 - **Freshness check.** Any stated current status (who operates what, what a program funds) was searched this session, not recalled.
-- **Mechanical checks.** Run the map verifier (`photon_mountain_map_verify.py`) if the map was touched; re-render and eyeball any rebuilt deliverable.
+- **Mechanical checks.** Run the map verifier (`photon_mountain_map_verify.py`) if the map was touched; re-render and eyeball any rebuilt deliverable. Both run in the cloud, never on the MacBook Air: dispatch `verify:comparison-maps` or a `render:` entry from `.github/cloud-test.json`, per `03_deliverables/infographics/BUILD.md`.
 - **User review.** Anything external-facing (copy, graphics, posts, the instructions field) gets Paul's explicit sign-off before it counts as done.
 
 ## 4. Task End

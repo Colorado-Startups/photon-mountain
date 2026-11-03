@@ -21,39 +21,45 @@ The page is also published as a private Artifact on claude.ai. It links out to t
 
 ## Setup
 
-The first three scripts are stdlib plus one third-party library each, pinned in `requirements.txt` at the repo root. `photon_mountain_vision_build.py` needs nothing beyond the standard library and runs with a bare `python3`.
+Nothing renders on the MacBook Air (Paul, 2026-11-02). Every script here runs on a hosted runner through `.github/workflows/cloud-test.yml`, by a name in `.github/cloud-test.json`, so there is no local setup.
 
-```bash
-python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-```
+The first three scripts are stdlib plus one third-party library each, pinned in `requirements.txt` at the repo root. Their cloud entries install it on the runner, with Python 3.11. `photon_mountain_vision_build.py` needs nothing beyond the standard library, so its entries install nothing.
 
 Brand colors and fonts come from `04_tools/brand_tokens.py`. No script here hardcodes a hex value or a font name. Confirm the tokens still agree with the identity doc before a build:
 
 ```bash
-python3 04_tools/brand_tokens.py --self-test
+gh workflow run cloud-test.yml -f ref=<branch> -f script=selftest:brand-tokens
 ```
 
 The seven brand TTFs live in `01_doctrine/brand_assets/fonts/`, with their provenance and the commands that cut them in the README there. If a font file is missing, `photon_mountain_build.py` prints `brand_fonts= False` and silently falls back to core PDF fonts, so check that line on every run.
 
 ## Regenerate
 
+Dispatch the entry, then download what it wrote. The outputs come back as a run artifact, kept 7 days (cloud-test/README.md in Colorado-Startups/.github). Commit the regenerated files from the artifact.
+
 ```bash
-cd 03_deliverables/infographics
-../../.venv/bin/python photon_mountain_build.py
-../../.venv/bin/python photon_mountain_map_generator.py .
-../../.venv/bin/python photon_mountain_map_verify.py
-python3 photon_mountain_vision_build.py
+gh workflow run cloud-test.yml -f ref=<branch> -f script=render:infographic-png
+gh workflow run cloud-test.yml -f ref=<branch> -f script=render:comparison-maps
+gh workflow run cloud-test.yml -f ref=<branch> -f script=verify:comparison-maps
+gh workflow run cloud-test.yml -f ref=<branch> -f script=render:vision
+gh run list --workflow cloud-test.yml --limit 4
+gh run download <id>
 ```
+
+| Entry | Runs, in this folder | Returns |
+|---|---|---|
+| `render:infographic` | `python3 photon_mountain_build.py` | `photon_mountain.pdf` |
+| `render:infographic-png` | the same, then `pdftoppm -png -r 200 -singlefile photon_mountain.pdf photon_mountain`, since the repo has no browser | `photon_mountain.pdf`, `photon_mountain.png` |
+| `render:comparison-maps` | `python3 photon_mountain_map_generator.py .` | both `..._vs_silicon_valley*.html` and their `_preview.png` |
+| `verify:comparison-maps` | `python3 photon_mountain_map_verify.py` | nothing; the run fails unless the geometry is sound |
+| `render:vision` | `python3 photon_mountain_vision_build.py --check` | `photon_mountain_vision.html` |
+| `check:vision-rebuild` | `python3 photon_mountain_vision_build.py`, then `git diff --exit-code --stat -- photon_mountain_vision.html` | nothing; the run fails if the rebuild changed the committed page |
 
 The vision build takes no arguments. It finds the repo root from its own location, so it must stay in this folder.
 
-Then rasterize the PDF, since the repo has no browser:
-
-```bash
-pdftoppm -png -r 200 -singlefile photon_mountain.pdf photon_mountain
-```
-
 ## What to check on every build
+
+Each line below is in the run's log, and the last lines of each entry's command are in its job summary.
 
 - **`brand_fonts= True`** in the build script's output. False means it rendered in fallback fonts.
 - **`OVERFLOW none`**. The page is US Letter and the layout is tight; a text change can push content past the bottom margin. A wider font pushes harder, which is how the re-skin first overflowed by 7pt.
@@ -61,8 +67,8 @@ pdftoppm -png -r 200 -singlefile photon_mountain.pdf photon_mountain
 - **Contrast.** `brand_tokens.check_pairing` raises on a pairing below WCAG AA. The trap to watch is violet: the on-light and on-dark variants look similar and are not interchangeable. Setting the on-light violet over the dark corridor panel scores 2.37, well under the 4.5 floor, and it looks plausible until measured.
 - **`sites: 53`** in the vision build's output, with the seven category counts. A different total means the corridor atlas changed, so `04_tools/marker_parity.py` and `../maps/MAP_NOTES.md` both need a look before the page ships.
 - **Alpenglow carries no text on the vision page.** On Snowfield it measures 2.90, under even the large-text floor, so accent text there is Alpenglow Deep or Violet Deep. This is the on-light half of the violet trap above, and it bites the same way.
-- **A rebuild leaves `git status` clean.** The vision page is generated, so building it twice must produce the same bytes. If a rebuild shows the file as modified, the build is not reproducible and you cannot tell real drift from noise. This was broken once: four scale-bar coordinates were interpolated without a format spec, so they emitted a full float repr that varied in the last bits between runs. Every coordinate in a generated SVG needs a format spec. Check with `python3 photon_mountain_vision_build.py && git diff --stat`.
-- **`check: PASS`** from `python3 photon_mountain_vision_build.py --check`. The comparison and timeline graphics pack their labels from measured character widths. A longer milestone label or city name can push past a viewBox edge, or collide with a neighbor. Neither raises on its own. The check also scans for a hex that traces to no token, and for an accent set as text where it cannot carry text. It found the Santa Clara and San Jose pins overlapping the first time it ran, which is the failure mode it exists for.
+- **A rebuild leaves `git status` clean.** The vision page is generated, so building it twice must produce the same bytes. If a rebuild shows the file as modified, the build is not reproducible and you cannot tell real drift from noise. This was broken once: four scale-bar coordinates were interpolated without a format spec, so they emitted a full float repr that varied in the last bits between runs. Every coordinate in a generated SVG needs a format spec. The `check:vision-rebuild` entry checks it: it rebuilds the page on the runner and fails if the committed file changed.
+- **`check: PASS`** from `render:vision`, which runs `python3 photon_mountain_vision_build.py --check`. The comparison and timeline graphics pack their labels from measured character widths. A longer milestone label or city name can push past a viewBox edge, or collide with a neighbor. Neither raises on its own. The check also scans for a hex that traces to no token, and for an accent set as text where it cannot carry text. It found the Santa Clara and San Jose pins overlapping the first time it ran, which is the failure mode it exists for.
 
 ## What the verifier does and does not cover
 

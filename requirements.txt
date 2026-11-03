@@ -5,8 +5,8 @@
 # nothing from this file. Only the deliverable build scripts in
 # 03_deliverables/infographics/ have third-party dependencies.
 #
-#   python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-#
+# Nothing builds on the MacBook Air (Paul, 2026-11-02). The entries in
+# .github/cloud-test.json that list this file install it on a hosted runner.
 # See 03_deliverables/infographics/BUILD.md for the build commands.
 
 matplotlib>=3.9,<4      # photon_mountain_map_generator.py, and map_verify via it
