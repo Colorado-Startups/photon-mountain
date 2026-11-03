@@ -15,9 +15,11 @@ locked decisions below exist to stop the next session from re-deriving them.
 
 ## Regenerate and verify
 
+Both run in the cloud, never on the MacBook Air. Each is an entry in `.github/cloud-test.json`; `BUILD.md` in this folder has the details.
+
 ```
-python3 photon_mountain_map_generator.py .   # writes both HTML + both previews
-python3 photon_mountain_map_verify.py        # exits 0 only if all checks pass
+gh workflow run cloud-test.yml --ref <branch> -f script=render:comparison-maps   # python3 photon_mountain_map_generator.py . (both HTML + both previews, as an artifact)
+gh workflow run cloud-test.yml --ref <branch> -f script=verify:comparison-maps   # python3 photon_mountain_map_verify.py (exits 0 only if all checks pass)
 ```
 
 ## Locked decisions

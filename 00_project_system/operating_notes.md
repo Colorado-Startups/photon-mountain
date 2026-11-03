@@ -10,7 +10,7 @@ Lightweight for now. Photon Mountain is a one-person project on day one; this gr
 ## Build notes
 
 - No browser in the build sandbox. Render PDFs with reportlab, then rasterize to PNG with `pdftoppm -png -r 200 -singlefile`.
-- Build dependencies are pinned in `../requirements.txt` and installed into a gitignored `.venv/`. Full steps and the per-build checklist: `../03_deliverables/infographics/BUILD.md`.
+- Build dependencies are pinned in `../requirements.txt`. Nothing builds or renders on the MacBook Air (Paul, 2026-11-02). The cloud-test entries in `../.github/cloud-test.json` install them on a hosted runner and return the outputs as artifacts. Full steps and the per-build checklist: `../03_deliverables/infographics/BUILD.md`.
 - **What the map verifier actually checks.** `photon_mountain_map_verify.py` verifies the **Silicon Valley comparison maps**, not the corridor atlas. It checks tier membership, blob nesting, and core diameters. It is indifferent to styling, which makes it a good re-skin regression test. It is not font-free: it imports the generator, which imports matplotlib. The corridor atlas in `../03_deliverables/maps/` is guarded separately by `../04_tools/marker_parity.py`. An earlier version of this file said the verifier was a pure numeric check to run after any map edit; that was wrong on both counts and misled a later planning session.
 - npm and PyPI may be blocked in-sandbox; rebuild from the scripts already in the repo rather than installing.
 

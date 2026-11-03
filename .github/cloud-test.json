@@ -1,0 +1,79 @@
+{
+  "$comment": "The only commands .github/workflows/cloud-test.yml can run. Format: cloud-test/README.md in Colorado-Startups/.github. Paths in pip and artifacts start at the checkout root; cwd sets where before and run start. The self-tests mirror gate-selftests.yml, check:marker-parity mirrors marker-parity.yml, verify:comparison-maps mirrors comparison-map-verify.yml, and the render and vision entries follow 03_deliverables/infographics/BUILD.md.",
+  "version": 1,
+  "scripts": {
+    "selftests": {
+      "$comment": "All six gate self-tests, in gate-selftests.yml order, stopping at the first failure. The pull_request default. The log shows every one; the job summary shows the last.",
+      "before": [
+        ["python3", "04_tools/voice_lint.py", "--self-test"],
+        ["python3", "04_tools/brand_tokens.py", "--self-test"],
+        ["python3", "04_tools/marker_parity.py", "--self-test"],
+        ["bash", ".claude/hooks/pm-check-voice.sh", "--self-test"],
+        ["bash", ".claude/hooks/pm-guard-bypass.sh", "--self-test"]
+      ],
+      "run": ["bash", ".githooks/pre-commit", "--self-test"]
+    },
+    "selftest:voice-lint": { "run": ["python3", "04_tools/voice_lint.py", "--self-test"] },
+    "selftest:brand-tokens": { "run": ["python3", "04_tools/brand_tokens.py", "--self-test"] },
+    "selftest:marker-parity": { "run": ["python3", "04_tools/marker_parity.py", "--self-test"] },
+    "selftest:pm-check-voice": { "run": ["bash", ".claude/hooks/pm-check-voice.sh", "--self-test"] },
+    "selftest:pm-guard-bypass": { "run": ["bash", ".claude/hooks/pm-guard-bypass.sh", "--self-test"] },
+    "selftest:pre-commit": { "run": ["bash", ".githooks/pre-commit", "--self-test"] },
+    "check:marker-parity": {
+      "$comment": "The corridor atlas's four files carry the same 53 markers.",
+      "run": ["python3", "04_tools/marker_parity.py"]
+    },
+    "verify:comparison-maps": {
+      "$comment": "Geometry of the Silicon Valley comparison maps. Imports the generator, so it needs matplotlib.",
+      "run": ["python3", "photon_mountain_map_verify.py"],
+      "cwd": "03_deliverables/infographics",
+      "pip": ["requirements.txt"]
+    },
+    "render:infographic": {
+      "$comment": "The launch infographic PDF. Check brand_fonts= True and OVERFLOW none in the job summary.",
+      "run": ["python3", "photon_mountain_build.py"],
+      "cwd": "03_deliverables/infographics",
+      "pip": ["requirements.txt"],
+      "artifacts": ["03_deliverables/infographics/photon_mountain.pdf"]
+    },
+    "render:infographic-png": {
+      "$comment": "The PDF, then BUILD.md's rasterize step with pdftoppm from poppler-utils. The build's own lines are in the log, under its group.",
+      "before": [
+        ["sudo", "apt-get", "update", "-qq"],
+        ["sudo", "apt-get", "install", "-y", "-qq", "--no-install-recommends", "poppler-utils"],
+        ["python3", "photon_mountain_build.py"]
+      ],
+      "run": ["pdftoppm", "-png", "-r", "200", "-singlefile", "photon_mountain.pdf", "photon_mountain"],
+      "cwd": "03_deliverables/infographics",
+      "pip": ["requirements.txt"],
+      "artifacts": [
+        "03_deliverables/infographics/photon_mountain.pdf",
+        "03_deliverables/infographics/photon_mountain.png"
+      ]
+    },
+    "render:comparison-maps": {
+      "$comment": "Both comparison maps and their previews.",
+      "run": ["python3", "photon_mountain_map_generator.py", "."],
+      "cwd": "03_deliverables/infographics",
+      "pip": ["requirements.txt"],
+      "artifacts": [
+        "03_deliverables/infographics/photon_mountain_vs_silicon_valley.html",
+        "03_deliverables/infographics/photon_mountain_vs_silicon_valley_preview.png",
+        "03_deliverables/infographics/photon_mountain_vs_silicon_valley_core.html",
+        "03_deliverables/infographics/photon_mountain_vs_silicon_valley_core_preview.png"
+      ]
+    },
+    "render:vision": {
+      "$comment": "The vision page, then its --check. Standard library only, so no pip.",
+      "run": ["python3", "photon_mountain_vision_build.py", "--check"],
+      "cwd": "03_deliverables/infographics",
+      "artifacts": ["03_deliverables/infographics/photon_mountain_vision.html"]
+    },
+    "check:vision-rebuild": {
+      "$comment": "BUILD.md's reproducibility check: a rebuild must leave the committed page byte for byte unchanged.",
+      "before": [["python3", "photon_mountain_vision_build.py"]],
+      "run": ["git", "diff", "--exit-code", "--stat", "--", "photon_mountain_vision.html"],
+      "cwd": "03_deliverables/infographics"
+    }
+  }
+}

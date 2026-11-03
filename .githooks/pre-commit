@@ -62,6 +62,9 @@ set -uo pipefail
 #      touches .githooks/, .claude/hooks/ or 04_tools/. FIRES.
 #   2. Section 3 of this hook, when a commit stages any of the four files.
 #      FIRES, once the clone has set core.hooksPath.
+#   3. .github/workflows/cloud-test.yml, as selftest:pre-commit or selftests
+#      in .github/cloud-test.json. WAITS for a dispatch, except that a pull
+#      request changing that workflow or its allowlist runs selftests once.
 #
 # Written for the bash 3.2 that ships with macOS: no ${var,,}, no mapfile, no
 # associative arrays.

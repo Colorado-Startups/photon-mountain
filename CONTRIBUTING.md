@@ -12,13 +12,7 @@ git config core.hooksPath .githooks
 
 **Do this first.** Without it the pre-commit gate does not run for you, and the repo is private on a Free-tier organization, which means GitHub cannot enforce a required status check either. Until the repo goes public, that hook is the only gate that actually stops anything.
 
-For the deliverable build scripts only:
-
-```bash
-python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
-```
-
-The doctrine tooling in `04_tools/` is standard library by design and needs none of that.
+Builds and renders run in the cloud, never on the MacBook Air (Paul, 2026-11-02). The deliverable build scripts render on a hosted runner through `.github/workflows/cloud-test.yml`, which installs `requirements.txt` there. So there is no local virtual environment to set up. `03_deliverables/infographics/BUILD.md` has the commands. The doctrine tooling in `04_tools/` is standard library by design and needs no install anywhere.
 
 ### Quieting Claude Code in this project
 
@@ -46,7 +40,11 @@ Three scripts, all with `--self-test`:
 
 Plus `03_deliverables/infographics/photon_mountain_map_verify.py`, which checks the **comparison maps'** geometry and needs matplotlib. It does not check the corridor atlas; `marker_parity.py` does.
 
-The three shell gates take `--self-test` too: `.githooks/pre-commit`, `.claude/hooks/pm-check-voice.sh`, and `.claude/hooks/pm-guard-bypass.sh`. CI runs all six in `gate-selftests.yml`.
+The three shell gates take `--self-test` too: `.githooks/pre-commit`, `.claude/hooks/pm-check-voice.sh`, and `.claude/hooks/pm-guard-bypass.sh`. CI runs all six in `gate-selftests.yml`. To run them in the cloud on demand, dispatch `selftests`, or one `selftest:` name from `.github/cloud-test.json`:
+
+```bash
+gh workflow run cloud-test.yml --ref <your branch> -f script=selftests
+```
 
 ### What blocks and what warns
 

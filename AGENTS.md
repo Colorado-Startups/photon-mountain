@@ -6,7 +6,7 @@ The operating manual for any AI agent or automated contributor working in this r
 
 ## What this project is
 
-Photon Mountain is a place brand for Colorado's computing-with-light corridor. It is doctrine, corridor substance, and deliverables, not an application. There is no server, no test suite in the usual sense, and no deploy. The "build" is three Python scripts that render an infographic and two maps.
+Photon Mountain is a place brand for Colorado's computing-with-light corridor. It is doctrine, corridor substance, and deliverables, not an application. There is no server, no test suite in the usual sense, and no deploy. The "build" is three Python scripts that render an infographic and two maps. They render on a cloud runner, never on the MacBook Air.
 
 The project's whole value is that its claims are true. Read that sentence again before changing anything in `02_substance/`.
 
@@ -21,6 +21,8 @@ The project's whole value is that its claims are true. Read that sentence again 
 
 ## Before you open a pull request
 
+**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: `~/.claude/rules/compute.md` (canonical: Code-OS `rules/compute.md`), which wins any disagreement.
+
 Run the gates. They are fast, they need no network, and two of the three are standard library only.
 
 ```bash
@@ -28,6 +30,8 @@ python3 04_tools/voice_lint.py <files you changed>
 python3 04_tools/brand_tokens.py --self-test
 python3 04_tools/marker_parity.py          # if you touched 03_deliverables/maps/
 ```
+
+The comparison map geometry check and the deliverable renders need matplotlib or reportlab, so they run in the cloud, by a name in `.github/cloud-test.json`. `03_deliverables/infographics/BUILD.md` has the commands.
 
 Enable the local hooks once per clone, or the pre-commit gate will not run for you at all:
 
