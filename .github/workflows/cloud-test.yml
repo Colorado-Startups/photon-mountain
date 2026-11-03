@@ -50,7 +50,7 @@ concurrency:
 
 jobs:
   cloud-test:
-    uses: Colorado-Startups/.github/.github/workflows/cloud-test.yml@9bb5e6d4830903adb552b5ad894c78f57570aa23 # .github PR #4 reviewed head; bump to main after merge
+    uses: Colorado-Startups/.github/.github/workflows/cloud-test.yml@3237ce8e8c0ec337123fd2d4a0d17476caf887b1 # Colorado-Startups/.github main, PR #4's squash merge (2026-11-02)
     with:
       ref: ${{ inputs.ref }}
       script: ${{ inputs.script || 'selftests' }}
