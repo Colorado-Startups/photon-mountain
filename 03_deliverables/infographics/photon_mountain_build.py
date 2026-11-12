@@ -260,7 +260,7 @@ def pillars():
     gap=10; cw=(CW-2*gap)/3.0; h=132; top=y
     data=[("PHOTONIC CHIPS","Chips that compute and move data with light, at far lower power. Colorado fabricates them today at NIST Boulder.",">$10B","2034 market, per analyst forecasts",chip_glyph),
           ("RENEWABLE ENERGY","Power is the constraint on the AI build. Golden's National Laboratory of the Rockies (formerly NREL) is a Department of Energy national lab.","100%","renewable-electricity goal by 2040 (Polis roadmap)",sun_glyph),
-          ("QUANTUM SYSTEMS","The Elevate Quantum hub, and Colorado School of Mines' first-in-nation quantum systems engineering bachelor's.","$127M+","federal and state funding awarded, 2024",atom_glyph)]
+          ("QUANTUM SYSTEMS","The Elevate Quantum hub, and Mines' first-in-nation quantum systems engineering bachelor's.","$127M+","federal and state awards, 2024",atom_glyph)]
     for i,(title,body,stat,lab,glyph) in enumerate(data):
         x=CX+i*(cw+gap)
         rrect(x,top,cw,h,r=10,fill=WHITE,stroke=MIST,sw=1)
