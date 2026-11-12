@@ -115,11 +115,10 @@ Generous margins. Summit Night or White fields. Rules and captions in Granite. O
 | The mark in one palette color, clear space respected. | The mark with a gradient, rays, or a prism beam. |
 | "Come build with light." | "Join the revolution!" |
 
-## 11. Using the brand (usage policy, v1)
+## 11. Using the brand (usage policy, v2)
 
-- No third party may use the Photon Mountain name or mark as a brand without Paul's written approval.
-- Corridor institutions and press may reference the name in text freely.
-- Partners producing material under an approval follow this document exactly; when in doubt, ask the steward.
+- Anyone may use the Photon Mountain name, wordmark, Summit Sun mark and palette, for any purpose, with no approval needed (Paul, 2026-11-12).
+- This document is guidance, not a condition of use. Following it keeps the mark recognizable.
 - The steward is Paul; brand decisions and changes are recorded in `brand_identity.md`'s changelog.
 
 ## 12. Decision record
@@ -129,5 +128,6 @@ Generous margins. Summit Night or White fields. Rules and captions in Granite. O
 
 ## Changelog
 
+- 2026-11-12 · Section 11 now usage policy v2: nothing is reserved, and no approval is needed.
 - 2026-07-05 · Tagline system and Summit Sun mark locked; sections 1, 4, and 12 updated to match.
 - 2026-07-05 · v1 drafted (external-ready form, internal until sign-off). Tagline and final mark pending.

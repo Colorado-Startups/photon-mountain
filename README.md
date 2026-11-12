@@ -28,10 +28,10 @@ Start with [`CONTRIBUTING.md`](CONTRIBUTING.md), then pick an issue labeled [goo
 
 ## License
 
-- **Writing and images:** [CC BY 4.0](LICENSE).
-- **Code:** [MIT](LICENSES/MIT.txt).
-- **Corridor map data:** [ODbL 1.0](LICENSES/ODbL-1.0.txt), because it derives from OpenStreetMap.
+- **Everything:** [CC0 1.0](LICENSE). Use it for anything, with no credit owed.
+- **Code:** CC0 1.0 or [0BSD](LICENSES/0BSD.txt), your choice.
+- **Corridor map data:** [ODbL 1.0](LICENSES/ODbL-1.0.txt), because it derives from OpenStreetMap. Credit "© OpenStreetMap contributors".
 
-The name and the Summit Sun mark are reserved; [`TRADEMARKS.md`](TRADEMARKS.md) says what you may do without asking. The per-path detail is in [`LICENSING.md`](LICENSING.md).
+Nothing is reserved, including the name and the Summit Sun mark. The fonts, the vendored voice lint and the Code of Conduct keep their own licenses. [`LICENSING.md`](LICENSING.md) lists every exception.
 
 Photon Mountain is a Colorado Startups project, in collaboration with Colorado AI.

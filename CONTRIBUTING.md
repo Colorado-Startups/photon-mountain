@@ -115,9 +115,9 @@ The task lifecycle is `00_project_system/task_protocol.md`. A task is not done u
 
 ## Licensing
 
-By contributing, you license your work under the licenses in `LICENSING.md`: CC BY 4.0 for prose, MIT for code, ODbL 1.0 for the corridor map data. The map data is different because it derives from OpenStreetMap; read that section before touching `03_deliverables/maps/`. Your sign-off certifies you have the right to do so.
+Your contribution comes in under the same terms as the rest of the repo: CC0 1.0 for content, and CC0 1.0 OR 0BSD for code. Map data derived from OpenStreetMap stays ODbL 1.0, because that is OpenStreetMap's term. Read `LICENSING.md` before touching `03_deliverables/maps/`, or before adding anything you did not write yourself. Third-party material keeps its own license and gets its own row there.
 
-The name and the Summit Sun mark are reserved. See `TRADEMARKS.md`.
+Your DCO sign-off certifies you have the right to contribute the work on those terms.
 
 ## Maintainers using Claude Code
 

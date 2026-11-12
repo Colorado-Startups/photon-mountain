@@ -37,11 +37,13 @@ The repo carries three different kinds of material and needs a per-path scheme. 
 
 | Path | License |
 |---|---|
-| Prose and doctrine | CC BY 4.0 |
+| Prose and doctrine | CC0 1.0 |
 | `03_deliverables/maps/` data files | ODbL 1.0, with OpenStreetMap attribution |
-| Rendered map images | CC BY 4.0 (ODbL Produced Works) |
-| Python | MIT |
-| Name, wordmark, Summit Sun, palette | Reserved; see `TRADEMARKS.md` |
+| Rendered map images | CC0 1.0, with the OSM credit (ODbL Produced Works) |
+| Code | CC0 1.0 OR 0BSD |
+| Name, wordmark, Summit Sun, palette | Not reserved |
+
+Relicensed 2026-11-12 per Paul: "as lenient as possible for everything." The table first shipped as CC BY 4.0, MIT and a reserved brand. `LICENSING.md` is current.
 
 `MAP_NOTES.md` records that the corridor centerlines were traced from OpenStreetMap via the OSRM router, and that many markers sit at OSM building centroids. Under the OSM Foundation's Produced Work guideline, the `.geojson` and `.kml` are a **Derivative Database**, since they are intended for extraction of the data. That binds them to ODbL share-alike. The rendered `.png` and `.pdf` images are Produced Works and can be licensed freely.
 

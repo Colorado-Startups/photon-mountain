@@ -35,4 +35,4 @@ There is no bounty. This is a small civic project. A first reply within seven da
 
 ## A note on the brand
 
-`TRADEMARKS.md` covers brand misuse, which is a different problem from a security vulnerability. Someone passing off material as Photon Mountain's, or attaching the mark to claims the corridor has not verified, is a trademark and honesty matter. Report it to the same address.
+Nothing about the brand is reserved, so anyone may use the name and the Summit Sun mark. A false claim made under the name is a fact matter, not a security vulnerability. Report it as a fact correction, or to the same address.

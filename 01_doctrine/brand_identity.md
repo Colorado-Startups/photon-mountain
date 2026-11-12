@@ -213,7 +213,7 @@ FONT_MONO    = "Space Mono"      # Google Fonts, OFL
 
 - **Steward:** Paul. Final say on every brand decision sits with him until handed off.
 - **Decision rights:** this file is canonical. Changes to strategy, palette, type, or the mark need Paul's explicit approval and a dated entry in the changelog below.
-- **Usage policy (v1):** no third party may use the Photon Mountain name or mark as a brand without Paul's written approval. Corridor institutions and press may reference the name in text freely. Revisit when the first real request arrives.
+- **Usage policy (v2, 2026-11-12):** nothing is reserved. Anyone may use the Photon Mountain name, wordmark, Summit Sun mark and palette, for any purpose, including in their own brand. Colorado Startups will not enforce rights in them (Paul, 2026-11-12). The rest of the repo is CC0 1.0; see `LICENSING.md`.
 - **Evolution rule:** the visual system (mark, palette, type) is fixed for v1. The strategy layer (narrative, pillars, boilerplate) updates as the corridor's facts change, through the normal task protocol. Target arc, per the Silicon Slopes case: founder-driven now, formalized stewardship (board or coalition) when there is community traction.
 
 ---
@@ -233,5 +233,6 @@ FONT_MONO    = "Space Mono"      # Google Fonts, OFL
 
 ## Changelog
 
+- 2026-11-12 · Usage policy v2, per Paul: "people can use whatever." Nothing is reserved, and the content is CC0 1.0. Section 4 updated, and the separate trademarks file removed.
 - 2026-07-05 · Tagline system and mark locked by Paul. Master tagline "Build with light."; the essence updated to match, from "Build on light". Supporting line "The era of intelligence, built with light." The mark is Summit Sun, picked from a four-concept review (`brand_assets/mark_review.html`); First Light demoted to an exploration.
 - 2026-07-05 · v1 locked (PT-4). Strategy, verbal identity, visual identity, governance note. Tagline pick and final mark assets await Paul's sign-off.
