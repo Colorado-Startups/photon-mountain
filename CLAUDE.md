@@ -31,10 +31,9 @@ CLAUDE.md            This router
 AGENTS.md            Operating manual for AI agents and automated contributors
 CONTRIBUTING.md      Setup, the gates, branches, labels, licensing
 SECURITY.md          Reporting, what is in place, known gaps
-LICENSE              CC BY 4.0 (the prose)
-LICENSES/            MIT and ODbL 1.0 full texts
-LICENSING.md         The per-path scheme, and why the map data differs
-TRADEMARKS.md        What is reserved, and what you may do without asking
+LICENSE              CC0 1.0 (everything Colorado Startups owns)
+LICENSES/            CC0 1.0, 0BSD, ODbL 1.0 and Apache 2.0 full texts, and Git Crafter's NOTICE
+LICENSING.md         CC0 1.0 (code: CC0 1.0 OR 0BSD), and the exceptions
 CODE_OF_CONDUCT.md   Contributor Covenant 3.0, adapted (CC BY-SA 4.0)
 README.md            What the project is
 project_context.md   Five-minute overview

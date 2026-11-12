@@ -23,6 +23,7 @@
 
 - [ ] No Colorado AI carryover introduced: no motto, no pillars, no turquoise, pine green, or flag gold, no IBM Plex, Work Sans, or JetBrains Mono.
 - [ ] No brand value hardcoded. Colors and fonts come from `04_tools/brand_tokens.py`.
+- [ ] My own work comes in under CC0 1.0 (code: CC0 1.0 OR 0BSD). Anything third-party keeps its license and has a row in `LICENSING.md`.
 - [ ] If this touches the corridor map data, the OpenStreetMap attribution and the ODbL notice are intact. See `LICENSING.md`.
 
 ## Notes for the reviewer

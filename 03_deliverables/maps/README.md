@@ -8,7 +8,7 @@ The definitive Photon Mountain corridor boundary and marker atlas. Method, sourc
 
 The boundary was built by tracing road centerlines from OpenStreetMap through the OSRM public router, and many markers sit at OSM building centroids. That makes the data files here a **Derivative Database** under ODbL, not a Produced Work, because they are intended for extraction of the coordinates. Share-alike applies: a modified version you publish goes out under ODbL as well, with the credit intact.
 
-The full reasoning, and the per-path scheme for the rest of the repo, is in `../../LICENSING.md`. The license text is at `../../LICENSES/ODbL-1.0.txt`.
+The rest of the repo is CC0 1.0; `../../LICENSING.md` lists every exception. The license text is at `../../LICENSES/ODbL-1.0.txt`.
 
 `photon_mountain_corridor.geojson`, `felt_boundary.geojson`, and `photon_mountain_corridor.kml` each carry this notice in their own metadata, so it survives the file being copied out on its own. `corridor_ring_latlng.json` is a bare coordinate array with nowhere to put metadata, so this README is its notice.
 

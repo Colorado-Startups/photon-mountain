@@ -46,7 +46,7 @@ git config core.hooksPath .githooks
 - **The build scripts' y axis increases downward.** Every primitive renders at `PAGE_H - y`. "Above" means a smaller y. A shape drawn with the intuitive convention comes out upside down.
 - **The two violets are not interchangeable.** Violet Deep is for text on light grounds, Violet Bright for text on dark. Getting this backwards scores 2.37 against WCAG AA's 4.5 floor and looks completely plausible. `brand_tokens.check_pairing` raises on it; do not work around that.
 - **Notes differ between map formats by design.** The HTML and JSX notes are `"<Category>. "` plus the GeoJSON note, because GeoJSON keeps `category` as its own property. That is not drift.
-- **Corridor map data is ODbL, not CC BY.** It derives from OpenStreetMap. See `LICENSING.md` before touching `03_deliverables/maps/`.
+- **Corridor map data is ODbL, not CC0.** It derives from OpenStreetMap. See `LICENSING.md` before touching `03_deliverables/maps/`.
 
 ## What an agent must not do
 
@@ -67,4 +67,4 @@ git config core.hooksPath .githooks
 | Corridor facts and their guardrails | `02_substance/corridor_facts_and_sources.md` |
 | How to rebuild a deliverable | `03_deliverables/infographics/BUILD.md` |
 | Map method and locked conventions | `03_deliverables/maps/MAP_NOTES.md` |
-| Licensing, and why the map data differs | `LICENSING.md` |
+| Licensing, and its exceptions | `LICENSING.md` |
