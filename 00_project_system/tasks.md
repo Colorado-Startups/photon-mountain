@@ -3,12 +3,12 @@
 
 ## Active
 
-- **PT-8 · GitHub repo.** Steps 1 to 5 of `github_setup_plan.md` closed 2026-09-22. Remaining: step 6, the Claude Code GitHub App, which needs an interactive session (`claude setup-token`, then `/install-github-app`). Also open: the Projects board, which needs `gh auth refresh -s project,read:project`.
+- **PT-9 · Go public and open to contributors.** Started 2026-11-12, per Paul: "open source the Photon Mountain GitHub repo ... so people in the community can contribute." Plan: fact gate the public surface (PR #17, merged), contributor files and stale-claim sweep, required checks, the flip, public-only security settings, seeded good first issues, and a weekly triage task.
+- **PT-8 · GitHub repo.** Steps 1 to 5 of `github_setup_plan.md` closed 2026-09-22. Remaining: step 6, the Claude Code GitHub App, which needs an interactive session (`claude setup-token`, then `/install-github-app`). Also open: the Projects board; the token carries the `project` scope since at least 2026-11-12, so it no longer waits on Paul.
 
 ## Backlog
 
-1. **PT-9 · Go public.** Flip the repo to public. The roster re-verification that gated this closed 2026-10-08, so the remaining gate is Paul's call on timing. Doing so unlocks rulesets, required status checks, protected `main`, CODEOWNERS enforcement, and unlimited Actions minutes, all free; a private repo in a Free org gets none of them. Add `CODE_OF_CONDUCT.md` and confirm the license files and OpenStreetMap attribution at the same time, since ODbL obligations attach on distribution. Three row-level flags should be resolved or visibly labeled first: the ASD Boulder site status, the Areté Longmont-or-Niwot address, and the Lever Photonics entity status.
-2. **Standing · Roster additions.** The row-by-row re-verification is closed (see Done, 2026-10-08). What remains is additions, not verification: Oblate Optics (Longmont-area meta-optics), Google Quantum AI's Boulder neutral-atom program, and the watchlist already in the roster's section 10. The CPIA member directory loads via JavaScript and has never been scraped end to end, which is the best single source of missing small firms.
+1. **Standing · Roster additions.** The row-by-row re-verification is closed (see Done, 2026-10-08). What remains is additions, not verification: Oblate Optics (Longmont-area meta-optics), Google Quantum AI's Boulder neutral-atom program, and the watchlist already in the roster's section 10. The CPIA member directory loads via JavaScript and has never been scraped end to end, which is the best single source of missing small firms.
 
 ## Done
 

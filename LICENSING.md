@@ -14,6 +14,7 @@ The short version: the writing is CC BY 4.0, the code is MIT, the corridor map *
 | `03_deliverables/infographics/*.png`, `*.pdf`, `*.html` | **CC BY 4.0** | Rendered images are ODbL "Produced Works", so they are free to license. |
 | `04_tools/*.py`, `03_deliverables/infographics/*.py` | **MIT** | |
 | `01_doctrine/brand_assets/fonts/*.ttf` | **SIL Open Font License 1.1** | Not ours. Each family's OFL text sits beside the fonts. |
+| `CODE_OF_CONDUCT.md` | **CC BY-SA 4.0** | Adapted from the Contributor Covenant 3.0, whose license is share-alike. Not CC BY like the rest of the prose. |
 | The name, wordmark, Summit Sun mark, and palette | **Reserved** | See `TRADEMARKS.md`. No content license grants trademark rights. |
 
 Full texts: `LICENSE` (CC BY 4.0), `LICENSES/MIT.txt`, `LICENSES/ODbL-1.0.txt`, `LICENSES/CC-BY-4.0.txt`.

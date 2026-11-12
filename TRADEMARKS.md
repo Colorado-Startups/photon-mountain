@@ -25,7 +25,7 @@ These are held by Colorado Startups. This is the standing usage policy recorded 
 - Modifying the mark, or rebuilding it in a different palette, and presenting the result as Photon Mountain's identity.
 - Merchandise or promotional goods carrying the name or mark.
 
-Ask Paul at Colorado Startups.
+Ask Paul at Colorado Startups: **paul@coloradostartups.org**. Brand approvals are his decisions.
 
 ## The reasoning, since it is not obvious
 

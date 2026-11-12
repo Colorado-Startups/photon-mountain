@@ -1,8 +1,9 @@
 # Photon Mountain code owners.
 #
-# Advisory while the repo is private: a Free-tier organization cannot enforce
-# CODEOWNERS review on a private repository. It becomes enforceable at PT-9,
-# when the repo goes public and rulesets turn on.
+# Review routing, not a required review. Every maintainer pull request comes from
+# the same account that owns these paths, and GitHub does not let an author approve
+# their own pull request, so requiring code-owner review would block all of them.
+# The required checks and the maintainer's merge are the gate.
 
 * @paul-co-startups
 
