@@ -6,13 +6,14 @@
 
 <!-- Tick what applies. An unticked box is fine if it does not apply; an
      unticked box that DOES apply is the thing reviewers should ask about.
-     While this repo is private, CI cannot be a required check, so these
-     boxes and the pre-commit hook are the real gate. -->
+     The required checks cover the mechanical rules; these boxes are the
+     human half of the gate. -->
 
-- [ ] **Voice.** `/pm-voice-check` run on every file of prose I touched, and the findings are addressed or explained.
+- [ ] **Voice.** `python3 04_tools/voice_lint.py` (or `/pm-voice-check` in Claude Code) run on every file of prose I touched, and the findings are addressed or explained.
 - [ ] **No em dashes.** Commas, semicolons, periods, or parentheses instead.
+- [ ] **Signed off.** Every commit carries `Signed-off-by:` (`git commit -s`), for the DCO check.
 - [ ] **Figures.** Every figure names a credible source or is labeled a goal.
-- [ ] **Facts.** If this touches `02_substance/` or any current-status claim, pm-fact-guardrails was run and the claims were re-searched, not recalled.
+- [ ] **Facts.** If this touches `02_substance/` or any current-status claim, each claim was re-searched, not recalled, and its source is linked (pm-fact-guardrails in Claude Code).
 - [ ] **Three clocks.** What operates today, what opens in 2026, and what is on the horizon are kept distinct.
 - [ ] **Gates self-test.** If `04_tools/` changed: `voice_lint.py`, `brand_tokens.py`, and `marker_parity.py` all pass `--self-test`.
 - [ ] **Corridor atlas.** If `03_deliverables/maps/` changed: `marker_parity.py` passes, and `MAP_NOTES.md` has a revision entry.

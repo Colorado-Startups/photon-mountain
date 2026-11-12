@@ -8,10 +8,11 @@ name: voice-check
 # it cannot drift between a laptop, a web edit, and a cloud agent. No AI, no
 # paid dependency, no network.
 #
-# ADVISORY while the repo is private. A private repo in a Free organization
-# cannot have required status checks, so this reports and does not gate; the
-# pre-commit hook is the enforcing gate until then. Promote this to required at
-# PT-9, once it has proven quiet on real pull requests.
+# REQUIRED on every pull request (repo ruleset "Required checks", 2026-11-12).
+# It fails only when the lint assigns a FAIL, which today means an em dash or a
+# spaced en dash: literal tests with no false positives. Warnings print and
+# pass. A lint crash maps to 0 inside the hook, so the gate fails open on
+# infrastructure and never on a broken checker.
 
 on:
   pull_request:
@@ -92,4 +93,8 @@ jobs:
           fi
 
           printf '%s\n' "$out"
-          echo "Advisory while the repo is private; findings are in the job summary."
+          if [ "$status" -eq 1 ]; then
+            echo "voice-check: a FAIL finding blocks this pull request; details are in the job summary."
+            exit 1
+          fi
+          echo "voice-check: warnings only, advisory; details are in the job summary."

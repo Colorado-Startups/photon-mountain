@@ -29,10 +29,9 @@
 #
 # The rule of thumb behind this split: block on fast, deterministic,
 # auto-fixable things; warn on slow or probabilistic ones; put the real gate
-# server-side. That last part is why this hook matters more here than it
-# would elsewhere. While the repo is private on a Free org, GitHub will not
-# let CI be a required check, so this hook is the only gate that actually
-# stops anything.
+# server-side. The server-side half is the required voice-check on every
+# pull request (since 2026-11-12). This hook is the early half: it stops the
+# same FAIL before it leaves the clone.
 #
 # ESCAPE HATCH:  git commit --no-verify
 #     Deliberate, documented, and yours. A PreToolUse hook denies that flag

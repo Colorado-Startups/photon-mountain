@@ -21,7 +21,7 @@ The project's whole value is that its claims are true. Read that sentence again 
 
 ## Before you open a pull request
 
-**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: `~/.claude/rules/compute.md` (canonical: Code-OS `rules/compute.md`), which wins any disagreement.
+**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: `~/.claude/rules/compute.md` (canonical: Git Crafter `rules/compute.md`), which wins any disagreement.
 
 Run the gates. They are fast, they need no network, and two of the three are standard library only.
 
@@ -52,7 +52,7 @@ git config core.hooksPath .githooks
 
 - **Do not use the pre-commit bypass flag.** A `PreToolUse` hook blocks it for Claude specifically. If a gate objects, fix the finding or say why you think the gate is wrong; do not route around it.
 - **Do not touch the Colorado AI repository** from a session working here. They are separate projects with a locked boundary.
-- **Do not publish anything externally.** Every external-facing artifact needs Paul's sign-off. Staging it is fine; sending it is not.
+- **Know what goes to Paul.** On 2026-11-12 Paul set the split: billing and payment, major product questions, and major vision questions go to him. Engineering, security, privacy, legal, settings and admin are Claude's to run. A change to the brand itself is a vision question. Never send email or messages as Paul.
 - **Do not mark a task done without running its gates** and writing a dated entry in `00_project_system/tasks.md` that says what was actually found.
 
 ## Where to look

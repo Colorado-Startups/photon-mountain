@@ -1,6 +1,6 @@
 # Operating notes
 
-Lightweight for now. Photon Mountain is a one-person project on day one; this grows as needed.
+Lightweight for now. Photon Mountain is a small project, public and open to contributors since PT-9; this grows as needed.
 
 ## Editing and version control
 

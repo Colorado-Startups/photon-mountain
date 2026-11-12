@@ -16,7 +16,7 @@ The project turns that idea into shippable corridor doctrine: a locked brand, ve
 - **Build pipeline: on-brand.** Closed 2026-09-22. Every color and font comes from `04_tools/brand_tokens.py`.
 - **Tooling:** three gate scripts, all standard library, all with self-tests: `voice_lint.py`, `brand_tokens.py`, `marker_parity.py`.
 - **Repo: in progress.** Private `photon-mountain` under Colorado-Startups. Plan: `00_project_system/github_setup_plan.md`.
-- **Roster verification: never run.** This is the project's one standing verification debt, and it gates going public.
+- **Roster verification: done.** Row-by-row re-verification closed 2026-10-08 across all 58 rows, with a delta pass on 2026-11-12 before going public.
 - **Deliverable cadence and public presence: undecided.** Nothing in the project files commits to either.
 
 ## The phases, in order
@@ -46,7 +46,7 @@ Nothing decides this today. Candidate types from existing assets: the corridor o
 
 **Goal.** The repo public, and the corridor's materials citable.
 **Gated on.** Phase B. Publishing an unverified roster would violate the project's own honesty rule, and once public it can be cited by anyone.
-**What it unlocks.** Rulesets, required status checks, protected `main`, CODEOWNERS enforcement, and unmetered Actions, all free; a private repo in a Free organization gets none of them. So this is a capability upgrade, not a visibility toggle.
+**What it unlocks.** Required checks on pull requests, GitHub's free secret scanning and push protection, private vulnerability reporting, and unmetered standard runners. Protected `main` arrived earlier, through an org ruleset on 2026-11-02.
 **Also in scope.** `CODE_OF_CONDUCT.md`, and confirming the license files and OpenStreetMap attribution, since ODbL obligations attach on distribution.
 
 ### Phase E · Packaging (optional)
@@ -64,7 +64,7 @@ Website, social channels, and launch timing are undecided everywhere in the proj
 
 - **Colorado AI.** The two projects share subject matter with a locked boundary: photonic quantum lives here, the broad quantum-for-materials story and statewide AI policy stay with Colorado AI. Any substance edit that moves a claim across that boundary needs a check against the other project first.
 - **Honesty gates.** Every step closes through pm-voice-check and, for anything carrying current-status claims, pm-fact-guardrails. No step is done until its gates pass. External-facing work also needs Paul's sign-off.
-- **Free-tier GitHub.** Until Phase D, nothing can be enforced server-side. The pre-commit hook is the only real gate, which is why its policy was set deliberately rather than by default.
+- **Server-side gates.** An org ruleset protects `main`, and from Phase D the required checks gate every pull request. The pre-commit hook stays the early, local half of the same gate.
 - **Three clocks.** Operating today, opening in 2026, on the horizon. Blurring them is the fastest way to lose a technical audience, and it is the failure mode every gate in this project exists to catch.
 
 ## Open questions for Paul
