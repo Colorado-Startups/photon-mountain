@@ -16,12 +16,7 @@ A private `photon-mountain` repository under the **Colorado-Startups** org, carr
 
 **Paul cannot create repos in the Colorado-AI org.** His membership there reports `state: inactive, role: unaffiliated, direct_membership: false`. He has admin on the `colorado-ai` repo as an **outside collaborator**, which does not carry repo-creation rights. This is why the target moved to Colorado-Startups.
 
-**A private repo in a Free org cannot enforce anything server-side.** GitHub gives rulesets and branch protection only on public repos at the Free tier. So this plan runs two enforcement regimes:
-
-- **While private:** the pre-commit hook is the real gate. CI runs and reports, but cannot be required.
-- **At go-public (PT-9):** rulesets become the gate and required status checks turn on. Actions also stop being metered. Free-tier private repos get 2,000 minutes a month, and public repos get unlimited use of standard runners, per GitHub's billing documentation.
-
-Going public is therefore a capability upgrade, not just a visibility change.
+**A private repo in a Free org could not enforce anything server-side.** That was the 2026-09-22 premise. *Superseded 2026-11-12:* the org API now reports plan `enterprise`, and an org ruleset has protected `main` since 2026-11-02. At go-public (PT-9) a repo ruleset made `voice-check`, `secret scan` and `DCO` required checks, and GitHub's secret scanning and push protection turned on. Public repos also get unlimited use of standard runners, per GitHub's billing documentation.
 
 ## Division of labor
 
@@ -66,7 +61,7 @@ One PR against the fresh `main`, so the repo's own review flow runs from day one
 
 | Workflow | Trigger | Behavior |
 |---|---|---|
-| `voice-check.yml` | pull request | Runs the same hook script the local harness runs, on changed Markdown. Advisory while private. |
+| `voice-check.yml` | pull request | Runs the same hook script the local harness runs, on changed Markdown. Required since 2026-11-12; fails only on a voice FAIL. |
 | `lint-selftest.yml` | push, pull request on `04_tools/**` | `voice_lint.py --self-test` and `brand_tokens.py --self-test`. Blocking: the gates must be trustworthy. |
 | `marker-parity.yml` | pull request on `03_deliverables/maps/**` | The 53-marker four-file invariant. |
 | `comparison-map-verify.yml` | pull request on `03_deliverables/infographics/**` | `photon_mountain_map_verify.py`. Needs matplotlib. |
@@ -84,7 +79,7 @@ Plus `.githooks/pre-commit`, issue and PR templates, `CODEOWNERS`, `dependabot.y
 
 ### Step 6 · Claude Code GitHub App
 
-`claude setup-token`, then `/install-github-app` from an interactive session. Authenticate with `CLAUDE_CODE_OAUTH_TOKEN` so runs bill against the existing Claude subscription, not a separate API key. Two things to know going in. The Claude GitHub App grants eleven permissions all-or-nothing. Every run also draws from the monthly private-repo Actions allowance, 2,000 minutes on the Free tier per GitHub's billing documentation, so cap it with `--max-turns`, a job timeout, and a concurrency group.
+`claude setup-token`, then `/install-github-app` from an interactive session. Authenticate with `CLAUDE_CODE_OAUTH_TOKEN` so runs bill against the existing Claude subscription, not a separate API key. Two things to know going in. The Claude GitHub App grants eleven permissions all-or-nothing. Public repos run on standard runners without the private-repo minute allowance, per GitHub's billing documentation. Cap every run anyway with `--max-turns`, a job timeout, and a concurrency group. On a public repo, also limit any `@claude` trigger to users with write access.
 
 ## Definition of done
 
@@ -92,4 +87,4 @@ The private repo exists under Colorado-Startups, `main` holds the full tree, `lo
 
 ## After this plan
 
-PT-7 (packaging) is optional. PT-9 (go public) waits on the roster row-by-row re-verification. Git conventions from here: Claude Code commits and pushes, substantive changes go through branches and pull requests.
+PT-7 (packaging) is optional. PT-9 (go public) waited on the roster row-by-row re-verification, which closed 2026-10-08; it ran 2026-11-12. Git conventions from here: Claude Code commits and pushes, substantive changes go through branches and pull requests.

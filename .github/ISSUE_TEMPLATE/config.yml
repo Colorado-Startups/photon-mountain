@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Report a security problem privately
+    url: https://github.com/Colorado-Startups/photon-mountain/security/advisories/new
+    about: For a suspected credential leak or vulnerability. Do not open a public issue for these.
   - name: A question about the corridor itself
     url: https://github.com/Colorado-Startups/photon-mountain/blob/main/02_substance/corridor_facts_and_sources.md
     about: The corridor facts, their sources, and the standing honesty guardrails are documented here first.

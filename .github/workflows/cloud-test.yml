@@ -1,6 +1,6 @@
 name: cloud-test
 
-# ADVISORY. No ruleset requires this check, so it reports and never blocks a merge.
+# ADVISORY. It is not a required check, so it reports and never blocks a merge.
 #
 # Runs a name from .github/cloud-test.json on a hosted runner through the shared workflow in Colorado-Startups/.github
 # (cloud-test/README.md there). Cloud first, the Mac last and small (Paul, 2026-11-02): suites, builds, browsers
