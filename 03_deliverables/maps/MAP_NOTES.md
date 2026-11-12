@@ -16,11 +16,16 @@ A `pm-fact-guardrails` pass on the marker notes, run before the repository went 
 - **NCAR Mesa Laboratory.** "Under NSF restructuring review" understated it. NSF announced a breakup of NCAR in December 2025 and invited bids to own Mesa Lab in January 2026. UCAR sued in March 2026, and a June 2026 injunction paused one transfer, per Boulder Reporting Lab and BizWest.
 - **Glo Park.** "In development" overstated it. As of October 2025 the parcel sat vacant, and the state was weighing apartment proposals for it, per BusinessDen.
 - **Quantum Commons Labs.** The no-opening-notice date moved from July to November 2026.
-- **NIST Precision Measurement Laboratory.** The name is Katharine Gebbie, not Katherine. The 283,000 sq ft figure is now attributed to the builder, Whiting-Turner, and HDR gives 297,000.
+- **NIST Precision Measurement Laboratory.** The name is Katharine Gebbie, not Katherine. The building is 283,000 sq ft per its builder, Whiting-Turner, and 297,000 per HDR; the note now names the builder as its source.
 
 The roster stays at 53 markers. No coordinate, category or convention changed, and `04_tools/marker_parity.py` passes across all four files. The live Felt map still carries the old text for these four notes and needs the same edits.
 
-Not re-checked this pass, because the search budget ran out: NIST Buildings 1, 3 and 24 and the campus acreage, the NLR campus and ESIF figures, Flatirons acreage, the CU Denver, Venture Partners, NEXUS and York Space items, NCF's researcher count, and the Old Main and Guggenheim dates. STEP's "renovation underway" rests on 2023 sources. Those notes carry their July verification.
+Some notes were not re-checked this pass, because the search budget ran out. They are mostly stable building facts:
+
+- NIST Buildings 1, 3 and 24, and the campus acreage
+- the NLR campus and ESIF figures, and the Flatirons acreage
+- the CU Denver, Venture Partners, NEXUS and York Space items
+- NCF's researcher count, and the Old Main and Guggenheim dates STEP's "renovation underway" rests on 2023 sources. Those notes carry their July verification.
 
 ## Revision 7y (2026-10-05): figures in this log attributed; no roster, geometry, or convention change
 

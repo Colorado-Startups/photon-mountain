@@ -307,7 +307,7 @@ def footer():
     # and a personal address would read as one person's side project. No
     # domain here until photonmountain.org is actually live.
     txt(PAGE_W/2,y+7,"Photon Mountain  ·  a Colorado Startups project in collaboration with Colorado AI",SANS,9,STONE,'center'); y+=11
-    src="Sources: NIST; Elevate Quantum / Colorado OEDIT; Colorado School of Mines; National Laboratory of the Rockies (formerly NREL); Colorado Energy Office and Xcel Clean Energy Plan; market range per IMARC, Polaris, Precedence, Straits, Cervicorn. NIST Boulder runs an operating cleanroom for integrated photonics; the Quantum Commons (Arvada) fab is targeted for 2026, and CU Boulder's nanofab for 2028. Colorado's 100% renewable-electricity target is a 2040 goal. 2025-2026."
+    src="Sources: NIST; Elevate Quantum / Colorado OEDIT; Colorado School of Mines; National Laboratory of the Rockies (formerly NREL); Colorado Energy Office; Xcel; IMARC, Precedence and other analysts. NIST Boulder runs an operating photonics cleanroom; the Arvada fab is targeted for 2026, CU's nanofab for 2028. The 100% renewable-electricity target is a 2040 goal."
     for ln in wrap(src,MONO,7,CW-20):
         txt(PAGE_W/2,y+7,ln,MONO,7,STONE,'center'); y+=9.0
 
