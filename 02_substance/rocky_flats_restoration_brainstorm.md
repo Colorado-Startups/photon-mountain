@@ -14,11 +14,11 @@ This is a multi-decade moonshot. We should say that plainly and still pursue it.
 
 ## The honest starting point
 
-What is there now. The Rocky Flats National Wildlife Refuge is about 5,237 acres of buffer land around a former nuclear weapons plant that machined plutonium pits (source: U.S. Fish and Wildlife Service; Wikipedia). The most contaminated core, the Central Operable Unit, was not restored to a blank slate. The Department of Energy retains it under permanent use restrictions, groundwater treatment, and long-term monitoring (source: GAO-06-352).
+What is there now. The Rocky Flats National Wildlife Refuge covers 5,640 acres around a former nuclear weapons plant that machined plutonium pits (source: U.S. Fish and Wildlife Service hunt plan, August 2026; Wikipedia for the plant's history). The most contaminated core, the Central Operable Unit, was not restored to a blank slate. The Department of Energy's Office of Legacy Management retains it under permanent use restrictions, groundwater treatment, and long-term monitoring (source: GAO-06-352; DOE Legacy Management, 2026).
 
-What was already done. A cleanup ran roughly ten years and cost about $7 billion, completed in 2005, removing the plutonium buildings and roughly 500,000 cubic meters of radioactive waste (source: GAO; Yale E360). Full removal of all contaminated soil and infrastructure was priced at about $37 billion over about 65 years, and that option was deliberately not taken (source: GAO; Yale E360). So "cleaned up" meant "stabilized and managed," not "made pristine."
+What was already done. A cleanup ran roughly ten years and cost about $7 billion, completed in 2005, removing the plutonium buildings and roughly 500,000 cubic meters of radioactive waste (source: GAO; Yale E360). The Department of Energy priced full removal of all contaminated soil and infrastructure at $37 billion over 65 years, per Yale E360 (2016). That option was deliberately not taken. So "cleaned up" meant "stabilized and managed," not "made pristine."
 
-The core constraint. The contaminant of concern is plutonium-239, with a half-life near 24,100 years, per standard nuclear reference data. We cannot wait it out. We cannot destroy it chemically. Any chemical or physical method moves the plutonium; it does not eliminate it. Eliminating a plutonium atom requires a nuclear process (fission or transmutation).
+The core constraint. The contaminant of concern is plutonium-239, with a half-life of 24,110 years, per the EPA. We cannot wait it out. We cannot destroy it chemically. Any chemical or physical method moves the plutonium; it does not eliminate it. Eliminating a plutonium atom requires a nuclear process (fission or transmutation).
 
 The one-line restatement. To truly clear the site we must do one of two things with the plutonium: move all of it somewhere permanent, or destroy it in a reactor or accelerator. Decay is not on the table on any human timescale.
 
@@ -46,8 +46,8 @@ Why this matters: if precise mapping cuts the volume that needs treatment by a l
 
 The goal here is to pull plutonium out of large volumes of soil and leave behind clean bulk soil plus a small, concentrated stream.
 
-- **Soil washing and chemical leaching.** Wash or leach plutonium off soil particles, then handle the concentrated residue. Established for some radionuclides, but effectiveness depends heavily on soil type, and Rocky Flats soils are clay and silt rich, which is the hard case (source: ResearchGate review; Frontiers). Maturity: **Today elsewhere, site-uncertain here**.
-- **Electrokinetic remediation.** Run a low electric field through the soil to drive plutonium toward a collection electrode. A field-scale trial treated about 4 tonnes of plutonium-contaminated soil over 60 days and showed plutonium mobilizing toward the anode (source: ScienceDirect). Uranium analogs reach roughly 61 to 99 percent removal, but slowly, and clay-rich soils are a known challenge (source: Frontiers). Maturity: **Emerging / pilot**.
+- **Soil washing and chemical leaching.** Wash or leach plutonium off soil particles, then handle the concentrated residue. Established for some radionuclides, but effectiveness depends heavily on soil type. Rocky Flats plutonium binds mostly to the fine clay fraction, which washing concentrates but does not clean, per a DOE soil study (Olsen et al., 1979). Maturity: **Today elsewhere, site-uncertain here**.
+- **Electrokinetic remediation.** Run a low electric field through the soil to drive plutonium toward a collection electrode. A pilot-scale on-site trial at the UK's Aldermaston weapons site treated about 4 tonnes of plutonium-contaminated soil over 60 days, per Agnew et al. (2011). Plutonium mobilized toward the anode, and only the cathode zone fell below free-release limits. Uranium analogs reach roughly 61 to 99 percent removal, but slowly, per a 2025 Frontiers review (Bai et al.). The same review notes that clay and organic matter bind uranium and slow its migration. Maturity: **Emerging / pilot**.
 - **Mechanical sorting and segmented-gate systems.** Use real-time radiation sensing on conveyed soil to divert only the hot fraction. Maturity: **Today**.
 
 Output of this stage: most of the dirt comes back clean, and the plutonium ends up in a much smaller package.
@@ -55,7 +55,7 @@ Output of this stage: most of the dirt comes back clean, and the plutonium ends 
 ### C. Capture chemically or biologically (polish and immobilize)
 
 - **Selective chelators and nanomaterial sorbents.** Molecules and engineered surfaces that grab actinides selectively for extraction or capture. Maturity: **Emerging / lab**.
-- **Phytoremediation and bioremediation.** Plants and microbes that take up or bind plutonium. Honest limit: plutonium has low bioavailability, so plant uptake is small, and microbial methods mostly immobilize, not remove (source: remediation reviews). Useful as a polishing or stabilizing step, not as the main engine. Maturity: **Limited / research**.
+- **Phytoremediation and bioremediation.** Plants and microbes that take up or bind plutonium. Honest limit: plutonium has low bioavailability, so plant uptake is small, and microbial methods mostly immobilize, not remove. That claim is not yet tied to a specific review; cite one before using it externally. Useful as a polishing or stabilizing step, not as the main engine. Maturity: **Limited / research**.
 
 ### D. Destroy it for good (the only path that is actually "clean")
 
@@ -88,7 +88,7 @@ What we should not claim: that photonics alone cleans the site, that any of this
 
 - **Ownership.** DOE retains the Central Operable Unit. Nothing happens there without the federal government as a partner.
 - **Regulation.** The site sits inside the CERCLA / Superfund framework, with EPA and the Colorado Department of Public Health and Environment (CDPHE) as regulators. "Clean" is a legal and scientific standard, not a feeling.
-- **Community trust and consent.** The community is genuinely divided about Rocky Flats, including about the refuge opening to public trails in 2018. Trust is the scarce resource. Radical transparency, open data, and independent verification are not optional extras here; they are the product.
+- **Community trust and consent.** The community is genuinely divided about Rocky Flats, including about the refuge opening to public trails in 2018. The refuge opened its first elk hunt in September 2026, and the Rocky Mountain Peace and Justice Center still calls the site a health risk, per KSUT (2026-10-16). Trust is the scarce resource. Radical transparency, open data, and independent verification are not optional extras here; they are the product.
 - **Funding and liability.** Numbers like $37 billion (the historical full-removal estimate) signal the order of magnitude. Who pays, who carries liability, and who certifies the end state are first-order questions.
 - **Defining "done."** We need an explicit, certifiable definition of "completely clear" and "liveable," agreed with regulators and the community, before we promise it. Otherwise the goal cannot be checked.
 
@@ -98,7 +98,7 @@ What we should not claim: that photonics alone cleans the site, that any of this
 
 1. No method on the shelf today fully clears dispersed plutonium from soil. We would be advancing the field, not applying a catalog.
 2. Every non-nuclear step relocates plutonium. Only stage D ends it.
-3. Soil type at Rocky Flats (clay and silt) is the difficult case for the most promising separation methods.
+3. Plutonium at Rocky Flats rides on the fine clay fraction, the difficult case for the most promising separation methods.
 4. The full path is plausibly multi-decade and national in scale. Photon Mountain can lead the front end and convene the rest.
 5. The fastest credible win is characterization, not removal. Map first.
 
@@ -136,3 +136,12 @@ What we should not claim: that photonics alone cleans the site, that any of this
 - [Accelerator-driven systems for nuclear waste transmutation (Annual Reviews)](https://www.annualreviews.org/doi/full/10.1146/annurev.nucl.48.1.505)
 - [Accelerator-driven nuclear energy (World Nuclear Association)](https://world-nuclear.org/information-library/current-and-future-generation/accelerator-driven-nuclear-energy)
 - [Rocky Flats Solar Ponds Plume remediation (ITRC)](https://rmcs-1.itrcweb.org/6-3-rocky-flats-solar-ponds-plume-colorado/)
+- [Rocky Flats NWR Hunt Plan, August 2026 (FWS)](https://iris.fws.gov/APPS/ServCat/DownloadFile/301775)
+- [Rocky Flats Site (DOE Legacy Management)](https://www.energy.gov/lm/rocky-flats-site-colorado)
+- [Radionuclide Basics: Plutonium (EPA)](https://www.epa.gov/radiation/radionuclide-basics-plutonium)
+- [LIBS instrument on the DLR Lightweight Rover Unit (MDPI Applied Sciences, 2024)](https://www.researchgate.net/publication/379017023)
+- [Soil decontamination at Rocky Flats (OSTI, 1979)](https://www.osti.gov/servlets/purl/5738652)
+- [Electrokinetic pilot trial at Aldermaston (OSTI)](https://www.osti.gov/etdeweb/biblio/22070341)
+- [Elk hunting opens at the refuge (KSUT, 2026-10-16)](https://www.ksut.org/2026-10-16/elk-hunting-opens-for-the-first-time-at-colorado-refuge-built-around-former-nuclear-site)
+
+*Current-status claims searched 2026-11-12.*

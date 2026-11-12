@@ -109,7 +109,7 @@ Generous margins. Summit Night or White fields. Rules and captions in Granite. O
 | Correct | Incorrect |
 |---|---|
 | "An operating photonic-chip cleanroom sits at NIST Boulder." | "The corridor's fabs are shipping photonic processors at scale." |
-| "A photonic-integrated-circuit fab opens in Arvada in 2026 (Elevate Quantum)." | "Arvada's operating fab..." |
+| "A photonic-integrated-circuit fab is planned for Arvada, targeted for 2026 (Elevate Quantum)." | "Arvada's operating fab..." |
 | "NLR (formerly NREL)" on first reference. | "NREL" or bare "NLR" on first reference. |
 | "The Colorado Photonics Industry Association cites roughly 250 photonics companies statewide." | "Colorado has 250 photonics companies." |
 | The mark in one palette color, clear space respected. | The mark with a gradient, rays, or a prism beam. |

@@ -7032,7 +7032,7 @@
    "properties": {
     "name": "NIST Precision Measurement Laboratory (BMF)",
     "category": "National Lab",
-    "note": "Building 81 on the NIST Boulder campus, now the Katherine Gebbie Laboratory: a 283,000 sq ft precision measurement building housing the Boulder Microfabrication Facility, an operating 18,000 sq ft ISO 5 cleanroom with integrated-photonics tooling; cleanroom opened 2012. West of the Broadway line with the rest of the campus; counted as a corridor site. (OSM building centroid.)",
+    "note": "Building 81 on the NIST Boulder campus, now the Katharine Gebbie Laboratory: a 283,000 sq ft (per builder Whiting-Turner) precision measurement building housing the Boulder Microfabrication Facility, an operating 18,000 sq ft ISO 5 cleanroom with integrated-photonics tooling; cleanroom opened 2012. West of the Broadway line with the rest of the campus; counted as a corridor site. (OSM building centroid.)",
     "inside_corridor": true,
     "marker-color": "#f59f00"
    },
@@ -7338,7 +7338,7 @@
    "properties": {
     "name": "NCAR Mesa Laboratory",
     "category": "National Lab",
-    "note": "NSF FFRDC for atmospheric science, 1850 Table Mesa Dr. Operating but under NSF restructuring review (announced Dec 2025-Jan 2026). 2 km southwest of the Broadway line; counted as a corridor institution.",
+    "note": "NSF FFRDC for atmospheric science, 1850 Table Mesa Dr. Operating. NSF announced a breakup of NCAR in Dec 2025 and invited bids to own Mesa Lab in Jan 2026; UCAR sued in March 2026, and a June 2026 injunction paused one transfer, per Boulder Reporting Lab and BizWest. 2 km southwest of the Broadway line; counted as a corridor institution.",
     "inside_corridor": true,
     "marker-color": "#f59f00"
    },
@@ -7559,7 +7559,7 @@
    "properties": {
     "name": "Quantum Commons Labs (open-access)",
     "category": "Innovation Campus",
-    "note": "The first major building on the Quantum Commons campus, grand-opened August 2025: a renovated building carrying the campus's offices, coworking, and administration, per the Governor's office. The 17,000 sq ft of open-access quantum labs (solid-state and AMO modalities, with a Class IV laser lab in the construction scope) are the next phase; August 2025 reporting put them a few months out, and no opening notice had been found as of July 2026. Run by Elevate Quantum with Mines, CU Boulder, and CSU. (Georeferenced from current satellite imagery; approximate.)",
+    "note": "The first major building on the Quantum Commons campus, grand-opened August 2025: a renovated building carrying the campus's offices, coworking, and administration, per the Governor's office. The 17,000 sq ft of open-access quantum labs (solid-state and AMO modalities, with a Class IV laser lab in the construction scope) are the next phase; August 2025 reporting put them a few months out, and no opening notice had been found as of November 2026. Run by Elevate Quantum with Mines, CU Boulder, and CSU. (Georeferenced from current satellite imagery; approximate.)",
     "inside_corridor": true,
     "marker-color": "#9c36b5"
    },
@@ -7576,7 +7576,7 @@
    "properties": {
     "name": "Glo Park (Global Energy Park)",
     "category": "Innovation Campus",
-    "note": "State-championed energy research and commercialization campus; NexCore ground lease on the open state parcel immediately south-southwest of NLR's South Table Mountain campus, across Denver West Pkwy. In development; no street address yet. Location per project owner. Sits between NLR's campus and STEP, the DOE's commercialization park; the stated pipeline is startups graduating from STEP into Glo Park.",
+    "note": "State-championed energy research and commercialization campus; NexCore ground lease on the open state parcel immediately south-southwest of NLR's South Table Mountain campus, across Denver West Pkwy. Planned, not built: as of Oct 2025 the parcel sat vacant and the state was weighing apartment proposals for it, per BusinessDen. No street address yet. Location per project owner. Sits between NLR's campus and STEP, the DOE's commercialization park; the stated pipeline is startups graduating from STEP into Glo Park.",
     "inside_corridor": true,
     "marker-color": "#9c36b5"
    },

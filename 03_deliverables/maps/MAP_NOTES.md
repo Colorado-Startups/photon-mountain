@@ -9,6 +9,24 @@ A site earns a dot only if its headline work is (a) light or photonics itself, o
 
 Approximate pins awaiting better imagery or site plans: Quantum Commons PIC Fab (campus pin; building not yet visible in imagery), NLR EMAPS (east side of campus, under construction, completion expected 2027), STEP (campus extent), RAIL (placed from the campus map), Flatirons Control Center (sited from builder descriptions), Quantum Commons Labs (georeferenced from satellite imagery), Glo Park (development parcel), plus the address-anchored Mines dots (CoorsTek Center, Colorado Fuel Cell Center; pins welcome). Dated statuses to re-verify when touched: Glo Park's projected early-2026 opening (per 2023 reporting), the CoCo train's November 2026 ballot question, NCAR's NSF restructuring review, CU Denver's Engineering, Design and Computing Building (unverified, project pages taken down), Quantum Commons fab and labs build-out through 2026, NQN completion (2028-29), and EMAPS completion (2027).
 
+## Revision 7z (2026-11-12): fact gate before the repository went public; four note corrections
+
+A `pm-fact-guardrails` pass on the marker notes, run before the repository went public. Four notes changed, each byte-identical across the GeoJSON, KML, HTML and JSX:
+
+- **NCAR Mesa Laboratory.** "Under NSF restructuring review" understated it. NSF announced a breakup of NCAR in December 2025 and invited bids to own Mesa Lab in January 2026. UCAR sued in March 2026, and a June 2026 injunction paused one transfer, per Boulder Reporting Lab and BizWest.
+- **Glo Park.** "In development" overstated it. As of October 2025 the parcel sat vacant, and the state was weighing apartment proposals for it, per BusinessDen.
+- **Quantum Commons Labs.** The no-opening-notice date moved from July to November 2026.
+- **NIST Precision Measurement Laboratory.** The name is Katharine Gebbie, not Katherine. The building is 283,000 sq ft per its builder, Whiting-Turner, and 297,000 per HDR; the note now names the builder as its source.
+
+The roster stays at 53 markers. No coordinate, category or convention changed, and `04_tools/marker_parity.py` passes across all four files. The live Felt map still carries the old text for these four notes and needs the same edits.
+
+Some notes were not re-checked this pass, because the search budget ran out. They are mostly stable building facts:
+
+- NIST Buildings 1, 3 and 24, and the campus acreage
+- the NLR campus and ESIF figures, and the Flatirons acreage
+- the CU Denver, Venture Partners, NEXUS and York Space items
+- NCF's researcher count, and the Old Main and Guggenheim dates STEP's "renovation underway" rests on 2023 sources. Those notes carry their July verification.
+
 ## Revision 7y (2026-10-05): figures in this log attributed; no roster, geometry, or convention change
 
 This file carried eight figures with no attribution cue, which the voice lint flagged as FAILs. Nothing was wrong with the numbers; the revision log had just not been held to the same standard as the map data. Seven were fixed by reusing the attribution the live map data already carries, not by inventing a source: RAIL's 15,700 sq ft and ESIF's 15 partner labs are per NLR, the NIST Boulder Microfabrication Facility's 18,000 sq ft is per NIST, the NQN addition's 3,600 sq ft is per CU, and the superseded EMAPS figures are per the 2023 NLR article the entry already named.
