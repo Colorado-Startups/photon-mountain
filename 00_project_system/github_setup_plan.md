@@ -47,7 +47,7 @@ Relicensed 2026-11-12 per Paul: "as lenient as possible for everything." The tab
 
 `MAP_NOTES.md` records that the corridor centerlines were traced from OpenStreetMap via the OSRM router, and that many markers sit at OSM building centroids. Under the OSM Foundation's Produced Work guideline, the `.geojson` and `.kml` are a **Derivative Database**, since they are intended for extraction of the data. That binds them to ODbL share-alike. The rendered `.png` and `.pdf` images are Produced Works and can be licensed freely.
 
-**Open compliance item:** the four data files carry no OpenStreetMap attribution today. The HTML and JSX credit OSM, but only for their basemap tiles, which is a different obligation. ODbL requires both attribution and the license text or a link to it, placed where a user would look.
+**Compliance item, closed 2026-11-12:** `photon_mountain_corridor.geojson`, `felt_boundary.geojson` and `photon_mountain_corridor.kml` carry the OpenStreetMap attribution and the ODbL 1.0 license in their own metadata. `corridor_ring_latlng.json` is a bare array, so `03_deliverables/maps/README.md` is its notice. The HTML and JSX credit OSM for their basemap tiles, which is a separate obligation.
 
 ### Step 3 · Repo and first commit
 
