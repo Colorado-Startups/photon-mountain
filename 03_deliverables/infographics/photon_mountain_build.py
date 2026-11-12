@@ -15,8 +15,8 @@
 #     project-wide 2026-06-21).
 # Honesty guardrails (per 02_substance/corridor_facts_and_sources.md and
 # 02_substance/energy_why_and_how.md):
-#   NIST Boulder = an OPERATING photonic-chip cleanroom; Quantum Commons (Arvada)
-#   and the CU Boulder nanofab OPEN 2026; "(formerly NREL)" for NLR; the 100%
+#   NIST Boulder = an OPERATING cleanroom for integrated photonics; the Quantum
+#   Commons (Arvada) fab is TARGETED for 2026 and the CU Boulder nanofab for 2028; "(formerly NREL)" for NLR; the 100%
 #   figure is labeled a 2040 GOAL (Polis roadmap), never stated as current.
 # Output: photon_mountain.pdf next to this script.
 # ============================================================================
@@ -258,9 +258,9 @@ def corridor():
 def pillars():
     global y
     gap=10; cw=(CW-2*gap)/3.0; h=132; top=y
-    data=[("PHOTONIC CHIPS","Chips that compute and move data with light, at far lower power. Colorado fabricates them today at NIST Boulder.",">$13B","silicon photonics market by 2034",chip_glyph),
-          ("RENEWABLE ENERGY","Power is the constraint on the AI build. Golden's National Laboratory of the Rockies (formerly NREL) is the nation's renewable-energy lab.","100%","renewable-electricity goal by 2040 (Polis roadmap)",sun_glyph),
-          ("QUANTUM SYSTEMS","The Elevate Quantum hub, and the nation's first quantum-engineering degree at Colorado School of Mines.","$127M+","federal and state investment to date",atom_glyph)]
+    data=[("PHOTONIC CHIPS","Chips that compute and move data with light, at far lower power. Colorado fabricates them today at NIST Boulder.",">$10B","2034 market, per analyst forecasts",chip_glyph),
+          ("RENEWABLE ENERGY","Power is the constraint on the AI build. Golden's National Laboratory of the Rockies (formerly NREL) is a Department of Energy national lab.","100%","renewable-electricity goal by 2040 (Polis roadmap)",sun_glyph),
+          ("QUANTUM SYSTEMS","The Elevate Quantum hub, and Colorado School of Mines' first-in-nation quantum systems engineering bachelor's.","$127M+","federal and state funding awarded, 2024",atom_glyph)]
     for i,(title,body,stat,lab,glyph) in enumerate(data):
         x=CX+i*(cw+gap)
         rrect(x,top,cw,h,r=10,fill=WHITE,stroke=MIST,sw=1)
@@ -307,7 +307,7 @@ def footer():
     # and a personal address would read as one person's side project. No
     # domain here until photonmountain.org is actually live.
     txt(PAGE_W/2,y+7,"Photon Mountain  ·  a Colorado Startups project in collaboration with Colorado AI",SANS,9,STONE,'center'); y+=11
-    src="Sources: NIST; Elevate Quantum / Colorado OEDIT; Colorado School of Mines; National Laboratory of the Rockies (formerly NREL); Colorado Energy Office and Xcel Clean Energy Plan. NIST Boulder is an operating photonic-chip cleanroom; the Quantum Commons (Arvada) and CU Boulder fabs open in 2026. Colorado's 100% renewable-electricity target is a 2040 goal. 2025-2026."
+    src="Sources: NIST; Elevate Quantum / Colorado OEDIT; Colorado School of Mines; National Laboratory of the Rockies (formerly NREL); Colorado Energy Office and Xcel Clean Energy Plan; market range per IMARC, Polaris, Precedence, Straits, Cervicorn. NIST Boulder runs an operating cleanroom for integrated photonics; the Quantum Commons (Arvada) fab is targeted for 2026, and CU Boulder's nanofab for 2028. Colorado's 100% renewable-electricity target is a 2040 goal. 2025-2026."
     for ln in wrap(src,MONO,7,CW-20):
         txt(PAGE_W/2,y+7,ln,MONO,7,STONE,'center'); y+=9.0
 

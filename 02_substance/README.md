@@ -4,13 +4,13 @@
 
 ## The files
 
-- `photonics_why_and_how.md`. The core case: chips and interconnects that compute and move data with light. Reframed and re-verified 2026-07-06.
-- `energy_why_and_how.md`. Light as energy (solar, laser fusion) plus energy for compute. Reframed and re-verified 2026-07-06.
-- `ai_compute_by_function.md`. The compute stack by role, and where the corridor plugs in. Reframed and re-verified 2026-07-06.
-- `manufacturing_strategy.md`. Where the corridor fits in the semiconductor siting picture: photonic and mature-node specialty fabrication. Reframed and re-verified 2026-07-06.
-- `corridor_facts_and_sources.md`. The anchor institutions and honesty guardrails, by city. Photon Mountain native; freshness pass 2026-07-06.
-- `colorado_photonics_companies.md`. The verified company roster. Photon Mountain native, compiled 2026-06-23. Row-by-row re-verification closed 2026-10-08, covering all 58 rows.
-- `rocky_flats_restoration_brainstorm.md`. An internal idea file, maturity-tagged, not a plan. Photon Mountain native.
+- `photonics_why_and_how.md`. The core case: chips and interconnects that compute and move data with light. Reframed 2026-07-06; re-searched 2026-11-12.
+- `energy_why_and_how.md`. Light as energy (solar, laser fusion) plus energy for compute. Reframed 2026-07-06; re-searched 2026-11-12.
+- `ai_compute_by_function.md`. The compute stack by role, and where the corridor plugs in. Reframed 2026-07-06; re-searched 2026-11-12.
+- `manufacturing_strategy.md`. Where the corridor fits in the semiconductor siting picture: photonic and mature-node specialty fabrication. Reframed 2026-07-06; re-searched 2026-11-12.
+- `corridor_facts_and_sources.md`. The anchor institutions and honesty guardrails, by city. Photon Mountain native; re-searched 2026-11-12.
+- `colorado_photonics_companies.md`. The verified company roster. Photon Mountain native, compiled 2026-06-23. Row-by-row re-verification closed 2026-10-08, covering all 58 rows; a delta pass on 2026-11-12 searched for changes since.
+- `rocky_flats_restoration_brainstorm.md`. An idea file, maturity-tagged, not a plan. Photon Mountain native; current-status claims re-searched 2026-11-12.
 
 Removed: `lead_abundance.md` was archived on 2026-07-06 and deleted on 2026-09-22. It was Colorado AI candidate-framework material; the statewide policy story stays with that project.
 

@@ -1,6 +1,6 @@
 # AI Compute, by Function
 
-*Photon Mountain substance. How each piece of the compute stack contributes to intelligence, grouped by what it does. Reframed from the Colorado AI seed on 2026-07-06 (PT-5); product statuses searched that day (see source block). Companion to `photonics_why_and_how.md`, which carries the corridor's photonics case in full.*
+*Photon Mountain substance. How each piece of the compute stack contributes to intelligence, grouped by what it does. Reframed from the Colorado AI seed on 2026-07-06 (PT-5); product statuses re-searched 2026-11-12 (see source block). Companion to `photonics_why_and_how.md`, which carries the corridor's photonics case in full.*
 
 ## How intelligence is produced (the one-paragraph version)
 
@@ -56,12 +56,12 @@ Combines compute and memory in one tight package to cut the data-movement penalt
 | Component | What it contributes to intelligence | Used in |
 |---|---|---|
 | **SoC** (System on a Chip) | Puts compute and memory on one module so data travels less, more usable compute per watt (Apple M-series). | Both |
-| **Superchip** | Fuses a CPU and GPU(s) plus memory into one module for the same payoff at data-center scale. Nvidia Grace Blackwell ships today. Vera Rubin is announced, targeting early 2027. | Both |
+| **Superchip** | Fuses a CPU and GPU(s) plus memory into one module for the same payoff at data-center scale. Nvidia Grace Blackwell ships today. Its successor, Vera Rubin, began production shipments in August 2026, per Nvidia. | Both |
 | **APU** (Accelerated Processing Unit) | Puts CPU and GPU on one package for tighter integration and higher efficiency (AMD MI300A). | Both |
 
 ## 6. House it at scale (facilities)
 
-Where thousands of the above combine, with power and cooling, to train and serve frontier AI. Energy is the binding constraint at this layer, which is why the corridor's energy-for-compute work matters (see `energy_why_and_how.md`).
+Where thousands of the above combine, with power and cooling, to train and serve frontier AI. Energy is a binding constraint at this layer, which is why the corridor's energy-for-compute work matters (see `energy_why_and_how.md`).
 
 | Component | What it contributes to intelligence | Used in |
 |---|---|---|
@@ -70,7 +70,7 @@ Where thousands of the above combine, with power and cooling, to train and serve
 
 ## 7. A separate track (quantum)
 
-A different computing paradigm, not part of today's neural-network AI math. Photon Mountain claims only the light-based slice: quantum optics research and the photonic-integrated-circuit fab in Arvada, which serves quantum and classical photonics alike. The broader quantum story (materials discovery, the statewide quantum economy) belongs to the Colorado AI project, not this one.
+A different computing paradigm, not part of today's neural-network AI math. Photon Mountain claims only the light-based slice: quantum optics research and the photonic-integrated-circuit fab planned for Arvada, meant to serve quantum and classical photonics alike. The fab is planned, not operating: Colorado School of Mines says the Quantum Commons campus comes online in 2026. The broader quantum story (materials discovery, the statewide quantum economy) belongs to the Colorado AI project, not this one.
 
 | Component | What it contributes to intelligence | Used in |
 |---|---|---|
@@ -83,16 +83,17 @@ A different computing paradigm, not part of today's neural-network AI math. Phot
 
 ## Where the corridor plugs in
 
-Two layers are the live opportunity. **Photonics** sits at the "connect the brains" layer today, where optical interconnects are the surest near-term win, and at the "do the thinking" layer tomorrow, where photonic compute is emerging. **Energy for compute** is what makes the "house it at scale" layer possible, because the facilities are limited by power more than by anything else. The full cases, with sources and honesty guardrails, are `photonics_why_and_how.md` and `energy_why_and_how.md`.
+Two layers are the live opportunity. **Photonics** sits at the "connect the brains" layer today, where optical interconnects are the surest near-term win, and at the "do the thinking" layer tomorrow, where photonic compute is emerging. **Energy for compute** is what makes the "house it at scale" layer possible, because a data center runs only as large as the power that reaches it. The full cases, with sources and honesty guardrails, are `photonics_why_and_how.md` and `energy_why_and_how.md`.
 
 ## Internal honesty guardrails
 
 1. **The photonic processor row stays emerging.** It is an inference-first bet for the back half of the decade, not a shipping product at scale. Never move it to the present tense.
 2. **Quantum stays a separate track.** It is not part of today's AI math, and this project claims only its light-based slice. Do not blend the QPU row into the AI pipeline.
-3. **Product examples carry their real status.** Grace Blackwell ships today. Vera Rubin is announced, with first deployments targeted for early 2027, per Nvidia customer announcements. Update examples when the facts move.
+3. **Product examples carry their real status.** Grace Blackwell ships today. Vera Rubin began production shipments in August 2026, per Nvidia's earnings call of 2026-08-26. Blackwell still ships alongside it, per the same call. Update examples when the facts move.
 
-## Sources (searched and verified 2026-07-06)
+## Sources (searched 2026-11-12; first searched 2026-07-06)
 
-- Nvidia Vera Rubin platform: unveiled 2026, pairing Rubin GPUs with the Vera CPU. Initial deployments are targeted for the first quarter of 2027, per Nvidia customer announcements (Digi Power X 8-K, June 2026).
+- Nvidia Vera Rubin platform: Rubin GPUs paired with the Vera CPU. Nvidia said production shipments began in August 2026 (Q2 fiscal 2027 earnings call, 2026-08-26, investor.nvidia.com). Nvidia's release of 2026-05-31 had set them for the fall. Grace Blackwell continues to ship, per the same call. Digi Power X targets its own first Vera Rubin deployment for the first quarter of 2027 (release, 2026-06-03, on SEC EDGAR).
 - Component roles (CPU, GPU, TPU, memory, interconnect, SoC, APU): stable, widely documented product categories; examples per vendor documentation (Apple, Nvidia, AMD).
-- Photonic processor status and the interconnect-first timeline: sourced in `photonics_why_and_how.md` (searched 2026-07-06).
+- Photonic processor status and the interconnect-first timeline: sourced in `photonics_why_and_how.md`. Re-checked 2026-11-12: no photonic processor found shipping at scale.
+- Arvada fab status: Colorado School of Mines says Quantum Commons comes online in 2026 (mines.edu, 2026-01-14). No opening announcement was found on 2026-11-12.

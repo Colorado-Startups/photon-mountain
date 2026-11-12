@@ -346,14 +346,14 @@ def comparison():
 MILESTONES = [
     (2023.37, "RAIL opens", "NLR wet labs", "now"),
     (2024.26, "Beck Venture Center", "Mines incubator", "now"),
-    (2024.54, "$40.5M Tech Hubs award", "per the EDA", "now"),
+    (2024.54, "$40.5M Tech Hubs award", "per Elevate Quantum", "now"),
     (2024.96, "Flatirons Control Center", "per Mortenson", "now"),
     (2025.04, "Quantum Incubator opens", "Boulder", "now"),
     (2025.62, "Quantum Commons opens", "first building", "now"),
     (2025.92, "NREL becomes NLR", "per energy.gov", "now"),
-    (2026.45, "Phoenix laser", "start announced by Xcimer", "soon"),
-    (2026.95, "Photonic-IC fab, phase one", "per Elevate Quantum", "soon"),
-    (2027.60, "EMAPS completes", "$224M, NLR", "horizon"),
+    (2026.45, "Phoenix laser", "start announced by Xcimer", "now"),
+    (2026.95, "Photonic-IC fab target", "per School of Mines", "soon"),
+    (2027.60, "EMAPS expected", "$224M, NLR", "horizon"),
     (2028.80, "National Quantum Nanofab", "$20M NSF award", "horizon"),
 ]
 FRAME_COLOR = {"now": ALPENGLOW_DEEP, "soon": VIOLET_DEEP, "horizon": GRANITE}
@@ -706,8 +706,8 @@ def build(root, out):
     <div class="figs">
       <div class="fig"><div class="v">{total}</div><div class="l">sites mapped in the corridor</div><div class="s">7 categories</div></div>
       <div class="fig"><div class="v">24.1</div><div class="l">miles across the core</div><div class="s">Boulder to Denver, measured</div></div>
-      <div class="fig"><div class="v">~250</div><div class="l">photonics companies statewide</div><div class="s">on the order of 250, per CPIA</div></div>
-      <div class="fig"><div class="v">~8,000</div><div class="l">photonics workers statewide</div><div class="s">roughly 8,000, per CPIA</div></div>
+      <div class="fig"><div class="v">250+</div><div class="l">photonics companies statewide</div><div class="s">over 250, per CPIA</div></div>
+      <div class="fig"><div class="v">8,000+</div><div class="l">photonics workers statewide</div><div class="s">over 8,000, per CPIA</div></div>
     </div>
   </section>
 
@@ -764,9 +764,9 @@ def build(root, out):
     <p class="kicker">Honesty guardrail</p>
     <p class="guard">Photonic compute is emerging, not shipping at scale. Boulder is the research anchor, not Denver.</p>
     <p class="src">
-      <b>Sources.</b> Core diameters measured by the project's geometry verifier. CPIA is the Colorado Photonics Industry Association; the company and workforce counts are its figures. Tech Hubs award per the EDA. Fab phase one per Elevate Quantum and the Denver Gazette, 2025-08-29. Lab renaming per energy.gov. Control Center per Mortenson. EMAPS per the design-build team's topping-out release. Nanofab award per CU Boulder. Corridor claims verified 2026-07-06; re-verify before external use.<br>
+      <b>Sources.</b> Core diameters measured by the project's geometry verifier. CPIA is the Colorado Photonics Industry Association; the company and workforce counts are its figures. Tech Hubs award per Elevate Quantum. Fab target per Colorado School of Mines, 2024; no opening announced as of 2026-11-12. Lab renaming per energy.gov. Control Center per Mortenson. EMAPS per the design-build team's topping-out release. Nanofab award per CU Boulder. Corridor claims re-verified 2026-11-12; re-verify before external use.<br>
       <b>Map data.</b> Boundary and marker coordinates derived from OpenStreetMap. &copy; OpenStreetMap contributors, ODbL 1.0. Boundary drawn simplified.<br>
-      <b>Status.</b> Internal draft. Nothing external-facing ships without Paul's sign-off.
+      <b>Status.</b> Published with the open repository, 2026-11-12. Re-verify any claim before you reuse it.
     </p>
   </section>
 

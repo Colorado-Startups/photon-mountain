@@ -40,7 +40,7 @@ For the builders of the light era, Photon Mountain is the Front Range corridor w
 
 - Light science and metrology in Boulder (NIST, JILA, CU).
 - An operating photonic-chip cleanroom at NIST Boulder.
-- A photonic-integrated-circuit fab opening in Arvada in 2026 (Elevate Quantum).
+- A photonic-integrated-circuit fab planned for Arvada, targeted for 2026 (Elevate Quantum).
 - The Colorado School of Mines in Golden; clean-energy research at NLR (formerly NREL).
 - Denver as the metro anchor.
 
@@ -67,7 +67,7 @@ We are not: boosterish, vague, breathless, derivative ("the Silicon Valley of X"
 
 Four proof areas, matching the corridor scope in `CLAUDE.md`. Attribution and status framing for each live in `02_substance/corridor_facts_and_sources.md`; re-verify before external use.
 
-1. **Photonic chips and interconnects.** Proof: the operating photonic-chip cleanroom at NIST Boulder; the Arvada photonic-integrated-circuit fab opening in 2026 (Elevate Quantum).
+1. **Photonic chips and interconnects.** Proof: the operating photonic-chip cleanroom at NIST Boulder; the Arvada photonic-integrated-circuit fab, planned and targeted for 2026 (Elevate Quantum).
 2. **Photonic sensors and fiber.** Proof: Boulder's metrology anchors, including NIST and JILA and the optical frequency comb.
 3. **Light as energy: solar and laser fusion.** Proof: clean-energy research at NLR (formerly NREL) in Golden; laser inertial fusion work in the Denver area (for example Xcimer).
 4. **Energy for compute.** Proof: generation, storage, and grid research that powers the computing corridor, anchored by NLR (formerly NREL).
@@ -76,7 +76,7 @@ Photonic quantum counts only as the light-based slice (quantum optics and the ph
 
 ### Narrative (the spine)
 
-Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one: light. On Colorado's Front Range, between Boulder and Denver, the light era is already under construction. Today, NIST and JILA in Boulder run some of the most precise light science on Earth. An operating photonic-chip cleanroom sits at NIST Boulder. In 2026, a photonic-integrated-circuit fab opens in Arvada (Elevate Quantum). On the horizon, photonic compute is emerging as an inference-first bet for the back half of the decade. It is not shipping at scale today, and the corridor says so plainly. That honesty is the brand. If you want to build with photons, energy, and compute, the mountain is where the pieces already are. Come build with light.
+Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one: light. On Colorado's Front Range, between Boulder and Denver, the light era is already under construction. Today, NIST and JILA in Boulder run some of the most precise light science on Earth. An operating photonic-chip cleanroom sits at NIST Boulder. A photonic-integrated-circuit fab is planned for Arvada, targeted for 2026 (Elevate Quantum). On the horizon, photonic compute is emerging as an inference-first bet for the back half of the decade. It is not shipping at scale today, and the corridor says so plainly. That honesty is the brand. If you want to build with photons, energy, and compute, the mountain is where the pieces already are. Come build with light.
 
 ### Tagline (locked 2026-07-05: a two-level system)
 
@@ -107,9 +107,9 @@ Avoid: revolutionary; world-class (unattributed); hub (as a bare noun); "the Sil
 
 **25 words.** Photon Mountain is Colorado's Front Range corridor for computing with light: photonic chips, sensors, solar, and laser fusion, anchored by Boulder, Golden, Arvada, and Denver.
 
-**50 words.** Photon Mountain is Colorado's Front Range corridor for computing with light. Boulder holds NIST, JILA, CU, and an operating photonic-chip cleanroom. A photonic-integrated-circuit fab opens in Arvada in 2026. Golden holds Mines and NLR (formerly NREL). Denver anchors the metro. If you build with light, start here.
+**50 words.** Photon Mountain is Colorado's Front Range corridor for computing with light. Boulder holds NIST, JILA, CU, and an operating photonic-chip cleanroom. A photonic-integrated-circuit fab is planned for Arvada, targeted for 2026. Golden holds Mines and NLR (formerly NREL). Denver anchors the metro. If you build with light, start here.
 
-**100 words.** Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one: light. It is Colorado's Front Range corridor for computing with light, running Boulder, Golden, Arvada, Denver, with a greater ring out to Longmont. Today, Boulder's NIST and JILA run world-leading light science, and an operating photonic-chip cleanroom sits at NIST Boulder. In 2026, a photonic-integrated-circuit fab opens in Arvada (Elevate Quantum). Photonic compute itself is emerging, not shipping at scale, and the corridor says so. The work spans chips, sensors, solar, and laser fusion. Come build with light.
+**100 words.** Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one: light. It is Colorado's Front Range corridor for computing with light, running Boulder, Golden, Arvada, Denver, with a greater ring out to Longmont. Today, Boulder's NIST and JILA run world-leading light science, and an operating photonic-chip cleanroom sits at NIST Boulder. A photonic-integrated-circuit fab is planned for Arvada, targeted for 2026 (Elevate Quantum). Photonic compute itself is emerging, not shipping at scale, and the corridor says so. The work spans chips, sensors, solar, and laser fusion. Come build with light.
 
 (A note on "world-leading" in the 100-word boilerplate: the named instruments carry it. If it reads as a bare superlative in context, swap in "some of the most precise light science on Earth". That phrasing is the frequency-comb claim from `corridor_facts_and_sources.md`.)
 
