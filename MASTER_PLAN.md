@@ -42,7 +42,7 @@ The roster check is the real work: every row verified by search, confirming the 
 
 Nothing decides this today. Candidate types from existing assets: the corridor one-pager, the launch infographic, map excerpts, substance-doc briefs. The standing rule to write into the definition: every ship re-runs the fact gate that day. Cadence claims about the corridor are re-verified per ship, never recalled.
 
-### Phase D · Go public
+### Phase D · Go public (done 2026-11-12)
 
 **Goal.** The repo public, and the corridor's materials citable.
 **Gated on.** Phase B. Publishing an unverified roster would violate the project's own honesty rule, and once public it can be cited by anyone.
