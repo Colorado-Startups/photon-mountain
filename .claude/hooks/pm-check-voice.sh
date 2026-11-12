@@ -38,8 +38,8 @@
 # "Built-in checks" table in its docstring lists them; its --self-test holds
 # that table to the code. As of 2026-10-08 the FAIL checks are em-dash and
 # spaced-en-dash. unattributed-figure, ai-tell, hedge-word and sentence-length
-# warn. voice_lint.py is a copy synced from Claude-OS (.claude-os-managed.json
-# records it), so a regrade happens there and needs no edit here.
+# warn. voice_lint.py is vendored from Git Crafter (its first lines name the
+# source and commit), so a regrade happens there and needs no edit here.
 #
 # Exit 1 is normalized. A crash inside voice_lint.py also exits 1, but prints
 # no FAIL finding, so it would otherwise look like a doctrine violation. This

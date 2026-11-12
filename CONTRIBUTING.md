@@ -52,7 +52,7 @@ The pre-commit hook **blocks** on any FAIL finding from the voice lint. As of 20
 
 It **warns** on everything else the lint finds: unattributed figures, AI tells, hedges, and long sentences. Each of those checks is a heuristic by the lint's own description, and blocking on a heuristic just teaches people to bypass the hook. A figure warning still needs an answer, because rule 2 below does not soften.
 
-The grades live in `voice_lint.py`, not in the hook. The hook blocks on the grade the lint assigns, so a regrade needs no hook edit. `voice_lint.py` is a synced copy of a shared lint, and `.claude-os-managed.json` records the sync. Do not edit it here; propose a change in an issue.
+The grades live in `voice_lint.py`, not in the hook. The hook blocks on the grade the lint assigns, so a regrade needs no hook edit. `voice_lint.py` is a vendored copy of a shared lint, and its first lines name its source and commit. Do not edit it here; propose a change in an issue.
 
 It **fails open** if it cannot run at all. A missing interpreter, or a crash inside the lint, is not a doctrine violation. The hook says it could not verify and lets the commit through.
 
