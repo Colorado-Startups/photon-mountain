@@ -9,10 +9,12 @@
 - `ai_compute_by_function.md`. The compute stack by role, and where the corridor plugs in. Reframed and re-verified 2026-07-06.
 - `manufacturing_strategy.md`. Where the corridor fits in the semiconductor siting picture: photonic and mature-node specialty fabrication. Reframed and re-verified 2026-07-06.
 - `corridor_facts_and_sources.md`. The anchor institutions and honesty guardrails, by city. Photon Mountain native; freshness pass 2026-07-06.
-- `colorado_photonics_companies.md` (+ `.xlsx`). The verified company roster. Photon Mountain native, compiled 2026-06-23; spot-freshness pass 2026-07-06. Row-by-row re-verification is a pre-publication step.
+- `colorado_photonics_companies.md`. The verified company roster. Photon Mountain native, compiled 2026-06-23. Row-by-row re-verification closed 2026-10-08, covering all 58 rows.
 - `rocky_flats_restoration_brainstorm.md`. An internal idea file, maturity-tagged, not a plan. Photon Mountain native.
 
 Removed: `lead_abundance.md` was archived on 2026-07-06 and deleted on 2026-09-22. It was Colorado AI candidate-framework material; the statewide policy story stays with that project.
+
+Removed: `colorado_photonics_companies.xlsx`, deleted 2026-11-12. It was a one-off export of the roster, compiled 2026-06-23 per its own About sheet, by a script that is not in this repo. It never received the 2026-10 corrections, so it carried claims the roster had already retracted. The `.md` is the one roster. A spreadsheet, if one is wanted, gets generated from it.
 
 ## How to use these documents
 

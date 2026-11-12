@@ -57,7 +57,7 @@ cowork_project_instructions.md  Mirror of the Cowork Settings > Instructions fie
 02_substance/        Corridor substance, reframed from the Colorado AI seeds 2026-07-06 (PT-5)
   README.md          Folder guide: verification dates, usage rules, standing boundaries
   corridor_facts_and_sources.md   Anchor institutions and the honesty guardrails
-  colorado_photonics_companies.md (+ .xlsx)   Company roster
+  colorado_photonics_companies.md   Company roster
   photonics_why_and_how.md, energy_why_and_how.md, manufacturing_strategy.md,
   ai_compute_by_function.md, rocky_flats_restoration_brainstorm.md
 03_deliverables/
