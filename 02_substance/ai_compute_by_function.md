@@ -70,7 +70,7 @@ Where thousands of the above combine, with power and cooling, to train and serve
 
 ## 7. A separate track (quantum)
 
-A different computing paradigm, not part of today's neural-network AI math. Photon Mountain claims only the light-based slice: quantum optics research and the photonic-integrated-circuit fab planned for Arvada, meant to serve quantum and classical photonics alike. The fab is planned, not operating: Colorado School of Mines says the Quantum Commons campus comes online in 2026. The broader quantum story (materials discovery, the statewide quantum economy) belongs to the Colorado AI project, not this one.
+A different computing paradigm, not part of today's neural-network AI math. Photon Mountain claims only the light-based slice: quantum optics research and the photonic-integrated-circuit fab planned for Arvada, meant to serve quantum and classical photonics alike. The fab is planned, not operating: it is targeted for 2026, per Colorado School of Mines, and no opening had been announced as of 2026-11-12. The broader quantum story (materials discovery, the statewide quantum economy) belongs to the Colorado AI project, not this one.
 
 | Component | What it contributes to intelligence | Used in |
 |---|---|---|
@@ -96,4 +96,4 @@ Two layers are the live opportunity. **Photonics** sits at the "connect the brai
 - Nvidia Vera Rubin platform: Rubin GPUs paired with the Vera CPU. Nvidia said production shipments began in August 2026 (Q2 fiscal 2027 earnings call, 2026-08-26, investor.nvidia.com). Nvidia's release of 2026-05-31 had set them for the fall. Grace Blackwell continues to ship, per the same call. Digi Power X targets its own first Vera Rubin deployment for the first quarter of 2027 (release, 2026-06-03, on SEC EDGAR).
 - Component roles (CPU, GPU, TPU, memory, interconnect, SoC, APU): stable, widely documented product categories; examples per vendor documentation (Apple, Nvidia, AMD).
 - Photonic processor status and the interconnect-first timeline: sourced in `photonics_why_and_how.md`. Re-checked 2026-11-12: no photonic processor found shipping at scale.
-- Arvada fab status: Colorado School of Mines says Quantum Commons comes online in 2026 (mines.edu, 2026-01-14). No opening announcement was found on 2026-11-12.
+- Arvada fab status: targeted for 2026, per Colorado School of Mines (groundbreaking release, 2024; mines.edu, 2026-01-14). No opening announcement was found on 2026-11-12.
