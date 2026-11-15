@@ -2,6 +2,10 @@
 
 **Build with light.**
 
+a [Colorado Startups](https://coloradostartups.org) project
+
+Brand: [Colorado Startups brand guide](https://colorado-startups.github.io/brand/)
+
 Photon Mountain is Colorado's Front Range corridor for computing with light: photonic chips, sensors, solar, and laser fusion, anchored by Boulder, Golden, Arvada, and Denver.
 
 Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one.
