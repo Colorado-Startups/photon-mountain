@@ -1,7 +1,8 @@
 // The live record, checked at build: the invariants the site's numbers rest on.
 import { describe, expect, it } from "vitest";
 import factsMd from "../../../02_substance/corridor_facts_and_sources.md?raw";
-import { anchors, companies, corridorCompanies, figures, sites } from "./corridor";
+import energyMd from "../../../02_substance/energy_why_and_how.md?raw";
+import { anchors, clocks, companies, corridorCompanies, figures, sites } from "./corridor";
 
 const CATEGORIES = ["National Lab", "University Lab", "Fabrication Facility", "Innovation Campus", "University Campus", "Government Hall", "Transit Station"];
 
@@ -48,6 +49,18 @@ describe("the corridor record", () => {
       expect(factsMd, `${f.id}: its source is listed in the facts doc`).toContain(f.source);
       expect(f.read, f.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(["today", "2026", "horizon"], f.id).toContain(f.clock);
+    }
+  });
+
+  it("keeps every clock item in its own doc, and all three clocks filled", () => {
+    const docs: Record<string, string> = {
+      "02_substance/corridor_facts_and_sources.md": factsMd,
+      "02_substance/energy_why_and_how.md": energyMd,
+    };
+    expect(new Set(clocks.map((c) => c.clock))).toEqual(new Set(["today", "2026", "horizon"]));
+    for (const c of clocks) {
+      expect(docs[c.doc], `${c.id}: ${c.doc}`).toBeDefined();
+      expect(docs[c.doc], `${c.id}: "${c.match}"`).toContain(c.match);
     }
   });
 });

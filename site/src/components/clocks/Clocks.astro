@@ -1,5 +1,72 @@
 ---
-// Launch plan wave 2: the clocks section of the home page. Its own step replaces this stub; nothing else
-// in the site imports from this folder except src/pages/index.astro.
+// The three clocks, kept apart on purpose: what operates today, what is targeted for 2026, and what is on the
+// horizon. Every item comes from 02_substance/clocks.json and quotes the doc that dates it.
+import { clocks } from "../../data/corridor";
+
+const repo = "https://github.com/Colorado-Startups/photon-mountain/blob/main/";
+const lanes = [
+  { id: "today", name: "Operating today" },
+  { id: "2026", name: "Targeted for 2026" },
+  { id: "horizon", name: "On the horizon" },
+] as const;
 ---
-<section class="wrap stub" aria-label="Clocks" data-section="clocks"></section>
+<section class="clocks wrap" aria-labelledby="clocks-title" data-section="clocks">
+  <p class="eyebrow">Three clocks</p>
+  <h2 id="clocks-title">What runs now, what opens next, what comes after</h2>
+  <div class="filter" role="group" aria-label="Show a clock">
+    <button type="button" aria-pressed="true" data-show="all">All</button>
+    {lanes.map((l) => <button type="button" aria-pressed="false" data-show={l.id}>{l.name}</button>)}
+  </div>
+  <ol class="lanes" role="list">
+    {lanes.map((l) => (
+      <li class={`lane lane-${l.id}`} data-lane={l.id}>
+        <h3><span class="dot" aria-hidden="true"></span>{l.name}</h3>
+        <ul role="list">
+          {clocks.filter((c) => c.clock === l.id).map((c) => (
+            <li class="item">
+              <p class="when">{c.when} · {c.place}</p>
+              <p class="title">{c.title}</p>
+              <p class="text">{c.text}</p>
+              <a class="src" href={repo + c.doc}>Dated in {c.doc.split("/").pop()}</a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<script>
+  // Filter chips: show one clock or all three. Without script every lane shows.
+  const root = document.querySelector<HTMLElement>("[data-section=clocks]");
+  root?.querySelectorAll<HTMLButtonElement>("[data-show]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const show = b.dataset.show;
+      root.querySelectorAll<HTMLButtonElement>("[data-show]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      root.querySelectorAll<HTMLElement>("[data-lane]").forEach((lane) => (lane.hidden = show !== "all" && lane.dataset.lane !== show));
+    }),
+  );
+</script>
+
+<style>
+  .clocks { display: grid; gap: 1rem; padding-block: 3rem; }
+  .filter { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .filter button { min-height: 2.75rem; padding: 0.5rem 1rem; border: var(--hairline) solid var(--rule); border-radius: 999rem; background: var(--surface); color: var(--ink); font: 600 var(--step0) var(--font-body); cursor: pointer; }
+  .filter button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--color-white); }
+  .lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; padding: 0; margin: 0; list-style: none; }
+  .lane[hidden] { display: none; }
+  .lane { display: grid; align-content: start; gap: 0.75rem; padding: 1rem; border-radius: 1rem; border: var(--hairline) solid var(--rule); background: var(--surface); }
+  .lane h3 { display: flex; gap: 0.5rem; align-items: center; font-size: var(--step2); }
+  .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; background: var(--accent); }
+  .lane-2026 .dot { background: var(--gold); }
+  .lane-horizon { border-style: dashed; }
+  .lane-horizon .dot { background: transparent; border: 0.125rem solid var(--ink-2); }
+  .lane ul { display: grid; gap: 0.75rem; padding: 0; margin: 0; list-style: none; }
+  .item { display: grid; gap: 0.2rem; padding-left: 0.75rem; border-left: 0.1875rem solid var(--rule); }
+  .lane-today .item { border-left-color: var(--accent); }
+  .lane-2026 .item { border-left-color: var(--gold); }
+  .when { font-family: var(--font-mono); font-size: var(--step0); color: var(--ink-2); }
+  .title { font-weight: 600; }
+  .text { color: var(--ink-2); font-size: var(--step0); }
+  .src { font-size: var(--step0); }
+</style>
