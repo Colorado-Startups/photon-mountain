@@ -32,7 +32,8 @@ Full conventions in `voice.md`; the lexicon and tone layer in `brand_identity.md
 - Write **Photon Mountain**: two words, both capitalized, never hyphenated.
 - Do not abbreviate in external copy: no "PM," no "PhoMo."
 - Programs are named under the master brand: "Photon Mountain [Program]." No sub-brand gets its own logo in v1.
-- Domains: photonmountain.com and photonmountain.org.
+- Domains: photonmountain.co for the site (registered 2026-11-16), plus photonmountain.com and photonmountain.org.
+- Footer: two lines, in this order and these exact words. First "a Colorado Startups project", then "A joint effort with Colorado Compute". Set both in Inter Regular in the secondary text color. Never call the two a coalition, and never merge their marks.
 
 ## 4. The mark: Summit Sun (locked 2026-07-05)
 
@@ -55,7 +56,7 @@ Never: add rays, add gradients, add a prism or refracted beam, tilt the mark, pu
 
 ## 6. Color
 
-The palette is light-derived and locally true: alpenglow on the peaks at dawn, a violet laser line, the night sky over the summit, snowfield, granite.
+The palette is light-derived and locally true: alpenglow on the peaks at dawn, a violet laser line, the night sky over the summit, snowfield, granite. Gold joined on 2026-11-16: the gold of full sun.
 
 | Token | Hex | Role |
 |---|---|---|
@@ -69,6 +70,9 @@ The palette is light-derived and locally true: alpenglow on the peaks at dawn, a
 | Violet Bright | `#8F75FF` | Violet as text on dark surfaces. |
 | Violet Deep | `#5636D6` | Violet as text on light surfaces. |
 | Dawn Tint | `#FFE9E2` | Soft warm background tint. |
+| Gold | `#F2B233` | Third accent. Graphic only: fills, rules, map and chart marks. Never text. |
+| Gold Deep | `#8A6212` | Gold as text on light surfaces. |
+| Gold Tint | `#FFF3D6` | Soft gold background tint. |
 
 Pairing rules (contrast computed 2026-07-05, WCAG 2.1 method; ratios in `brand_identity.md`):
 
@@ -78,8 +82,10 @@ Pairing rules (contrast computed 2026-07-05, WCAG 2.1 method; ratios in `brand_i
 - Accent text on Summit Night uses Alpenglow or Violet Bright.
 - Alpenglow `#FF5A36` and Laser Violet `#7B5CFF` on white: graphics and large text only, never body text.
 - One Alpenglow moment per piece. Alpenglow is the loud thing; everything else stays quiet.
+- Gold `#F2B233` never carries text. On Summit Night it works for any graphic. On light surfaces it is decoration only, so a meaningful mark uses Gold Deep.
+- Gold text uses Gold Deep on White, Snowfield, or Gold Tint. Body text on Gold Tint is Summit Night.
 
-Never: use turquoise, pine green, or flag gold (the Colorado AI palette is prohibited here); set body text in any accent color; place Alpenglow text on Dawn Tint.
+Never: use turquoise, pine green, or Colorado flag gold `#FFD100` (the Colorado AI palette is prohibited here); set body text in any accent color; place Alpenglow text on Dawn Tint.
 
 ## 7. Typography
 
@@ -91,7 +97,7 @@ All families are open-source (SIL Open Font License) and on Google Fonts, so any
 | Body and UI | Inter | Regular 400, Medium 500, SemiBold 600 |
 | Data, figures, code | Space Mono | Regular 400, Bold 700 |
 
-Scale guidance: display 40 to 64, headline 24 to 32, body 10.5 to 12 (print points) or 16 to 18 (web px), captions in Granite. Never substitute look-alike fonts, and never use IBM Plex, Work Sans, or JetBrains Mono (the Colorado AI set).
+Scale guidance: display 40 to 64, headline 24 to 32, body 10.5 to 12 (print points) or 16 to 18 (web px), captions in Granite. On the web, use the eight rem steps, `step0` to `step7` (14, 16, 18, 24, 32, 40, 48 and 64 px), from `tokens.css`. Never substitute look-alike fonts, and never use IBM Plex, Work Sans, or JetBrains Mono (the Colorado AI set).
 
 ## 8. Imagery and iconography
 
@@ -128,6 +134,7 @@ Generous margins. Summit Night or White fields. Rules and captions in Granite. O
 
 ## Changelog
 
+- 2026-11-16 · Gold joins the palette (section 6), with the web type steps (section 7), the domain photonmountain.co and the two footer lines (section 3).
 - 2026-11-12 · Section 11 now usage policy v2: nothing is reserved, and no approval is needed.
 - 2026-07-05 · Tagline system and Summit Sun mark locked; sections 1, 4, and 12 updated to match.
 - 2026-07-05 · v1 drafted (external-ready form, internal until sign-off). Tagline and final mark pending.
