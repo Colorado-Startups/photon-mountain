@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { anchors, companies } from "../data/corridor";
-import { fromQuery, matches, slug, tally, toEntries } from "./explore";
+import { fromQuery, matches, matchesCard, slug, tally, toEntries } from "./explore";
 
 const all = toEntries(companies, anchors);
 const none = { q: "", kind: [], ring: [], segment: [], town: [] };
@@ -26,6 +26,15 @@ describe("the explorer", () => {
     const hits = all.filter((e) => matches(e, f));
     expect(hits.length).toBeGreaterThan(0);
     for (const h of hits) expect(h.towns).toContain("boulder");
+  });
+
+  it("tests a rendered card's data attributes exactly as it tests the entry", () => {
+    const filters = [fromQuery("?town=boulder"), fromQuery("?segment=lasers&q=laser"), fromQuery("?kind=anchor&ring=core"), fromQuery("")];
+    for (const e of toEntries(companies, anchors)) {
+      const card = { kind: e.kind, ring: slug(e.ring), segment: e.segment, towns: e.towns.join(" "), text: `${e.name} ${e.city} ${e.what}`.toLowerCase() };
+      for (const f of filters) expect(matchesCard(card, f), `${e.name} ${JSON.stringify(f)}`).toBe(matches(e, f));
+    }
+    expect(matchesCard({}, fromQuery(""))).toBe(true);
   });
 
   it("makes stable slugs", () => {

@@ -76,7 +76,7 @@ const groups = [
 </Base>
 
 <script>
-  import { fromQuery, type Filters } from "../../lib/explore";
+  import { fromQuery, matchesCard, type Filters } from "../../lib/explore";
 
   const root = document.querySelector<HTMLElement>("[data-explore]");
   if (root) {
@@ -89,26 +89,19 @@ const groups = [
     // A query value with no chip (a stale or mistyped link) would hide everything with no way back; drop it.
     for (const g of groups) f[g] = f[g].filter((v) => chips.some((b) => b.dataset.key === g && b.dataset.val === v));
     if (input) input.value = f.q;
-    const apply = () => {
-      const q = f.q.trim().toLowerCase();
-      let n = 0;
-      for (const c of cards) {
-        const d = c.dataset;
-        const ok =
-          (f.kind.length === 0 || f.kind.includes(d.kind ?? "")) &&
-          (f.ring.length === 0 || f.ring.includes(d.ring ?? "")) &&
-          (f.segment.length === 0 || f.segment.includes(d.segment ?? "")) &&
-          (f.town.length === 0 || (d.towns ?? "").split(" ").some((t) => f.town.includes(t))) &&
-          (!q || (d.text ?? "").includes(q));
-        c.hidden = !ok;
-        if (ok) n++;
-      }
-      for (const b of chips) b.setAttribute("aria-pressed", String(f[b.dataset.key as (typeof groups)[number]].includes(b.dataset.val ?? "")));
-      if (shown) shown.textContent = n === cards.length ? `Showing all ${n}` : `Showing ${n} of ${cards.length}`;
+    // The URL carries the filters, so a filtered view can be shared.
+    const syncUrl = () => {
       const p = new URLSearchParams();
       if (f.q) p.set("q", f.q);
       for (const g of groups) if (f[g].length) p.set(g, f[g].join(","));
       history.replaceState(null, "", p.size ? `?${p}` : location.pathname);
+    };
+    const apply = () => {
+      for (const c of cards) c.hidden = !matchesCard(c.dataset, f);
+      const n = cards.filter((c) => !c.hidden).length;
+      for (const b of chips) b.setAttribute("aria-pressed", String(f[b.dataset.key as (typeof groups)[number]].includes(b.dataset.val ?? "")));
+      if (shown) shown.textContent = n === cards.length ? `Showing all ${n}` : `Showing ${n} of ${cards.length}`;
+      syncUrl();
     };
     for (const b of chips) b.addEventListener("click", () => {
       const list = f[b.dataset.key as (typeof groups)[number]];
