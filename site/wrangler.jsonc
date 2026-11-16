@@ -3,17 +3,25 @@
   // Workers Builds deploys main on merge (root directory site/, build command `cd .. && npm ci && npm run build`,
   // deploy command `npx wrangler deploy`). Until Paul's yes at launch plan step 4.4 the site lives only at
   // photon-mountain-site.coloradostartups.workers.dev, kept out of search by X-Robots-Tag in public/_headers;
-  // step 4.4 adds the photonmountain.co custom domain here. No secrets live in this file.
+  // step 4.4 adds the photonmountain.co custom domain here. No secrets live in this file. Only /mcp wakes the
+  // Worker; pages and data files are plain static assets.
   "$schema": "../node_modules/wrangler/config-schema.json",
   "name": "photon-mountain-site",
   // The Colorado Startups account; the same login also sees two others, and Wrangler must never pick them.
   "account_id": "437b80fdd39fee1c4daab6da32fa5aeb",
   "compatibility_date": "2026-11-01",
+  // The Worker serves /mcp only (src/worker.ts); node:async_hooks, which the MCP handler uses, needs nodejs_compat.
+  "main": "src/worker.ts",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/mcp"],
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
+  // 60 MCP calls a minute per address, per Cloudflare location. The id is unique in the account.
+  "ratelimits": [{ "name": "MCP_LIMIT", "namespace_id": "20261116", "simple": { "limit": 60, "period": 60 } }],
   "workers_dev": true,
   "preview_urls": false,
   "observability": { "enabled": true }
