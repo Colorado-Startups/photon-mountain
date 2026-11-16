@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { anchors, companies, figures, sites } from "./data/corridor";
+import { readRpc } from "./mcp/rpc";
 import worker, { type Env, HEADERS } from "./worker";
 
 const files: Record<string, object> = {
@@ -33,7 +34,7 @@ describe("the Worker", () => {
     const seen: string[] = [];
     const res = await call(env(true, seen));
     expect(res.status).toBe(200);
-    expect((await res.json()).result.tools).toHaveLength(6);
+    expect((await readRpc(res)).result?.tools).toHaveLength(6);
     expect(seen.sort()).toEqual(Object.keys(files).sort());
     for (const [k, v] of Object.entries(HEADERS)) expect(res.headers.get(k)).toBe(v);
   });

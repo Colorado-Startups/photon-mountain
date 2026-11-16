@@ -90,6 +90,7 @@ export function createServer(r: McpRecord): McpServer {
   return server;
 }
 
-/** The /mcp handler for one record. Any origin may call it: it is public, read-only and keyless. */
+/** The /mcp handler for one record. Any origin may call it: it is public, read-only and keyless. JSON responses
+ * apply to clients on the 2026 protocol; 2025 clients get one server-sent event per answer (src/mcp/rpc.ts). */
 export const mcpHandler = (r: McpRecord) =>
   createMcpHandler(() => createServer(r), { route: "/mcp", allowedHostnames: HOSTS, allowedOriginHostnames: "*", responseMode: "json" });

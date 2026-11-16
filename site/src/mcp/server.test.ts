@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { anchors, companies, figures, sites } from "../data/corridor";
+import { readRpc } from "./rpc";
 import { mcpHandler, tools } from "./server";
 
 const record = { companies, anchors, sites, figures };
@@ -54,15 +55,15 @@ describe("the /mcp endpoint", () => {
   it("initializes, lists the six read-only tools, and answers a call", async () => {
     const init = await rpc({ method: "initialize", params: { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "test", version: "1" } } });
     expect(init.status).toBe(200);
-    expect((await init.json()).result.serverInfo.name).toBe("photon-mountain");
+    expect((await readRpc(init)).result?.serverInfo.name).toBe("photon-mountain");
 
-    const list = await (await rpc({ method: "tools/list" })).json();
-    const names = list.result.tools.map((x: { name: string }) => x.name).sort();
+    const list = (await readRpc(await rpc({ method: "tools/list" }))) as { result: { tools: { name: string; annotations: { readOnlyHint: boolean } }[] } };
+    const names = list.result.tools.map((x) => x.name).sort();
     expect(names).toEqual(["get_figures", "get_site", "list_anchors", "list_companies", "list_sites", "search"]);
     for (const tool of list.result.tools) expect(tool.annotations.readOnlyHint).toBe(true);
 
-    const call = await (await rpc({ method: "tools/call", params: { name: "list_anchors", arguments: { town: "Golden" } } })).json();
-    expect(JSON.parse(call.result.content[0].text).count).toBeGreaterThan(0);
+    const call = await readRpc(await rpc({ method: "tools/call", params: { name: "list_anchors", arguments: { town: "Golden" } } }));
+    expect(JSON.parse(call.result?.content[0].text).count).toBeGreaterThan(0);
   });
 
   it("refuses a Host it does not serve", async () => {
