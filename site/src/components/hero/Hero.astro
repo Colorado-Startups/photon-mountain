@@ -1,5 +1,117 @@
 ---
-// Launch plan wave 2: the hero section of the home page. Its own step replaces this stub; nothing else
-// in the site imports from this folder except src/pages/index.astro.
+// The first frame: the thesis, three ways in, the light loop over the Boulder painting, and the counters.
+// Every counter is computed from the record or carries its source; nothing here is typed by hand.
+import { clips, image, label, srcset, variant } from "../../lib/art";
+import { corridorAnchors } from "../../lib/home";
+import { anchors, corridorCompanies, figures, sites } from "../../data/corridor";
+
+const crest = image("crest");
+const poster = image("boulder");
+const clip = clips[0];
+const fig = Object.fromEntries(figures.map((f) => [f.id, f]));
+
+const counters = [
+  { value: String(corridorCompanies.length), label: "companies in the corridor", note: "Core and ring towns, from the roster", href: "/explore/" },
+  { value: String(corridorAnchors(anchors).length), label: "research anchors", note: "Labs, universities and the Tech Hub", href: "/explore/" },
+  { value: String(sites.length), label: "sites on the map", note: "Labs, campuses, fabs and stations", href: "/map/" },
+  { value: fig.cpia_companies.value, label: "photonics companies statewide", note: `The CPIA's figure, read ${fig.cpia_companies.read}`, href: fig.cpia_companies.source },
+  { value: fig.cpia_workers.value, label: "photonics workers statewide", note: `The CPIA's figure, read ${fig.cpia_workers.read}`, href: fig.cpia_workers.source },
+  { value: fig.hub_total.value, label: "quantum Tech Hub funding", note: "Elevate Quantum, 2024-07-02", href: fig.hub_total.source },
+];
 ---
-<section class="wrap stub" aria-label="Hero" data-section="hero"></section>
+<section class="hero wrap" aria-labelledby="hero-title" data-section="hero">
+  <div class="copy">
+    <p class="eyebrow">Boulder · Golden · Arvada · Denver</p>
+    <h1 id="hero-title">Build with light.</h1>
+    <p class="lede">The era of intelligence, built with light.</p>
+    <ul class="go" role="list">
+      <li><a href="/map/">See the map</a></li>
+      <li><a href="/explore/">Find a lab or company</a></li>
+      <li><a href="/data/">Connect your AI</a></li>
+    </ul>
+  </div>
+  <figure class="frame" data-loop>
+    <picture>
+      <source type="image/webp" srcset={srcset(poster)} sizes="(min-width: 60rem) 36rem, 100vw" />
+      <img src={variant(poster, 960)} alt={poster.alt} width={poster.width} height={poster.height} fetchpriority="low" decoding="async" />
+    </picture>
+    <video muted loop playsinline preload="none" width={poster.width} height={poster.height} aria-label={clip.alt} hidden>
+      {clip.sources.map((s) => <source src={`/art/${s.file}`} type={s.type} />)}
+    </video>
+    <img class="crest" src={variant(crest, 480)} alt={crest.alt} width="96" height="96" loading="lazy" decoding="async" />
+    <button class="play" type="button" aria-pressed="false">Play the light</button>
+    <figcaption>{clip.caption} <span class="tag">{label}</span></figcaption>
+  </figure>
+  <ul class="counters" role="list" aria-label="The corridor in numbers">
+    {counters.map((c) => (
+      <li>
+        <a href={c.href}>
+          <span class="n">{c.value}</span>
+          <span class="l">{c.label}</span>
+          <span class="s">{c.note}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  // The loop plays only on a click, or by itself when the reader allows motion and saves no data.
+  // It always has a pause control (WCAG 2.2.2), and the painting stays under reduced motion.
+  const fig = document.querySelector<HTMLElement>("[data-loop]");
+  const video = fig?.querySelector("video");
+  const button = fig?.querySelector<HTMLButtonElement>(".play");
+  const still = fig?.querySelector("picture");
+  if (fig && video && button && still) {
+    const set = (playing: boolean) => {
+      button.setAttribute("aria-pressed", String(playing));
+      button.textContent = playing ? "Pause the light" : "Play the light";
+    };
+    const play = async () => {
+      video.hidden = false;
+      try {
+        await video.play();
+        still.hidden = true;
+        set(true);
+      } catch {
+        video.hidden = true;
+        set(false);
+      }
+    };
+    const pause = () => { video.pause(); set(false); };
+    button.addEventListener("click", () => (video.paused ? play() : pause()));
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saving = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    if (!calm && !saving) {
+      addEventListener("load", () => {
+        new IntersectionObserver((entries, obs) => {
+          if (entries.some((e) => e.isIntersecting)) { obs.disconnect(); play(); }
+        }).observe(fig);
+      }, { once: true });
+    }
+  }
+</script>
+
+<style>
+  .hero { display: grid; gap: 2rem; padding-block: 3.5rem 2rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 60rem) { .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; } .counters { grid-column: 1 / -1; } }
+  .copy { display: grid; gap: 1rem; }
+  .lede { font-size: var(--step3); color: var(--ink-2); }
+  .go { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0; margin: 0.5rem 0 0; list-style: none; }
+  .go a { display: inline-block; padding: 0.75rem 1.1rem; border: var(--hairline) solid var(--rule); border-radius: 0.5rem; background: var(--surface); color: var(--ink); font-weight: 600; text-decoration: none; }
+  .go a:hover { border-color: var(--gold); background: var(--gold-wash); }
+  .frame { position: relative; margin: 0; border-radius: 1rem; overflow: hidden; background: var(--ink); box-shadow: 0 0 0 0.1875rem var(--gold-wash), 0 1.5rem 3rem -1.5rem var(--ink); }
+  .frame [hidden] { display: none; }
+  .frame img, .frame video { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; }
+  .frame .crest { position: absolute; top: 0.75rem; left: 0.75rem; width: 4.5rem; height: auto; aspect-ratio: 1; filter: drop-shadow(0 0.25rem 0.75rem var(--ink)); }
+  .play { position: absolute; right: 0.75rem; bottom: 3.25rem; min-height: 2.75rem; padding: 0.5rem 1rem; border: var(--hairline) solid var(--gold); border-radius: 999rem; background: var(--ink); color: var(--color-white); font: 600 var(--step0) var(--font-body); cursor: pointer; }
+  .play:hover { background: var(--gold-ink); }
+  figcaption { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.75rem 1rem; background: var(--ink); color: var(--color-text-secondary-on-dark); font-size: var(--step0); }
+  .tag { padding: 0.1rem 0.5rem; border-radius: 999rem; border: var(--hairline) solid var(--gold); color: var(--color-white); font-family: var(--font-mono); font-size: var(--step0); }
+  .counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 0.75rem; padding: 0; margin: 0; list-style: none; }
+  .counters a { display: grid; gap: 0.25rem; height: 100%; padding: 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); color: var(--ink); text-decoration: none; }
+  .counters a:hover { border-color: var(--gold); }
+  .n { font: 700 var(--step6) / 1 var(--font-display); font-variant-numeric: tabular-nums; background: linear-gradient(transparent 72%, var(--gold-wash) 72%); }
+  .l { font-weight: 600; }
+  .s { color: var(--ink-2); font-size: var(--step0); }
+</style>

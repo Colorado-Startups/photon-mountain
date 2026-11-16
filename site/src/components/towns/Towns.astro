@@ -1,5 +1,67 @@
 ---
-// Launch plan wave 2: the towns section of the home page. Its own step replaces this stub; nothing else
-// in the site imports from this folder except src/pages/index.astro.
+// The four core towns: the real place first (its role, anchors and companies, from the record), then
+// its painting, labeled AI-made. Arvada has no painting; its card shows the fab's honest clock instead.
+import { image, label, srcset, variant } from "../../lib/art";
+import { TOWNS, townStats } from "../../lib/home";
+import { anchors, companies } from "../../data/corridor";
+
+const cards = TOWNS.map((t) => ({ ...t, ...townStats(t, companies, anchors), img: t.art ? image(t.art) : null }));
 ---
-<section class="wrap stub" aria-label="Towns" data-section="towns"></section>
+<section class="towns wrap" aria-labelledby="towns-title" data-section="towns">
+  <p class="eyebrow">The triangle</p>
+  <h2 id="towns-title">Four towns, one corridor</h2>
+  <ul class="grid" role="list">
+    {cards.map((c) => (
+      <li class={`card ${c.img ? "" : "plain"}`}>
+        <div class="facts">
+          <h3>{c.name}</h3>
+          <p class="role">{c.role}</p>
+          <dl>
+            <div><dt>Companies</dt><dd>{c.companies.length}</dd></div>
+            <div><dt>Anchors</dt><dd>{c.anchors.length}</dd></div>
+          </dl>
+          {c.anchors.length > 0 && (
+            <ul class="names" role="list">
+              {c.anchors.map((a) => <li>{a.source ? <a href={a.source.url}>{a.name}</a> : a.name}</li>)}
+            </ul>
+          )}
+          <a class="more" href={`/explore/?town=${c.id}`}>See {c.name}'s companies</a>
+        </div>
+        {c.img ? (
+          <figure>
+            <picture>
+              <source type="image/webp" srcset={srcset(c.img)} sizes="(min-width: 60rem) 34rem, 100vw" />
+              <img src={variant(c.img, 960)} alt={c.img.alt} width={c.img.width} height={c.img.height} loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>{c.img.caption} <span class="tag">{label}</span></figcaption>
+          </figure>
+        ) : (
+          <p class="clock"><span class="tag2">2026</span> The photonic-IC fab at the Quantum Commons is targeted for 2026 and not yet open.</p>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .towns { display: grid; gap: 1rem; padding-block: 3rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); gap: 1rem; padding: 0; margin: 0.5rem 0 0; list-style: none; }
+  .card { display: grid; grid-template-rows: auto 1fr; overflow: hidden; border: var(--hairline) solid var(--rule); border-radius: 1rem; background: var(--surface); }
+  .facts { display: grid; gap: 0.5rem; padding: 1.25rem; }
+  .role { color: var(--ink-2); }
+  dl { display: flex; gap: 1.5rem; margin: 0.25rem 0; }
+  dl div { display: grid; }
+  dt { font-family: var(--font-mono); font-size: var(--step0); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+  dd { margin: 0; font: 700 var(--step5) / 1 var(--font-display); font-variant-numeric: tabular-nums; }
+  .names { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; margin: 0; list-style: none; font-size: var(--step0); }
+  .names li { padding: 0.2rem 0.6rem; border-radius: 999rem; background: var(--gold-wash); }
+  .names a { color: var(--ink); text-decoration: none; }
+  .names a:hover { text-decoration: underline; }
+  .more { font-weight: 600; }
+  figure { margin: 0; align-self: end; }
+  figure img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; }
+  figcaption { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.6rem 1rem; background: var(--ink); color: var(--color-text-secondary-on-dark); font-size: var(--step0); }
+  .tag { padding: 0.1rem 0.5rem; border-radius: 999rem; border: var(--hairline) solid var(--gold); color: var(--color-white); font-family: var(--font-mono); font-size: var(--step0); }
+  .clock { align-self: end; margin: 0 1.25rem 1.25rem; padding: 1rem; border: 0.125rem dashed var(--gold); border-radius: 0.75rem; color: var(--ink-2); max-width: none; }
+  .tag2 { display: inline-block; margin-right: 0.5rem; padding: 0.1rem 0.5rem; border-radius: 999rem; background: var(--ink); color: var(--color-white); font-family: var(--font-mono); font-size: var(--step0); }
+</style>
