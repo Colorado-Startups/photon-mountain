@@ -1,0 +1,20 @@
+{
+  // photonmountain.co: the static Astro build in ./dist, served from Cloudflare Workers static assets.
+  // Workers Builds deploys main on merge (root directory site/, build command `cd .. && npm ci && npm run build`,
+  // deploy command `npx wrangler deploy`). Until Paul's yes at launch plan step 4.4 the site lives only at
+  // photon-mountain-site.coloradostartups.workers.dev, kept out of search by X-Robots-Tag in public/_headers;
+  // step 4.4 adds the photonmountain.co custom domain here. No secrets live in this file.
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "photon-mountain-site",
+  // The Colorado Startups account; the same login also sees two others, and Wrangler must never pick them.
+  "account_id": "437b80fdd39fee1c4daab6da32fa5aeb",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true }
+}
