@@ -30,6 +30,15 @@ describe("the Worker", () => {
     expect(res.headers.get("x-content-type-options")).toBe("nosniff");
   });
 
+  it("answers 503 with its headers when the data files do not load, then 413 for an oversized body", async () => {
+    const broken: Env = { ...env(), ASSETS: { fetch: async () => new Response("gone", { status: 500 }) } };
+    const res = await call(broken);
+    expect(res.status).toBe(503);
+    expect(res.headers.get("retry-after")).toBe("60");
+    const big = await worker.fetch(new Request("https://photonmountain.co/mcp", { method: "POST", headers: { "content-length": "20000" }, body: "x" }), env());
+    expect(big.status).toBe(413);
+  });
+
   it("serves the MCP tools from the built data files, with the security headers", async () => {
     const seen: string[] = [];
     const res = await call(env(true, seen));

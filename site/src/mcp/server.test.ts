@@ -21,6 +21,7 @@ describe("the MCP tools", () => {
     for (const a of golden.anchors) expect(a.city).toMatch(/Golden/);
     expect(t.listCompanies({}).count).toBe(companies.length);
     for (const c of t.listCompanies({ ring: "Core" }).companies) expect(c.ring).toBe("Core");
+    expect(t.listCompanies({}).companies.every((c) => typeof c.tie === "string")).toBe(true);
     expect(t.listCompanies({ segment: "Solar" }).count).toBeGreaterThan(0);
     expect(t.listSites().count).toBe(53);
     expect(t.listSites("National Lab").sites.every((s) => s.category === "National Lab")).toBe(true);

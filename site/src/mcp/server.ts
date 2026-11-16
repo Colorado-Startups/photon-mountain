@@ -19,7 +19,7 @@ export const HOSTS = ["photonmountain.co", "www.photonmountain.co", "photon-moun
 const OSM = "Site data © OpenStreetMap contributors, ODbL 1.0";
 const RINGS = ["Core", "Ring", "Statewide", "Roots only"] as const;
 const lower = (s: string) => s.toLowerCase();
-const company = (c: Company) => ({ name: c.name, city: c.city, ring: c.ring, segment: c.segment, builds: c.builds, source: c.source?.url ?? null });
+const company = (c: Company) => ({ name: c.name, city: c.city, ring: c.ring, tie: c.tie, segment: c.segment, builds: c.builds, source: c.source?.url ?? null });
 const anchor = (a: Anchor) => ({ name: a.name, city: a.city, relevance: a.relevance, source: a.source?.url ?? null });
 const site = (s: Site) => ({ name: s.name, category: s.category, lat: s.lat, lon: s.lon, note: s.note });
 
@@ -67,7 +67,7 @@ export function createServer(r: McpRecord): McpServer {
   const t = tools(r);
   const server = new McpServer(
     { name: "photon-mountain", version: VERSION },
-    { instructions: "Photon Mountain is Colorado's Front Range corridor for computing with light: Boulder, Golden, Arvada and Denver. Every row names its source; cite it. Figures carry a clock: today (operating now), 2026 (targeted this year) or horizon (later). Keep them apart." },
+    { instructions: "Photon Mountain is Colorado's Front Range corridor for computing with light: Boulder, Golden, Arvada and Denver. Cite a row's source link when it gives one. A company's tie says whether the town holds its headquarters or a facility. Figures carry a clock: today (operating now), 2026 (targeted this year) or horizon (later). Keep them apart." },
   );
   server.registerTool("search", { title: "Search the record", description: "Find companies, research anchors and map sites by name, city or what they build.", annotations: readOnly,
     inputSchema: z.object({ query: z.string().min(2).max(100), limit: z.number().int().min(1).max(50).optional() }) },
