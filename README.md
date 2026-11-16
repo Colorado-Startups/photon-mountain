@@ -8,6 +8,8 @@ Brand: [Colorado Startups brand guide](https://colorado-startups.github.io/brand
 
 Photon Mountain is Colorado's Front Range corridor for computing with light: photonic chips, sensors, solar, and laser fusion, anchored by Boulder, Golden, Arvada, and Denver.
 
+[![Map of Photon Mountain: the loop of eight roads around Boulder, Golden, Arvada and Denver](https://coloradostartups.org/maps/photon-mountain.svg)](https://colorado-startups.github.io/photon-mountain/map/)
+
 Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one.
 
 This repository is the corridor's open record. It holds the brand, the researched substance behind every claim, and the maps and infographics built from it. It is not an application. Each substance document names its sources and the date its claims were last searched. That honesty is the point.
@@ -18,11 +20,11 @@ This repository is the corridor's open record. It holds the brand, the researche
 |---|---|
 | [`01_doctrine/`](01_doctrine/) | The locked brand identity, the voice rules, and the usage guidelines |
 | [`02_substance/`](02_substance/) | Corridor research: the anchor institutions, the company roster, and the why-and-how documents, each with dated sources |
-| [`03_deliverables/`](03_deliverables/) | The corridor map (HTML, GeoJSON, KML), the launch infographic, and the Silicon Valley comparison maps |
+| [`03_deliverables/`](03_deliverables/) | The corridor map (an interactive MapLibre page, GeoJSON, KML), the launch infographic, and the Silicon Valley comparison maps |
 | [`04_tools/`](04_tools/) | The gates: a voice lint, a brand-token check, and a map-parity check, all standard-library Python |
 | [`00_project_system/`](00_project_system/) | The work queue and the task lifecycle |
 
-The live corridor map is on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
+The interactive corridor map is [`03_deliverables/maps/index.html`](03_deliverables/maps/index.html). It publishes to https://colorado-startups.github.io/photon-mountain/map/ once GitHub Pages is switched on. The same atlas is also on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
 
 ## Contribute
 

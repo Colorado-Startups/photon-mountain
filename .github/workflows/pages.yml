@@ -1,0 +1,108 @@
+name: pages
+
+# Publishes the corridor map to GitHub Pages at /map/: the MapLibre page
+# 03_deliverables/maps/index.html, the one data file it fetches,
+# photon_mountain_corridor.geojson, and the brand fonts it uses, copied from
+# 01_doctrine/brand_assets/fonts/. The site root redirects to /map/.
+#
+# A pull request that touches the map checks the GeoJSON (53 points, each in
+# one of the seven categories) and assembles the site. Either fails on a bad or
+# missing file, and a pull request publishes nothing. Only a push to main publishes. Pages
+# itself must be switched on once in the repo settings (Source: GitHub
+# Actions) before the first deploy can land.
+#
+# Actions are pinned by full commit SHA with their version comment, as in the
+# repo's other workflows; Dependabot's github-actions entry bumps them.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '03_deliverables/maps/index.html'
+      - '03_deliverables/maps/photon_mountain_corridor.geojson'
+      - '.github/workflows/pages.yml'
+      - '01_doctrine/brand_assets/fonts/**'
+  pull_request:
+    paths:
+      - '03_deliverables/maps/index.html'
+      - '03_deliverables/maps/photon_mountain_corridor.geojson'
+      - '.github/workflows/pages.yml'
+      - '01_doctrine/brand_assets/fonts/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A deploy always finishes; a newer push queues behind it.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build the map site
+    runs-on: ubuntu-slim
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check the corridor data
+        run: |
+          set -euo pipefail
+          f=03_deliverables/maps/photon_mountain_corridor.geojson
+          # The seven categories the page draws, from CATS in index.html.
+          cats='["National Lab","University Lab","Fabrication Facility","Innovation Campus","University Campus","Government Hall","Transit Station"]'
+          jq -e '[.features[]|select(.geometry.type=="Point")]|length==53' "$f" >/dev/null \
+            || { echo "::error::$f must hold exactly 53 point features"; exit 1; }
+          bad=$(jq -r --argjson cats "$cats" '.features[]|select(.geometry.type=="Point")
+            |select(.properties.category|IN($cats[])|not)|"\(.properties.name): \(.properties.category)"' "$f")
+          if [ -n "$bad" ]; then echo "::error::markers outside the seven categories:"; echo "$bad"; exit 1; fi
+          echo "53 point features, each in one of the seven categories"
+
+      - name: Assemble the site
+        run: |
+          set -euo pipefail
+          mkdir -p site/map/fonts
+          cp 03_deliverables/maps/index.html site/map/index.html
+          cp 03_deliverables/maps/photon_mountain_corridor.geojson site/map/
+          # Self-hosted brand fonts: only the six faces the page uses, with their licences.
+          fonts=01_doctrine/brand_assets/fonts
+          cp "$fonts"/Inter-Regular.ttf "$fonts"/Inter-SemiBold.ttf \
+             "$fonts"/SpaceGrotesk-Medium.ttf "$fonts"/SpaceGrotesk-Bold.ttf \
+             "$fonts"/SpaceMono-Regular.ttf "$fonts"/SpaceMono-Bold.ttf \
+             "$fonts"/OFL-Inter.txt "$fonts"/OFL-SpaceGrotesk.txt "$fonts"/OFL-SpaceMono.txt \
+             site/map/fonts/
+          cat > site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Photon Mountain</title>
+          <meta http-equiv="refresh" content="0; url=map/">
+          <link rel="canonical" href="map/">
+          <p><a href="map/">The Photon Mountain corridor map</a></p>
+          HTML
+
+      - name: List the site
+        run: ls -R site
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: site
+
+  deploy:
+    name: deploy to GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-slim
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

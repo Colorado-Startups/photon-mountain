@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Photon Mountain corridor map</title>
+<meta name="description" content="The Photon Mountain corridor on Colorado's Front Range: the road-drawn boundary and 53 sites built with light, energy and compute, each with its note.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
+<style>
+/*
+  The brand fonts are self-hosted. pages.yml copies these six files from
+  01_doctrine/brand_assets/fonts/ (SIL OFL 1.1) into fonts/ beside this page.
+  A local preview without that folder falls back to the system stacks below.
+*/
+@font-face{font-family:'Inter';font-weight:400;font-style:normal;font-display:swap;src:url('fonts/Inter-Regular.ttf') format('truetype')}
+@font-face{font-family:'Inter';font-weight:600;font-style:normal;font-display:swap;src:url('fonts/Inter-SemiBold.ttf') format('truetype')}
+@font-face{font-family:'Space Grotesk';font-weight:500;font-style:normal;font-display:swap;src:url('fonts/SpaceGrotesk-Medium.ttf') format('truetype')}
+@font-face{font-family:'Space Grotesk';font-weight:700;font-style:normal;font-display:swap;src:url('fonts/SpaceGrotesk-Bold.ttf') format('truetype')}
+@font-face{font-family:'Space Mono';font-weight:400;font-style:normal;font-display:swap;src:url('fonts/SpaceMono-Regular.ttf') format('truetype')}
+@font-face{font-family:'Space Mono';font-weight:700;font-style:normal;font-display:swap;src:url('fonts/SpaceMono-Bold.ttf') format('truetype')}
+/*
+  Every hex below is a token from 04_tools/brand_tokens.py: the ten COLOR_*
+  palette values, plus ROLE rule_hairline (#D9DBDE) and the two derived on-dark
+  text roles (#D5D6DA, #B8BAC2). No other hex appears in this file.
+  Marker styling follows MAP_NOTES.md revision 7x (the Felt map), with the
+  on-light variant swapped in where a dot would fall under 3:1 on the light
+  basemap. The contrast record is in MAP_NOTES.md revision 8.
+*/
+:root{
+  color-scheme: light;
+  --ground:#F6F7FB; --surface:#FFFFFF; --edge:#D9DBDE;
+  --text:#131A33; --dim:#545B6B; --link:#5636D6; --mark-peak:#131A33;
+  --line:#7B5CFF; --casing:#131A33;
+  --hs-shadow:#545B6B; --hs-highlight:#FFFFFF; --hs-accent:#545B6B; --hs-exag:0.35;
+  --f-natlab:#C43C1C; --r-natlab:#FFFFFF;
+  --f-univlab:#7B5CFF; --r-univlab:#FFFFFF;
+  --f-fab:#FFE9E2; --r-fab:#C43C1C;
+  --f-innov:#8F75FF; --r-innov:#FFFFFF;
+  --f-campus:#5636D6; --r-campus:#8F75FF;
+  --f-gov:#F6F7FB; --r-gov:#131A33;
+  --f-transit:#545B6B; --r-transit:#F6F7FB;
+  --bar-pm:#7B5CFF; --bar-sv:#545B6B;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131A33; --surface:#131A33; --edge:#545B6B;
+    --text:#FFFFFF; --dim:#D5D6DA; --link:#8F75FF; --mark-peak:#F6F7FB;
+    --line:#8F75FF; --casing:#131A33;
+    --hs-shadow:#131A33; --hs-highlight:#545B6B; --hs-accent:#131A33; --hs-exag:0.6;
+    --f-natlab:#FF5A36; --r-natlab:#131A33;
+    --f-univlab:#7B5CFF; --r-univlab:#131A33;
+    --f-fab:#FFE9E2; --r-fab:#FF5A36;
+    --f-innov:#8F75FF; --r-innov:#131A33;
+    --f-campus:#5636D6; --r-campus:#8F75FF;
+    --f-gov:#F6F7FB; --r-gov:#131A33;
+    --f-transit:#545B6B; --r-transit:#F6F7FB;
+    --bar-pm:#8F75FF; --bar-sv:#B8BAC2;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131A33; --surface:#131A33; --edge:#545B6B;
+  --text:#FFFFFF; --dim:#D5D6DA; --link:#8F75FF; --mark-peak:#F6F7FB;
+  --line:#8F75FF; --casing:#131A33;
+  --hs-shadow:#131A33; --hs-highlight:#545B6B; --hs-accent:#131A33; --hs-exag:0.6;
+  --f-natlab:#FF5A36; --r-natlab:#131A33;
+  --f-univlab:#7B5CFF; --r-univlab:#131A33;
+  --f-fab:#FFE9E2; --r-fab:#FF5A36;
+  --f-innov:#8F75FF; --r-innov:#131A33;
+  --f-campus:#5636D6; --r-campus:#8F75FF;
+  --f-gov:#F6F7FB; --r-gov:#131A33;
+  --f-transit:#545B6B; --r-transit:#F6F7FB;
+  --bar-pm:#8F75FF; --bar-sv:#B8BAC2;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--text);font:16px/1.5 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column}
+.mono{font-family:'Space Mono',ui-monospace,Menlo,monospace}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--surface);border-bottom:1px solid var(--edge);flex-wrap:wrap}
+header svg{flex:0 0 auto}
+header h1{font:700 1.15rem/1.2 'Space Grotesk',system-ui,sans-serif;letter-spacing:-.01em;margin:0}
+header .sub{font:400 .72rem/1.4 'Space Mono',ui-monospace,monospace;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+header nav{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap;font:400 .78rem 'Space Mono',ui-monospace,monospace}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+main{flex:1;display:flex;min-height:0;position:relative}
+#map{flex:1;min-height:0}
+aside{width:360px;max-width:100%;background:var(--surface);border-left:1px solid var(--edge);overflow:auto;display:flex;flex-direction:column}
+.block{padding:14px 16px;border-bottom:1px solid var(--edge)}
+.eyebrow{font:700 .68rem/1.3 'Space Mono',ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+.legend{display:flex;flex-direction:column;gap:7px;margin:0;padding:0;list-style:none}
+.legend label{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem}
+.legend input{accent-color:var(--link);width:16px;height:16px;margin:0}
+.dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto;border-style:solid}
+.count{margin-left:auto;font:400 .78rem 'Space Mono',ui-monospace,monospace;color:var(--dim)}
+.swatch-line{width:18px;height:12px;border:2px solid var(--line);border-radius:3px;background:color-mix(in srgb,var(--line) 18%,transparent);flex:0 0 auto}
+.hint{font-size:.8rem;color:var(--dim);margin:10px 0 0}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{font:400 .76rem 'Space Mono',ui-monospace,monospace;background:var(--ground);color:var(--text);border:1px solid var(--edge);padding:7px 10px;cursor:pointer;border-radius:4px}
+.controls button:hover{border-color:var(--link)}
+.figs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.fig b{display:block;font:700 1.7rem/1.1 'Space Grotesk',system-ui,sans-serif;letter-spacing:-.01em}
+.fig span{font-size:.8rem;color:var(--dim)}
+.bars{display:flex;flex-direction:column;gap:6px;margin:0 0 6px}
+.bar{display:grid;grid-template-columns:7.5rem 1fr 3.2rem;align-items:center;gap:8px;font-size:.8rem}
+.bar i{display:block;height:12px;border-radius:2px}
+.bar .v{font:400 .76rem 'Space Mono',ui-monospace,monospace;color:var(--dim);text-align:right}
+.ratio{font:500 .92rem/1.35 'Space Grotesk',system-ui,sans-serif;margin:8px 0 10px}
+.roads{margin:0;padding:0 0 0 1.4rem;font-size:.86rem;columns:2;column-gap:18px}
+.roads li{break-inside:avoid;margin:0 0 3px}
+.src{font-size:.76rem;color:var(--dim);margin:10px 0 0;line-height:1.45}
+#sites{list-style:none;margin:0;padding:0}
+#sites li button{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:flex-start;width:100%;padding:9px 16px;cursor:pointer;border-bottom:1px solid var(--edge)}
+#sites li button:hover,#sites li button:focus-visible{background:var(--ground)}
+#sites .n{font-weight:600;font-size:.88rem;line-height:1.25}
+#sites .t{font:400 .72rem 'Space Mono',ui-monospace,monospace;color:var(--dim)}
+#sites .dot{margin-top:4px}
+.credits{font-size:.76rem;color:var(--dim);line-height:1.55;margin:0}
+.maplibregl-popup-content{background:var(--surface);color:var(--text);border:1px solid var(--edge);border-radius:6px;padding:12px 14px;max-width:300px;font-family:'Inter',system-ui,sans-serif}
+.maplibregl-popup-tip{border-top-color:var(--surface)!important;border-bottom-color:var(--surface)!important}
+.maplibregl-popup-close-button{color:var(--dim);font-size:18px;padding:0 6px}
+.pop-cat{display:flex;align-items:center;gap:7px;font:700 .66rem 'Space Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 5px}
+.pop-cat .dot{width:10px;height:10px}
+.pop-name{font:700 1rem/1.2 'Space Grotesk',system-ui,sans-serif;margin:0 0 6px}
+.pop-note{font-size:.84rem;line-height:1.45;margin:0}
+.maplibregl-ctrl-attrib{font-size:11px}
+#status{position:absolute;left:12px;bottom:34px;max-width:calc(100% - 24px);background:var(--surface);color:var(--text);border:1px solid var(--edge);padding:8px 10px;font:400 .76rem 'Space Mono',ui-monospace,monospace}
+@media (max-width: 760px){
+  main{flex-direction:column}
+  #map{min-height:60vh}
+  aside{width:100%;border-left:0;border-top:1px solid var(--edge);padding-bottom:env(safe-area-inset-bottom,0px)}
+  header nav{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <svg width="32" height="32" viewBox="0 0 200 200" role="img" aria-label="Summit Sun, the Photon Mountain mark">
+    <circle cx="100" cy="100" r="55" fill="#FF5A36"></circle>
+    <polygon points="30,165 100,85 170,165" fill="var(--mark-peak)"></polygon>
+  </svg>
+  <div>
+    <h1>Photon Mountain corridor</h1>
+    <div class="sub">Boulder &middot; Golden &middot; Arvada &middot; Denver</div>
+  </div>
+  <nav aria-label="Project links">
+    <a href="https://github.com/Colorado-Startups/photon-mountain">Repo</a>
+    <a href="photon_mountain_corridor.geojson">Data (GeoJSON, ODbL)</a>
+    <a href="https://github.com/Colorado-Startups/photon-mountain/issues/new?template=1-fact-correction.yml">Correct a fact</a>
+  </nav>
+</header>
+<main>
+  <div id="map" role="region" aria-label="Interactive map of the Photon Mountain corridor. The site list beside it holds the same information."></div>
+  <div id="status" role="status" hidden></div>
+  <aside aria-label="Corridor facts, map key and site list">
+    <section class="block" aria-labelledby="facts-h">
+      <p class="eyebrow" id="facts-h">The corridor</p>
+      <div class="figs">
+        <div class="fig"><b>170 sq mi</b><span>inside the loop</span></div>
+        <div class="fig"><b>25.4 mi</b><span>across, at its widest</span></div>
+      </div>
+      <div class="bars" role="img" aria-label="Area compared: Photon Mountain 170 square miles, Silicon Valley's US-101 and I-280 loop 95 square miles.">
+        <div class="bar"><span>Photon Mountain</span><i style="width:100%;background:var(--bar-pm)"></i><span class="v">170</span></div>
+        <div class="bar"><span>Silicon Valley loop</span><i style="width:55.9%;background:var(--bar-sv)"></i><span class="v">95</span></div>
+      </div>
+      <p class="ratio">1.79 times Silicon Valley's US-101 and I-280 loop</p>
+      <p class="eyebrow" style="margin-top:12px">Eight roads draw the line</p>
+      <ol class="roads">
+        <li>CO-93 / Broadway</li>
+        <li>Pearl St / Pearl Pkwy</li>
+        <li>Foothills Pkwy (CO-157)</li>
+        <li>US-36</li>
+        <li>I-25</li>
+        <li>Park Ave / Park Ave West</li>
+        <li>Broadway (Denver)</li>
+        <li>6th Ave / US-6</li>
+      </ol>
+      <p class="src">Figures per Colorado Startups' trace of the same eight roads on US Census road lines, measured 2026-11-15 with Silicon Valley's loop measured the same way: <a href="https://github.com/Colorado-Startups/coloradostartups.org/blob/37232431f9bab6a2a3cb2e09701642f40b446187/data/geo/regions.geojson">data/geo/regions.geojson at commit 3723243</a>. The ring drawn here is this repo's OpenStreetMap trace, which that Census trace follows within 50 m for 97% of its length, per the same measurement. A proposal, not a legal line.</p>
+    </section>
+    <section class="block" aria-labelledby="show-h">
+      <p class="eyebrow" id="show-h">Show</p>
+      <ul class="legend" id="legend"></ul>
+      <ul class="legend" style="margin-top:9px">
+        <li><label><input type="checkbox" id="toggle-boundary" checked><span class="swatch-line"></span>Corridor boundary<span class="count">8 roads</span></label></li>
+      </ul>
+      <p class="hint" id="tier-hint">Building-level dots on lab campuses appear at zoom 14 and closer.</p>
+      <div class="controls" style="margin-top:10px">
+        <button type="button" id="btn-fit">Whole corridor</button>
+        <button type="button" id="btn-nlr">NLR campus buildings</button>
+      </div>
+    </section>
+    <section class="block" style="padding:0;border-bottom:0" aria-labelledby="sites-h">
+      <p class="eyebrow" id="sites-h" style="padding:14px 16px 6px;margin:0">Sites</p>
+      <ul id="sites"></ul>
+    </section>
+    <section class="block" style="border-top:1px solid var(--edge);border-bottom:0" aria-label="Notes and credits">
+      <p class="credits">Sites just off the line (NIST, NOAA, NCAR, the State Capitol, Boulder Junction, Civic Center Station, COQI, Venture Partners) are counted as corridor sites by decision; each says so in its note. Method and sources: <a href="https://github.com/Colorado-Startups/photon-mountain/blob/main/03_deliverables/maps/MAP_NOTES.md">MAP_NOTES.md</a>.</p>
+      <p class="credits" style="margin-top:8px">Boundary and markers derived from OpenStreetMap: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL 1.0</a>. Basemap: <a href="https://openfreemap.org">OpenFreeMap</a>, &copy; <a href="https://www.openmaptiles.org/">OpenMapTiles</a>, data &copy; OpenStreetMap contributors. Relief: <a href="https://mapterhorn.com/attribution">Mapterhorn</a>.</p>
+    </section>
+  </aside>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous"></script>
+<script>
+(() => {
+  // The seven locked categories (MAP_NOTES.md revision 7k), styled per revision 7x.
+  // ring is the stroke width in px; the fab dots draw at the largest radius.
+  const CATS = [
+    { id: 'National Lab',         key: 'natlab',  ring: 1.5 },
+    { id: 'University Lab',       key: 'univlab', ring: 1.5 },
+    { id: 'Fabrication Facility', key: 'fab',     ring: 3, big: true },
+    { id: 'Innovation Campus',    key: 'innov',   ring: 1.5 },
+    { id: 'University Campus',    key: 'campus',  ring: 2 },
+    { id: 'Government Hall',      key: 'gov',     ring: 2 },
+    { id: 'Transit Station',      key: 'transit', ring: 2 },
+  ];
+  // The building tier (MAP_NOTES.md revision 7s). The GeoJSON is a flat roster
+  // with no tier flag, so the tier is named here, matching the HTML and JSX
+  // "bldg" markers. A name that stops matching the roster is reported below.
+  const BUILDING_TIER = [
+    'NIST Precision Measurement Laboratory (BMF)',
+    'NIST Building 1 (Radio Building)',
+    'NIST Communications Technology Laboratory (Building 3)',
+    'NLR Energy Systems Integration Facility (ESIF)',
+    'NLR Solar Energy Research Facility (SERF)',
+    'NLR Research and Innovation Laboratory (RAIL)',
+    'NLR Science and Technology Facility (S&TF)',
+    'NLR Solar Radiation Research Laboratory (SRRL)',
+    'NLR High-Flux Solar Furnace',
+    'NLR Solar Industrial Mesa Test Area (SIMTA)',
+    'NLR Outdoor Test Facility (OTF)',
+    'NLR Thermal Test Facility (TTF)',
+    'NLR EMAPS (under construction)',
+    'NLR Flatirons Control Center',
+  ];
+  const TIER_ZOOM = 14;
+  const STYLES = { light: 'https://tiles.openfreemap.org/styles/positron', dark: 'https://tiles.openfreemap.org/styles/dark' };
+  const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const scheme = () => {
+    const t = document.documentElement.dataset.theme;
+    if (t === 'dark' || t === 'light') return t;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  const status = document.getElementById('status');
+  const say = msg => { status.textContent = msg; status.hidden = !msg; };
+  const catOf = id => CATS.find(c => c.id === id);
+
+  let data = null, current = scheme();
+  const visible = new Set(CATS.map(c => c.id));
+
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: STYLES[current],
+    center: [-105.14, 39.87],
+    zoom: 9.6,
+    attributionControl: { compact: true },
+  });
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+  map.addControl(new maplibregl.ScaleControl({ unit: 'imperial' }), 'bottom-left');
+  map.on('error', e => { if (e && e.error && /tiles|style|Failed to fetch/i.test(String(e.error.message))) say('Some map tiles did not load. The site list still works.'); });
+
+  const match = (field, fallback) => {
+    const expr = ['match', ['get', 'category']];
+    CATS.forEach(c => expr.push(c.id, field(c)));
+    expr.push(fallback);
+    return expr;
+  };
+  const tierFlag = ['in', ['get', 'name'], ['literal', BUILDING_TIER]];
+  const pointFilter = building => ['all',
+    ['==', ['geometry-type'], 'Point'],
+    building ? tierFlag : ['!', tierFlag],
+    ['in', ['get', 'category'], ['literal', [...visible]]]];
+  // Insert under the first place-name layer, not the first symbol layer: in the
+  // dark style the first symbol layer sits below the roads, which would paint
+  // over a boundary drawn on those same roads.
+  const placeLabelId = () => {
+    const layers = map.getStyle().layers;
+    const l = layers.find(x => x.type === 'symbol' && x['source-layer'] === 'place') || layers.find(x => x.type === 'symbol' && /place/i.test(x.id));
+    return l && l.id;
+  };
+
+  function addOverlay() {
+    if (!data || map.getSource('pm')) return;
+    const before = placeLabelId();
+    map.addSource('dem', { type: 'raster-dem', tiles: ['https://tiles.mapterhorn.com/{z}/{x}/{y}.webp'], encoding: 'terrarium', tileSize: 512, maxzoom: 14,
+      attribution: '<a href="https://mapterhorn.com/attribution">&copy; Mapterhorn</a>' });
+    map.addLayer({ id: 'hillshade', type: 'hillshade', source: 'dem', paint: {
+      'hillshade-exaggeration': Number(css('--hs-exag')),
+      'hillshade-shadow-color': css('--hs-shadow'),
+      'hillshade-highlight-color': css('--hs-highlight'),
+      'hillshade-accent-color': css('--hs-accent') } }, before);
+    map.addSource('pm', { type: 'geojson', data, attribution: 'Corridor data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL' });
+    const ring = ['==', ['geometry-type'], 'Polygon'];
+    const join = { 'line-join': 'round', 'line-cap': 'round' };
+    // The boundary: a fill and three strokes, all under the basemap's place names.
+    map.addLayer({ id: 'boundary-fill', type: 'fill', source: 'pm', filter: ring,
+      paint: { 'fill-color': css('--line'), 'fill-opacity': 0.18 } }, before);
+    map.addLayer({ id: 'boundary-glow', type: 'line', source: 'pm', filter: ring, layout: join,
+      paint: { 'line-color': css('--line'), 'line-width': 14, 'line-blur': 6, 'line-opacity': 0.45 } }, before);
+    map.addLayer({ id: 'boundary-casing', type: 'line', source: 'pm', filter: ring, layout: join,
+      paint: { 'line-color': css('--casing'), 'line-width': 5.5, 'line-opacity': 0.6 } }, before);
+    map.addLayer({ id: 'boundary-line', type: 'line', source: 'pm', filter: ring, layout: join,
+      paint: { 'line-color': css('--line'), 'line-width': 3 } }, before);
+    const paint = () => ({
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, match(c => c.big ? 7 : 5, 5), 14, match(c => c.big ? 10 : 7.5, 7.5), 17, match(c => c.big ? 13 : 10, 10)],
+      'circle-color': match(c => css('--f-' + c.key), css('--dim')),
+      'circle-stroke-color': match(c => css('--r-' + c.key), css('--surface')),
+      'circle-stroke-width': match(c => c.ring, 1.5),
+    });
+    map.addLayer({ id: 'sites', type: 'circle', source: 'pm', filter: pointFilter(false), paint: paint() });
+    map.addLayer({ id: 'sites-building', type: 'circle', source: 'pm', minzoom: TIER_ZOOM, filter: pointFilter(true), paint: paint() });
+  }
+
+  function swatch(c, el) {
+    el.className = 'dot';
+    el.style.background = 'var(--f-' + c.key + ')';
+    el.style.borderColor = 'var(--r-' + c.key + ')';
+    el.style.borderWidth = c.ring + 'px';
+    return el;
+  }
+  function popupContent(p) {
+    const el = document.createElement('div');
+    const c = catOf(p.category);
+    const cat = document.createElement('p'); cat.className = 'pop-cat';
+    if (c) cat.append(swatch(c, document.createElement('span')));
+    cat.append(document.createTextNode(p.category || ''));
+    const n = document.createElement('p'); n.className = 'pop-name'; n.textContent = p.name || '';
+    const note = document.createElement('p'); note.className = 'pop-note'; note.textContent = p.note || '';
+    el.append(cat, n, note);
+    return el;
+  }
+  let popup = null;
+  function openSite(f) {
+    if (popup) popup.remove();
+    popup = new maplibregl.Popup({ offset: 12, maxWidth: '320px' }).setLngLat(f.geometry.coordinates).setDOMContent(popupContent(f.properties)).addTo(map);
+  }
+
+  const points = () => data.features.filter(f => f.geometry.type === 'Point');
+  function buildPanel() {
+    const sites = points();
+    const names = new Set(sites.map(f => f.properties.name));
+    const missing = BUILDING_TIER.filter(n => !names.has(n));
+    if (missing.length) console.warn('Building-tier names not in the roster:', missing);
+    document.getElementById('tier-hint').textContent =
+      `${BUILDING_TIER.length - missing.length} building-level dots on lab campuses appear at zoom ${TIER_ZOOM} and closer.`;
+    const legend = document.getElementById('legend');
+    legend.replaceChildren(...CATS.map(c => {
+      const li = document.createElement('li'); const label = document.createElement('label');
+      const box = document.createElement('input'); box.type = 'checkbox'; box.checked = true; box.dataset.cat = c.id;
+      const count = document.createElement('span'); count.className = 'count';
+      count.textContent = sites.filter(f => f.properties.category === c.id).length;
+      label.append(box, swatch(c, document.createElement('span')), document.createTextNode(c.id), count);
+      li.append(label); return li;
+    }));
+    legend.addEventListener('change', e => {
+      const cat = e.target.dataset.cat; if (!cat) return;
+      e.target.checked ? visible.add(cat) : visible.delete(cat);
+      if (map.getLayer('sites')) { map.setFilter('sites', pointFilter(false)); map.setFilter('sites-building', pointFilter(true)); }
+      renderList();
+    });
+    document.getElementById('toggle-boundary').addEventListener('change', applyBoundaryToggle);
+    renderList();
+  }
+  function applyBoundaryToggle() {
+    const on = document.getElementById('toggle-boundary').checked ? 'visible' : 'none';
+    ['boundary-fill', 'boundary-glow', 'boundary-casing', 'boundary-line'].forEach(id => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', on));
+  }
+  function renderList() {
+    const order = Object.fromEntries(CATS.map((c, i) => [c.id, i]));
+    const sites = points().filter(f => visible.has(f.properties.category))
+      .sort((a, b) => order[a.properties.category] - order[b.properties.category] || a.properties.name.localeCompare(b.properties.name));
+    document.getElementById('sites').replaceChildren(...sites.map(f => {
+      const li = document.createElement('li'); const b = document.createElement('button'); b.type = 'button';
+      const c = catOf(f.properties.category);
+      const text = document.createElement('span');
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = f.properties.name;
+      const t = document.createElement('span'); t.className = 't';
+      const building = BUILDING_TIER.includes(f.properties.name);
+      t.textContent = f.properties.category + (building ? ' · building' : '');
+      text.append(n, document.createElement('br'), t);
+      if (c) b.append(swatch(c, document.createElement('span')));
+      b.append(text);
+      b.addEventListener('click', () => {
+        map.flyTo({ center: f.geometry.coordinates, zoom: Math.max(map.getZoom(), building ? TIER_ZOOM + 1 : 12.5), speed: 1.4 });
+        openSite(f);
+      });
+      li.append(b); return li;
+    }));
+  }
+  function fitAll() {
+    const ringFeature = data.features.find(f => f.geometry.type === 'Polygon');
+    const b = new maplibregl.LngLatBounds();
+    ringFeature.geometry.coordinates[0].forEach(c => b.extend(c));
+    map.fitBounds(b, { padding: 36, duration: 600 });
+  }
+
+  // The data and the basemap style load in either order; whichever lands second adds the overlay.
+  let styleReady = false;
+  map.on('style.load', () => { styleReady = true; addOverlay(); applyBoundaryToggle(); });
+  ['sites', 'sites-building'].forEach(id => {
+    map.on('click', id, e => openSite(e.features[0]));
+    map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
+  });
+  document.getElementById('btn-fit').addEventListener('click', fitAll);
+  document.getElementById('btn-nlr').addEventListener('click', () => map.flyTo({ center: [-105.1735, 39.7415], zoom: 15.2, speed: 1.4 }));
+
+  // Follow the viewer's theme, from the system setting or a data-theme stamp.
+  const restyle = () => { const s = scheme(); if (s === current) return; current = s; map.setStyle(STYLES[s], { diff: false }); };
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', restyle);
+  new MutationObserver(restyle).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // A marker outside the seven categories is drawn nowhere, so name it here.
+  // A roster change that adds a category then shows up on the page.
+  function reportUnknown() {
+    const unknown = points().filter(f => !catOf(f.properties.category));
+    if (unknown.length) say(`${unknown.length} marker(s) use a category this page does not know. Not shown: ` +
+      unknown.map(f => `${f.properties.name} (${f.properties.category})`).join('; '));
+  }
+
+  // A fetch error and a drawing error get separate messages, each with its cause.
+  fetch('photon_mountain_corridor.geojson')
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(json => {
+      data = json;
+      try { reportUnknown(); buildPanel(); if (styleReady) addOverlay(); fitAll(); }
+      catch (err) { console.error(err); say('The corridor data loaded, but the page could not draw it: ' + err.message); }
+    }, err => say('The corridor data did not load (' + err.message + '). Open the GeoJSON file from the header link.'));
+})();
+</script>
+</body>
+</html>

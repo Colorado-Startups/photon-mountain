@@ -9,6 +9,44 @@ A site earns a dot only if its headline work is (a) light or photonics itself, o
 
 Approximate pins awaiting better imagery or site plans: Quantum Commons PIC Fab (campus pin; building not yet visible in imagery), NLR EMAPS (east side of campus, under construction, completion expected 2027), STEP (campus extent), RAIL (placed from the campus map), Flatirons Control Center (sited from builder descriptions), Quantum Commons Labs (georeferenced from satellite imagery), Glo Park (development parcel), plus the address-anchored Mines dots (CoorsTek Center, Colorado Fuel Cell Center; pins welcome). Dated statuses to re-verify when touched: Glo Park's projected early-2026 opening (per 2023 reporting), the CoCo train's November 2026 ballot question, NCAR's NSF restructuring review, CU Denver's Engineering, Design and Computing Building (unverified, project pages taken down), Quantum Commons fab and labs build-out through 2026, NQN completion (2028-29), and EMAPS completion (2027).
 
+## Revision 8 (2026-11-15): an interactive MapLibre page in the identity; no roster, geometry or convention change
+
+`index.html` is a new MapLibre GL page that fetches `photon_mountain_corridor.geojson` at load. It carries no copy of the roster, so the four-file invariant and `04_tools/marker_parity.py` are unchanged. `.github/workflows/pages.yml` publishes the page and that one GeoJSON at `/map/` on the repo's GitHub Pages site.
+
+| Layer | What it draws | Source |
+|---|---|---|
+| Basemap | OpenFreeMap `positron` (light scheme) and `dark` | tiles.openfreemap.org, OpenMapTiles schema, OpenStreetMap data |
+| Relief | Mapterhorn hillshade, under the place names | tiles.mapterhorn.com |
+| Boundary | Fill at 0.18. Glow: width 14, blur 6, opacity 0.45. Casing: Summit Night, width 5.5, opacity 0.6. Line: width 3. Round joins and caps, all under the place names | the GeoJSON polygon, the full trace (1,679 vertices per revision 7x) |
+| Markers | The seven categories, styled per revision 7x, with a legend that toggles each and shows its count | the GeoJSON points |
+| Building tier | The 14 building-level dots appear at zoom 14 and closer, per revision 7s | names listed in the page |
+| Popups and site list | Each marker's `note` as text, built with `textContent`; the list beside the map is the accessible alternative | the GeoJSON `note` |
+| Facts panel | The eight roads, 170 sq mi, 25.4 mi across, 1.79 times Silicon Valley's US-101 and I-280 loop | Colorado Startups' US Census re-trace, `data/geo/regions.geojson` at commit `37232431f9bab6a2a3cb2e09701642f40b446187` |
+
+Decisions, each reversible in the page alone:
+
+- **The line is violet, not Alpenglow.** Revision 7x already spends Alpenglow on the National Lab dots and the fab rings, and the identity allows one Alpenglow moment per piece. The palette names "a violet laser line", so the boundary is Laser Violet on the light basemap and Violet Bright on the dark one.
+- **On-light variants on the light basemap.** Positron's ground is `rgb(242,243,240)`, per its style JSON. Against it Alpenglow scores 2.90, under the 3:1 floor for graphics, so National Lab dots and the fab rings use Alpenglow Deep there. Government Hall's Snowfield dot gets a Summit Night ring, since its fill vanishes on that ground. The dark basemap keeps revision 7x's colors as recorded.
+- **The building tier is named in the page.** The GeoJSON is a flat roster with no tier flag, and this revision leaves the data untouched. The page lists the 14 names, which match the JSX `bldg` markers exactly, and logs a console warning if a name stops matching the roster.
+- **Boundary layers sit under the first place-label layer, not the first symbol layer.** In OpenFreeMap's dark style the first symbol layer comes before the road layers. Inserted there, the boundary sat under the black highways it runs along.
+
+Contrast, computed with `brand_tokens.contrast_ratio` on 2026-11-15. A dot passes when its fill or its ring clears 3:1 against the basemap ground (WCAG 1.4.11, the same 3.0 floor `check_pairing(large=True)` applies).
+
+| Category | Light: fill / ring on `#F2F3F0` | Dark: fill / ring on `#0C0C0C` |
+|---|---|---|
+| National Lab | 4.70 / 1.11 | 6.30 / 1.14 |
+| University Lab | 3.91 / 1.11 | 4.49 / 1.14 |
+| Fabrication Facility | 1.05 / 4.70 | 16.77 / 6.30 |
+| Innovation Campus | 3.06 / 1.11 | 5.73 / 1.14 |
+| University Campus | 6.51 / 3.06 | 2.70 / 5.73 |
+| Government Hall | 1.04 / 15.41 | 18.27 / 1.14 |
+| Transit Station | 6.11 / 1.04 | 2.87 / 18.27 |
+| Boundary line | 3.91 | 5.73 |
+
+The panel text passes `check_pairing` at the 4.5 body floor in both schemes. The pairings: Summit Night on White 17.17, Granite on White 6.81, Violet Deep links on White 7.26, White on Summit Night 17.17, the derived on-dark secondary text 11.82, and Violet Bright links on Summit Night 5.03. Every hex in the page is a `brand_tokens.py` value: the ten palette colors plus the hairline rule and the two derived on-dark text roles.
+
+Checked by hand in the built-in browser, served on port 3314. All 53 markers loaded with the right category counts (20, 10, 2, 6, 4, 5, 6), and the list holds 53 rows. The NLR building dots showed at zoom 15.2 and 14.2 and were gone at 13.2. The ring sat on Foothills Pkwy and US-36 at street zoom. The page had no horizontal scroll at 400 px. The only console warnings came from the basemap: a bare OpenFreeMap dark style with none of this page's layers raised the same `wood-pattern` warning. The live Felt map is unchanged and still needs revision 7z's four note edits.
+
 ## Revision 7z (2026-11-12): fact gate before the repository went public; four note corrections
 
 A `pm-fact-guardrails` pass on the marker notes, run before the repository went public. Four notes changed, each byte-identical across the GeoJSON, KML, HTML and JSX:
