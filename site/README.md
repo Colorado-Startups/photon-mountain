@@ -1,6 +1,6 @@
 # site
 
-The source of photonmountain.co: a static Astro build served from a Cloudflare Worker. The plan is the [launch plan](https://claude.ai/code/artifact/be3c781d-a557-4b17-9b6a-7b08011309cf).
+The source of photonmountain.co: a static Astro build served from a Cloudflare Worker. Its place in the project: [`MASTER_PLAN.md`](../MASTER_PLAN.md), phase F.
 
 ```mermaid
 flowchart LR
@@ -18,6 +18,7 @@ flowchart LR
 | `src/components/` | One folder per section |
 | `src/pages/` | One file per route |
 | `public/_headers` | Security headers for every static file |
+| `wrangler.jsonc` | The Worker: static assets from `dist/`, trailing-slash routes, the 404 page |
 | `public/favicon.svg` | The one-color Summit Sun mark, copied from `01_doctrine/brand_assets/`; CI fails when it drifts |
 
 | Command, from the repo root | Does |
