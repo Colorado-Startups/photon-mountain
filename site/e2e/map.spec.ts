@@ -37,3 +37,26 @@ test("a site in the list lights its dot on the poster", async ({ page }) => {
   await expect(first).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(`.poster .dot[data-name="${name}"]`)).toHaveClass(/on/);
 });
+
+test("a second click on the same site clears its highlight", async ({ page }) => {
+  await page.goto("/map/");
+  const first = page.locator("[data-sites] button[data-site]:not([data-building])").first();
+  await first.click();
+  await first.click();
+  await expect(first).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator(".poster .dot.on")).toHaveCount(0);
+});
+
+test("the live map loads only on request, then takes over from the poster", async ({ page }) => {
+  const lib: string[] = [];
+  page.on("request", (r) => { if (/maplibre|openfreemap/.test(r.url())) lib.push(r.url()); });
+  await page.goto("/map/");
+  await page.waitForLoadState("networkidle");
+  expect(lib).toEqual([]);
+  await page.getByRole("button", { name: "Open the live map" }).click();
+  // Wait for the map or the page's own failure line, then fail on that line so the report says why.
+  const failed = page.locator("[data-status]", { hasText: "The live map did not load" });
+  await expect(page.locator(".maplibregl-canvas").or(failed)).toBeVisible({ timeout: 25_000 });
+  await expect(failed).toHaveCount(0);
+  await expect(page.locator("svg.poster")).toBeHidden({ timeout: 10_000 });
+});

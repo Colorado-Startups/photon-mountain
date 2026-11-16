@@ -1,13 +1,119 @@
 ---
-// Launch plan wave 2 or 3 replaces this stub page; its route is already in e2e/routes.ts.
+// The data page: the record as files, as plain text an assistant reads, and as one prompt to paste.
+// It lists what src/ai/content.ts lists, so this page and llms.txt cannot drift apart.
 import Base from "../../layouts/Base.astro";
+import { DATA, PAGES, SITE, mdPath } from "../../ai/content";
+import { anchors, companies, figures, sites } from "../../data/corridor";
+
+const holds: Record<string, string> = {
+  "/data/companies.json": `${companies.length} companies`,
+  "/data/companies.csv": `${companies.length} companies`,
+  "/data/anchors.json": `${anchors.length} research anchors`,
+  "/data/figures.json": `${figures.length} headline figures`,
+  "/data/sites.json": `${sites.length} map sites`,
+  "/data/corridor.geojson": `${sites.length} sites and the boundary`,
+};
+const format = (path: string) => path.split(".").pop()?.toUpperCase();
+const prompt = `Read ${SITE}/llms-full.txt, the Photon Mountain record of Colorado's computing-with-light corridor. Answer from it, and give the source link it lists for each fact you use.`;
+const flow = [
+  { t: "The record", s: `${companies.length} companies, ${anchors.length} anchors, ${sites.length} sites` },
+  { t: "Files and text", s: `${DATA.length} files, llms.txt, ${PAGES.length} Markdown pages` },
+  { t: "Your assistant", s: "Claude, Claude Code, OpenCode or any model" },
+];
+const ways = [
+  { who: "Claude", how: "Paste it in claude.ai or the app, then ask." },
+  { who: "Claude Code", how: "Paste it at the prompt in your terminal." },
+  { who: "OpenCode", how: "Paste it in a session, with any model." },
+];
 ---
-<Base title="Connect your AI" description="Data files, llms.txt and a read-only MCP server for the Photon Mountain record.">
-  <section class="wrap stub-page">
+<Base title="Connect your AI" description="Download the Photon Mountain record, or point Claude, Claude Code or OpenCode at it with one prompt.">
+  <section class="head wrap">
+    <p class="eyebrow">Open data</p>
     <h1>Connect your AI</h1>
-    <p>Data files, llms.txt and a read-only MCP server for the Photon Mountain record.</p>
+    <p class="lede">The whole record as files and plain text. No sign-up, no key.</p>
+    <ol class="flow" role="list">
+      {flow.map((f) => <li><b>{f.t}</b><span>{f.s}</span></li>)}
+    </ol>
+  </section>
+
+  <section class="block wrap" aria-labelledby="paste">
+    <h2 id="paste">Paste one prompt</h2>
+    <div class="prompt">
+      <pre id="prompt-text">{prompt}</pre>
+      <button type="button" class="copy" data-copy="prompt-text" hidden>Copy the prompt</button>
+    </div>
+    <p class="status" role="status" data-status></p>
+    <ul class="ways" role="list">
+      {ways.map((w) => <li><b>{w.who}</b><span>{w.how}</span></li>)}
+    </ul>
+  </section>
+
+  <section class="block wrap" aria-labelledby="files">
+    <h2 id="files">Download the record</h2>
+    <div class="scroll" tabindex="0" role="region" aria-label="Data files">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">Holds</th><th scope="col">Format</th><th scope="col">License</th></tr></thead>
+        <tbody>
+          {DATA.map((d) => (
+            <tr><td><a href={d.path}>{d.title}</a></td><td>{holds[d.path]}</td><td><span class="fmt">{format(d.path)}</span></td><td>{d.license}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The ODbL files derive from OpenStreetMap: credit "© OpenStreetMap contributors" and share a changed copy alike.</p>
+  </section>
+
+  <section class="block wrap" aria-labelledby="text">
+    <h2 id="text">Read it as text</h2>
+    <ul class="texts" role="list">
+      <li><a href="/llms.txt">llms.txt</a><span>The index</span></li>
+      <li><a href="/llms-full.txt">llms-full.txt</a><span>Everything, one file</span></li>
+      {PAGES.map((p) => <li><a href={mdPath(p)}>{mdPath(p).slice(1)}</a><span>{p.title}</span></li>)}
+    </ul>
   </section>
 </Base>
+
+<script>
+  // Copy needs script and a clipboard, so the button shows only when both exist; the prompt stays selectable.
+  const status = document.querySelector<HTMLElement>("[data-status]");
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+    if (!navigator.clipboard) continue;
+    button.hidden = false;
+    button.addEventListener("click", async () => {
+      const text = document.getElementById(button.dataset.copy ?? "")?.textContent ?? "";
+      try {
+        await navigator.clipboard.writeText(text);
+        if (status) status.textContent = "Copied. Paste it into your assistant.";
+      } catch {
+        if (status) status.textContent = "Copy did not work here. Select the prompt and copy it instead.";
+      }
+    });
+  }
+</script>
+
 <style>
-  .stub-page { display: grid; gap: 1rem; padding-block: 4rem; }
+  .head { display: grid; gap: 1rem; padding-block: 3rem 2rem; }
+  .lede { font-size: var(--step2); color: var(--ink-2); }
+  .flow { display: grid; gap: 1.75rem; margin: 1rem 0 0; padding: 0; }
+  .flow li { position: relative; display: grid; gap: 0.25rem; padding: 1rem 1.25rem; background: var(--surface); border: var(--hairline) solid var(--rule); border-top: 0.25rem solid var(--gold); border-radius: 0.5rem; }
+  .flow li:not(:last-child)::after { content: "↓" / ""; position: absolute; left: 50%; bottom: -1.6rem; translate: -50% 0; color: var(--gold-ink); font-size: var(--step3); line-height: 1; }
+  .flow b { font-family: var(--font-display); font-size: var(--step3); }
+  .flow span, .ways span, .texts span { color: var(--ink-2); font-size: var(--step0); }
+  .block { display: grid; gap: 1rem; padding-block: 2rem; border-top: var(--hairline) solid var(--rule); }
+  .prompt { display: grid; gap: 0.75rem; justify-items: start; padding: 1.25rem; background: var(--gold-wash); border-radius: 0.5rem; max-width: var(--measure); }
+  .prompt pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-mono); font-size: var(--step0); }
+  .copy { font: inherit; font-size: var(--step0); padding: 0.5rem 1rem; min-height: 2.75rem; border: var(--hairline) solid var(--accent); border-radius: 0.375rem; background: var(--surface); color: var(--accent); cursor: pointer; }
+  .status { min-height: 1.5em; font-size: var(--step0); color: var(--ink-2); }
+  .ways, .texts { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.75rem; margin: 0; padding: 0; }
+  .ways li, .texts li { display: grid; gap: 0.125rem; padding: 0.75rem 1rem; background: var(--surface); border: var(--hairline) solid var(--rule); border-radius: 0.5rem; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: var(--step0); }
+  th, td { text-align: left; padding: 0.625rem 0.75rem; border-bottom: var(--hairline) solid var(--rule); }
+  th { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+  .fmt { font-family: var(--font-mono); padding: 0.125rem 0.5rem; background: var(--gold-wash); border-radius: 0.25rem; }
+  .note { font-size: var(--step0); color: var(--ink-2); }
+  @media (min-width: 48rem) {
+    .flow { grid-template-columns: repeat(3, 1fr); }
+    .flow li:not(:last-child)::after { content: "→" / ""; left: auto; right: -1.4rem; bottom: auto; top: 50%; translate: 0 -50%; }
+  }
 </style>

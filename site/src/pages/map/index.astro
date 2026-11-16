@@ -1,6 +1,7 @@
 ---
-// The corridor map. The still poster, drawn at build, paints first; the live MapLibre map joins it in launch
-// plan step 2.4, second half. The legend and the site list work without script.
+// The corridor map. The still poster, drawn at build, paints first; the live MapLibre map loads only when the
+// reader asks, so no tile or library byte loads before then. The site list reads without script; the legend and
+// the highlight need it.
 import Base from "../../layouts/Base.astro";
 import MapPoster from "../../components/map/MapPoster.astro";
 import { sites } from "../../data/corridor";
@@ -27,6 +28,9 @@ const roads = ["CO-93 / Broadway", "Pearl St / Pearl Pkwy", "Foothills Pkwy (CO-
   <div class="stage wrap">
     <div class="mapbox" data-map>
       <MapPoster />
+      <div class="live" data-live hidden></div>
+      <button class="open" type="button" data-open>Open the live map</button>
+      <p class="status" role="status" data-status hidden></p>
     </div>
 
     <aside class="panel" aria-label="Map key and site list">
@@ -67,15 +71,53 @@ const roads = ["CO-93 / Broadway", "Pearl St / Pearl Pkwy", "Foothills Pkwy (CO-
     document.querySelectorAll<SVGElement>(".poster .ring, .poster .glow").forEach((p) => p.classList.toggle("off", !legend.querySelector<HTMLInputElement>("[data-boundary]")?.checked));
     document.dispatchEvent(new CustomEvent("pm:filter", { detail: { cats: [...on], boundary: legend.querySelector<HTMLInputElement>("[data-boundary]")?.checked } }));
   });
-  // A site in the list lights its dot on the poster; the live map adds fly-to in its own step.
+  // The live map loads on request. Until then a site in the list lights its dot on the poster; a second click
+  // clears it. Once the live map is open, a site flies the map to it.
+  import type { LiveMap } from "../../components/map/live";
+  let live: LiveMap | null = null;
+  const box = document.querySelector<HTMLElement>("[data-map]");
+  const status = box?.querySelector<HTMLElement>("[data-status]");
+  const say = (msg: string) => { if (status) { status.textContent = msg; status.hidden = !msg; } };
+  const filters = () => {
+    const legendEl = document.querySelector<HTMLElement>("[data-legend]");
+    const cats = [...(legendEl?.querySelectorAll<HTMLInputElement>("[data-cat]") ?? [])].filter((b) => b.checked).map((b) => b.dataset.cat ?? "");
+    return { cats, boundary: legendEl?.querySelector<HTMLInputElement>("[data-boundary]")?.checked ?? true };
+  };
+  box?.querySelector<HTMLButtonElement>("[data-open]")?.addEventListener("click", async (e) => {
+    const button = e.currentTarget as HTMLButtonElement;
+    const target = box.querySelector<HTMLElement>("[data-live]");
+    if (!target) return;
+    button.disabled = true;
+    button.textContent = "Loading the map";
+    target.hidden = false;
+    try {
+      const { openLiveMap } = await import("../../components/map/live");
+      live = await openLiveMap(target, say);
+      const f = filters();
+      live.filter(f.cats, f.boundary);
+      box.querySelector(".poster")?.setAttribute("hidden", "");
+      button.hidden = true;
+    } catch (err) {
+      target.hidden = true;
+      button.disabled = false;
+      button.textContent = "Open the live map";
+      say(`The live map did not load (${err instanceof Error ? err.message : err}). The poster and the list still work.`);
+    }
+  });
+  document.addEventListener("pm:filter", (e) => {
+    const d = (e as CustomEvent<{ cats: string[]; boundary: boolean }>).detail;
+    live?.filter(d.cats, d.boundary);
+  });
   document.querySelector("[data-sites]")?.addEventListener("click", (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-site]");
     if (!b) return;
+    const was = b.getAttribute("aria-pressed") === "true";
     document.querySelectorAll(".poster .dot.on").forEach((d) => d.classList.remove("on"));
-    const dot = [...document.querySelectorAll<SVGElement>(".poster .dot")].find((d) => d.dataset.name === b.dataset.site);
-    dot?.classList.add("on");
-    document.querySelectorAll("[data-sites] button[aria-pressed]").forEach((x) => x.removeAttribute("aria-pressed"));
+    document.querySelectorAll("[data-sites] button[aria-pressed]").forEach((x) => x.setAttribute("aria-pressed", "false"));
+    if (was && !live) return;
     b.setAttribute("aria-pressed", "true");
+    [...document.querySelectorAll<SVGElement>(".poster .dot")].find((d) => d.dataset.name === b.dataset.site)?.classList.add("on");
+    live?.flyTo(b.dataset.site ?? "");
   });
 </script>
 
@@ -85,6 +127,16 @@ const roads = ["CO-93 / Broadway", "Pearl St / Pearl Pkwy", "Foothills Pkwy (CO-
   .figs li { display: grid; gap: 0.2rem; padding: 0.9rem 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); }
   .figs b { font: 700 var(--step5) / 1 var(--font-display); font-variant-numeric: tabular-nums; }
   .figs span, .src, .credits { color: var(--ink-2); font-size: var(--step0); }
+  .live { position: absolute; inset: 0; }
+  .live[hidden], .status[hidden], .open[hidden], :global(.poster[hidden]) { display: none; }
+  .open { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); min-height: 2.75rem; padding: 0.6rem 1.2rem; border: 0; border-radius: 999rem; background: var(--ink); color: var(--color-white); font: 600 var(--step1) var(--font-body); cursor: pointer; box-shadow: 0 0.5rem 1.5rem -0.5rem var(--ink); }
+  .open:hover { background: var(--accent); }
+  .open:disabled { cursor: progress; }
+  .status { position: absolute; top: 0.75rem; left: 0.75rem; right: 0.75rem; margin: 0; padding: 0.6rem 0.8rem; border-radius: 0.5rem; background: var(--surface); border: var(--hairline) solid var(--rule); font-size: var(--step0); max-width: none; z-index: 2; }
+  :global(.maplibregl-popup-content) { font-family: var(--font-body); color: var(--ink); border-radius: 0.5rem; }
+  :global(.maplibregl-popup-content .pop-cat) { font-family: var(--font-mono); font-size: var(--step0); color: var(--ink-2); }
+  :global(.maplibregl-popup-content .pop-name) { font-weight: 600; }
+  :global(.maplibregl-popup-content .pop-note) { font-size: var(--step0); }
   .stage { display: grid; gap: 1rem; padding-bottom: 3rem; }
   @media (min-width: 60rem) { .stage { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; } }
   .mapbox { position: relative; min-height: 26rem; border-radius: 1rem; overflow: hidden; border: var(--hairline) solid var(--rule); background: var(--surface); }
