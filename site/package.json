@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/art.mjs",
     "dev": "astro dev",
+    "prebuild": "node scripts/art.mjs",
     "build": "astro build",
     "check": "astro check",
     "test": "vitest run --coverage",
