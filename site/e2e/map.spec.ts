@@ -54,6 +54,9 @@ test("the live map loads only on request, then takes over from the poster", asyn
   await page.waitForLoadState("networkidle");
   expect(lib).toEqual([]);
   await page.getByRole("button", { name: "Open the live map" }).click();
-  await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 20_000 });
-  await expect(page.locator("svg.poster")).toBeHidden();
+  // Wait for the map or the page's own failure line, then fail on that line so the report says why.
+  const failed = page.locator("[data-status]", { hasText: "The live map did not load" });
+  await expect(page.locator(".maplibregl-canvas").or(failed)).toBeVisible({ timeout: 25_000 });
+  await expect(failed).toHaveCount(0);
+  await expect(page.locator("svg.poster")).toBeHidden({ timeout: 10_000 });
 });

@@ -34,7 +34,11 @@ async function loadStyles(): Promise<void> {
 
 export async function openLiveMap(container: HTMLElement, say: (msg: string) => void): Promise<LiveMap> {
   const [gl, data] = await Promise.all([
-    Promise.all([import("maplibre-gl"), loadStyles()]).then(([m]) => m),
+    // MapLibre looks for its worker next to its own module, which bundling moves; hand it the emitted file.
+    Promise.all([import("maplibre-gl"), import("maplibre-gl/dist/maplibre-gl-worker.mjs?url"), loadStyles()]).then(([m, worker]) => {
+      m.setWorkerUrl(worker.default);
+      return m;
+    }),
     fetch("/data/corridor.geojson").then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
   ]);
   const points = (data.features as Feature[]).filter((f) => f.geometry.type === "Point") as Point[];
