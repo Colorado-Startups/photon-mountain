@@ -8,7 +8,7 @@ A private `photon-mountain` repository under the **Colorado-Startups** org, carr
 
 ## Status
 
-- **Org:** `Colorado-Startups` created by Paul 2026-09-21. Free plan, Paul is an active admin, `members_can_create_repositories` is true. The name `photon-mountain` is available.
+- **Org:** `Colorado-Startups` created by Paul 2026-09-21. Free plan at creation; the org API reported plan `enterprise` on 2026-11-02 and again on 2026-11-16. Paul is an active admin, `members_can_create_repositories` is true. The name `photon-mountain` is available.
 - **Sequencing:** brought forward from last by Paul on 2026-09-21, superseding the 2026-07-05 "runs last" decision. PT-6 closed first, so the repo captures an on-brand pipeline instead of a stale one.
 - **Pre-flight:** done 2026-09-22. File ownership fixed, content triage complete, deliverables regenerated.
 
