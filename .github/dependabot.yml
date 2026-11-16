@@ -1,20 +1,25 @@
-# Dependabot, scoped to GitHub Actions only.
+# Dependabot, from Git Crafter templates/ci/dependabot.yml at v7.0.2.
 #
-# There is deliberately no npm or pip ecosystem here. The doctrine tooling in
-# 04_tools/ is standard library by design, and the two build scripts pin their
-# dependencies in requirements.txt but are not a deployed application. Adding
-# a pip ecosystem would generate noise without reducing risk.
+# One weekly pull request bumps every pinned action, Git Crafter's CI standard
+# included. A new release waits 14 days first (the dependabot_cooldown ideal).
+# Pinning by SHA is right for supply-chain safety, but a pinned SHA never
+# updates itself; this file is what keeps the pins current.
 #
-# Pinned action SHAs are the real reason this file exists: pinning is correct
-# for supply-chain safety, but a pinned SHA never updates itself. Dependabot
-# is what keeps the pins current.
+# The doctrine tooling in 04_tools/ is standard library by design, so there is
+# no pip entry. An npm entry joins when the site's package.json lands (launch
+# plan step 1.1).
 
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+    cooldown:
+      default-days: 14
+    groups:
+      actions:
+        patterns: ["*"]
     commit-message:
       prefix: "ci"
     labels:

@@ -1,0 +1,39 @@
+name: ci
+
+# From Git Crafter templates/ci/ci.yml at v7.0.2: the CI standard on GitHub's standard hosted runners (free on a
+# public repo). ci-ok is the check the ruleset requires. The short job runs every gate self-test and the four-file
+# marker parity check on each change. The standard job runs the comparison-map geometry check, in a venv because
+# the runner's own Python refuses pip installs, only when the infographics or their requirements change.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    uses: SoulCraft-Org/git-crafter/.github/workflows/ci-standard.yml@8023bd4683416f6d420bd20d137960b09c06b91e # v7.0.2
+    with:
+      standard-paths: |
+        03_deliverables/infographics/**
+        requirements.txt
+        .github/workflows/ci.yml
+      short: |
+        python3 04_tools/voice_lint.py --self-test
+        python3 04_tools/brand_tokens.py --self-test
+        python3 04_tools/marker_parity.py --self-test
+        python3 04_tools/marker_parity.py
+        bash .claude/hooks/pm-check-voice.sh --self-test
+        bash .claude/hooks/pm-guard-bypass.sh --self-test
+        bash .githooks/pre-commit --self-test
+      standard: |
+        python3 -m venv "$RUNNER_TEMP/venv"
+        "$RUNNER_TEMP/venv/bin/pip" install --quiet -r requirements.txt
+        cd 03_deliverables/infographics
+        "$RUNNER_TEMP/venv/bin/python" photon_mountain_map_verify.py
