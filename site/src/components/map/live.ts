@@ -27,6 +27,7 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
   const points = (data.features as Feature[]).filter((f) => f.geometry.type === "Point") as Point[];
   const ring = (data.features as Feature[]).find((f) => f.geometry.type === "Polygon") as Polygon;
   let visible = CATS.map((x) => x.id);
+  let boundaryOn = true;
 
   const map = new gl.Map({ container, style: STYLE, center: [-105.14, 39.87], zoom: 9.6, attributionControl: { compact: true } });
   map.addControl(new gl.NavigationControl({ showCompass: false }), "top-left");
@@ -49,6 +50,7 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
     map.addLayer({ id: "boundary-glow", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("laser_violet"), "line-width": 14, "line-blur": 6, "line-opacity": 0.45 } }, before);
     map.addLayer({ id: "boundary-casing", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("summit_night"), "line-width": 5.5, "line-opacity": 0.6 } }, before);
     map.addLayer({ id: "boundary-line", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("laser_violet"), "line-width": 3 } }, before);
+    for (const id of BOUNDARY) map.setLayoutProperty(id, "visibility", boundaryOn ? "visible" : "none");
     const paint = {
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, match((x) => (x.big ? 7 : 5), 5), 14, match((x) => (x.big ? 10 : 7.5), 7.5), 17, match((x) => (x.big ? 13 : 10), 10)],
       "circle-color": match((x) => c(x.fill), c("granite")),
@@ -64,7 +66,8 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
   const open = (f: Point) => {
     const p = f.properties ?? {};
     const el = document.createElement("div");
-    for (const [cls, text] of [["pop-cat", p.category], ["pop-name", p.name], ["pop-note", p.note]]) {
+    const rows: [string, unknown][] = [["pop-cat", p.category], ["pop-name", p.name], ["pop-note", p.note]];
+    for (const [cls, text] of rows) {
       const line = document.createElement("p");
       line.className = cls;
       line.textContent = String(text ?? "");
@@ -85,9 +88,22 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
     map.fitBounds(b, { padding: 36, duration: 600 });
   }
 
+  // Resolve only once the map has drawn; a style or network failure before that rejects, so the page keeps
+  // its poster and says why.
+  await new Promise<void>((resolve, reject) => {
+    map.once("load", () => resolve());
+    map.on("error", (e) => {
+      // A missing tile after the style has loaded is not fatal; the map draws around it.
+      if (map.loaded() || map.isStyleLoaded()) return;
+      map.remove();
+      reject(e?.error instanceof Error ? e.error : new Error("the map could not draw"));
+    });
+  });
+
   return {
     filter(cats, boundary) {
       visible = cats;
+      boundaryOn = boundary;
       if (map.getLayer("sites")) {
         map.setFilter("sites", pointFilter(false) as never);
         map.setFilter("sites-building", pointFilter(true) as never);
