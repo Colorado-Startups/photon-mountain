@@ -1,0 +1,65 @@
+{
+  "$comment": "The three clocks the site shows: what operates today, what opens or is targeted in 2026, and what is on the horizon. Each item quotes its own doc in `match`; site/src/data/corridor.test.ts fails when the text leaves that doc. Company roadmaps stay on the horizon clock as goals, never deliveries (energy_why_and_how.md, rule 5).",
+  "items": [
+    {
+      "id": "nist-cleanroom",
+      "clock": "today",
+      "when": "Operating",
+      "title": "NIST Boulder Microfabrication Facility",
+      "text": "An ISO class 5 cleanroom where NIST teams process integrated photonics.",
+      "place": "Boulder",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "An operating cleanroom is here: the NIST Boulder Microfabrication Facility"
+    },
+    {
+      "id": "mines-bachelors",
+      "clock": "today",
+      "when": "Since fall 2026",
+      "title": "A bachelor's in quantum systems engineering",
+      "text": "Colorado School of Mines, beside its quantum-engineering graduate program.",
+      "place": "Golden",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "since fall 2026, a bachelor's in quantum systems engineering"
+    },
+    {
+      "id": "xcimer-phoenix",
+      "clock": "today",
+      "when": "Since June 2026",
+      "title": "Xcimer's Phoenix laser",
+      "text": "Laser-driven fusion research in Denver; Xcimer announced the start of operations.",
+      "place": "Denver",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "Xcimer in Denver announced the start of operations for its Phoenix laser in June 2026"
+    },
+    {
+      "id": "arvada-fab",
+      "clock": "2026",
+      "when": "Targeted for 2026",
+      "title": "The Arvada photonic-IC fab",
+      "text": "At the Quantum Commons. Planned, not yet operating; no opening announced.",
+      "place": "Arvada",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "planned, targeted for 2026, not operating"
+    },
+    {
+      "id": "photonic-compute",
+      "clock": "horizon",
+      "when": "Back half of the decade",
+      "title": "Photonic compute",
+      "text": "Emerging and inference-first; not shipping at scale today.",
+      "place": "The corridor",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "Photonic compute is emerging, an inference-first bet for the back half of the decade, not shipping at scale today."
+    },
+    {
+      "id": "xcimer-2028",
+      "clock": "horizon",
+      "when": "2028 and the early 2030s",
+      "title": "Xcimer's next fusion machines",
+      "text": "Company targets, not deliveries.",
+      "place": "Denver",
+      "doc": "02_substance/energy_why_and_how.md",
+      "match": "Xcimer's 2028 and early-2030s machines"
+    }
+  ]
+}
