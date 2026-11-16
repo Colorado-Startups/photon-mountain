@@ -7,7 +7,8 @@
 #
 # The doctrine tooling in 04_tools/ is standard library by design, so there is
 # no pip entry. The npm entry covers the site workspace (site/), resolved from
-# the root package-lock.json.
+# the root package-lock.json. Minor and patch updates come grouped; a major
+# update (TypeScript 6 to 7, say) comes alone, so its own CI run judges it.
 
 version: 2
 updates:
@@ -33,6 +34,7 @@ updates:
     groups:
       site:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
     commit-message:
       prefix: "deps"
     labels:
