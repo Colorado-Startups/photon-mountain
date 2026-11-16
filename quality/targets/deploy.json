@@ -1,0 +1,10 @@
+[
+  {
+    "id": "deploy.waiting_merges",
+    "params": {
+      "comment": "GitHub Pages, deployed by pages.yml on every push to main, until photonmountain.co moves to a Cloudflare Worker at launch plan step 4.5.",
+      "platform": "pages",
+      "branch": "origin/main"
+    }
+  }
+]
