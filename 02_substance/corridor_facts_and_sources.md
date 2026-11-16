@@ -23,6 +23,16 @@ Louisville, Lafayette, Broomfield, Westminster, Longmont. Carries additional pho
 - **Solar** is the light-as-energy story for the corridor. Detail and sourcing are in `energy_why_and_how.md`.
 - **Laser (inertial) fusion** is the corridor-relevant fusion path. Colorado's laser-fusion work is the in-thesis line; Xcimer in Denver announced the start of operations for its Phoenix laser in June 2026. Magnetic-confinement fusion is not a Colorado in-state strength. CSU's ATLAS laser facility in Fort Collins, built with Marvel Fusion for fusion and other laser research, sits outside the corridor. CSU targets substantial completion in December 2026 and an opening in 2027, per its 2026-04-27 release. Keep those distinctions honest.
 
+## Sources for the headline figures (read 2026-11-16)
+
+`figures.json` holds these figures for the site; a test fails when a figure or its source leaves this list.
+
+| Figure | Source |
+|---|---|
+| More than 250 companies, more than 8,000 workers | [coloradophotonics.org](https://coloradophotonics.org/), the association's own figures |
+| $40.5 million EDA award; $77 million Colorado and $10 million New Mexico matches | [Elevate Quantum, 2024-07-02](https://www.elevatequantum.org/news/elevate-quantum-awarded-127-million-to-secure-us-leadership-in-quantum-technology) |
+| Quantum Commons online in 2026, with a fabrication cleanroom | [Colorado School of Mines, 2024-09-19](https://www.mines.edu/news/all-news/2024/quantum-commons-groundbreaking-ceremony-kicks-off-quantum-future-for-colorado-rocky-mountain-west.html) |
+
 ## Guardrails (repeat on every external piece)
 
 Operating versus opening-2026 versus horizon must stay distinct. NLR is "formerly NREL" on first reference. Photonic compute is emerging, an inference-first bet for the back half of the decade, not shipping at scale today. Never crown Denver as the research center; that is Boulder.

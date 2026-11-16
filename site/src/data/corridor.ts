@@ -13,6 +13,8 @@ export interface Figure {
 export const geojson = JSON.parse(geoRaw);
 export const sites = parseSites(geojson);
 export const companies = parseCompanies(rosterMd);
+/** The companies inside the corridor (Core and Ring). Statewide and "roots only" rows stay listed but never count here. */
+export const corridorCompanies = companies.filter((c) => c.ring === "Core" || c.ring === "Ring");
 export const anchors = parseAnchors(rosterMd);
 export const figures = figuresFile.figures as Figure[];
 

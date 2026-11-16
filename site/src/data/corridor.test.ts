@@ -1,7 +1,7 @@
 // The live record, checked at build: the invariants the site's numbers rest on.
 import { describe, expect, it } from "vitest";
 import factsMd from "../../../02_substance/corridor_facts_and_sources.md?raw";
-import { anchors, companies, figures, sites } from "./corridor";
+import { anchors, companies, corridorCompanies, figures, sites } from "./corridor";
 
 const CATEGORIES = ["National Lab", "University Lab", "Fabrication Facility", "Innovation Campus", "University Campus", "Government Hall", "Transit Station"];
 
@@ -27,6 +27,13 @@ describe("the corridor record", () => {
     }
   });
 
+  it("counts only Core and Ring companies as corridor companies", () => {
+    expect(corridorCompanies.length).toBeGreaterThan(30);
+    expect(corridorCompanies.length).toBeLessThan(companies.length);
+    for (const c of corridorCompanies) expect(["Core", "Ring"], c.name).toContain(c.ring);
+    expect(corridorCompanies.some((c) => c.name.startsWith("Ayar Labs"))).toBe(false);
+  });
+
   it("gives every anchor institution a source", () => {
     expect(anchors.length).toBeGreaterThanOrEqual(10);
     for (const a of anchors) expect(a.source?.url, a.name).toMatch(/^https:\/\//);
@@ -38,6 +45,7 @@ describe("the corridor record", () => {
       expect(f.doc, f.id).toBe("02_substance/corridor_facts_and_sources.md");
       expect(factsMd, `${f.id}: "${f.match}"`).toContain(f.match);
       expect(f.source, f.id).toMatch(/^https:\/\//);
+      expect(factsMd, `${f.id}: its source is listed in the facts doc`).toContain(f.source);
       expect(f.read, f.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(["today", "2026", "horizon"], f.id).toContain(f.clock);
     }
