@@ -1,5 +1,73 @@
 ---
-// Launch plan wave 2: the light section of the home page. Its own step replaces this stub; nothing else
-// in the site imports from this folder except src/pages/index.astro.
+// Light is information and energy. The diagram starts at the photon, splits into the two, fans out into what
+// the corridor builds, with live company counts from the roster, and meets again at compute.
+import { branches } from "../../lib/light";
+import { corridorCompanies } from "../../data/corridor";
+
+const all = branches(corridorCompanies);
+const info = all.filter((s) => s.branch === "information");
+const energy = all.filter((s) => s.branch === "energy");
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, "-").replace(/(^-|-$)/g, "");
 ---
-<section class="wrap stub" aria-label="Light" data-section="light"></section>
+<section class="light wrap" aria-labelledby="light-title" data-section="light">
+  <p class="eyebrow">Why light</p>
+  <h2 id="light-title">One particle, two powers, one future</h2>
+  <ol class="flow" role="list">
+    <li class="node photon">
+      <span class="glyph" aria-hidden="true">γ</span>
+      <span class="name">The photon</span>
+      <span class="sub">The quantum of light</span>
+    </li>
+    <li class="split">
+      <div class="branch info">
+        <p class="bname">Information</p>
+        <ul role="list">
+          {info.map((s) => (
+            <li><a href={`/explore/?segment=${slug(s.short)}`}><span>{s.short}</span><b>{s.companies.length}</b></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="branch energy">
+        <p class="bname">Energy</p>
+        <ul role="list">
+          {energy.map((s) => (
+            <li><a href={`/explore/?segment=${slug(s.short)}`}><span>{s.short}</span><b>{s.companies.length}</b></a></li>
+          ))}
+        </ul>
+      </div>
+    </li>
+    <li class="node compute">
+      <span class="glyph" aria-hidden="true">∑</span>
+      <span class="name">Compute</span>
+      <span class="sub">Light moves the data and powers the chips</span>
+    </li>
+  </ol>
+  <p class="note">Counts are corridor companies, core and ring towns, from the roster. Photonic compute is emerging, not shipping at scale today.</p>
+</section>
+
+<style>
+  .light { display: grid; gap: 1rem; padding-block: 3rem; }
+  .flow { position: relative; display: grid; gap: 1rem; padding: 0; margin: 0.5rem 0 0; list-style: none; }
+  @media (min-width: 60rem) { .flow { grid-template-columns: 12rem minmax(0, 1fr) 12rem; align-items: center; } }
+  .node { display: grid; justify-items: center; gap: 0.25rem; padding: 1.5rem 1rem; border-radius: 1rem; background: var(--ink); color: var(--color-white); text-align: center; }
+  .glyph { display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 50%; font: 700 var(--step5) / 1 var(--font-display); background: radial-gradient(circle, var(--gold) 0 35%, var(--gold-ink) 70%); color: var(--ink); box-shadow: 0 0 2rem 0.5rem var(--gold); }
+  .compute .glyph { background: radial-gradient(circle, var(--color-violet-bright) 0 35%, var(--accent) 70%); color: var(--color-white); box-shadow: 0 0 2rem 0.5rem var(--color-laser-violet); }
+  .name { font: 700 var(--step3) var(--font-display); }
+  .sub { color: var(--color-text-secondary-on-dark); font-size: var(--step0); max-width: 12rem; }
+  .split { display: grid; gap: 1rem; }
+  @media (min-width: 40rem) { .split { grid-template-columns: 1.6fr 1fr; } }
+  .branch { position: relative; padding: 1rem; border-radius: 1rem; border: var(--hairline) solid var(--rule); background: var(--surface); }
+  .branch::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 0.375rem; border-radius: 1rem 0 0 1rem; }
+  .info::before { background: linear-gradient(var(--color-laser-violet), var(--accent)); }
+  .energy::before { background: linear-gradient(var(--gold), var(--gold-ink)); }
+  .bname { font: 700 var(--step2) var(--font-display); margin-bottom: 0.5rem; }
+  .branch ul { display: grid; gap: 0.4rem; padding: 0; margin: 0; list-style: none; }
+  .branch a { display: flex; justify-content: space-between; gap: 1rem; min-height: 2.75rem; align-items: center; padding: 0.4rem 0.75rem; border-radius: 0.5rem; background: var(--ground); color: var(--ink); text-decoration: none; }
+  .branch a:hover { background: var(--gold-wash); }
+  .branch b { font: 700 var(--step2) var(--font-display); font-variant-numeric: tabular-nums; }
+  .note { color: var(--ink-2); font-size: var(--step0); }
+  @media (prefers-reduced-motion: no-preference) {
+    .photon .glyph { animation: pulse 3.2s ease-in-out 1; }
+    @keyframes pulse { 50% { box-shadow: 0 0 3rem 1rem var(--gold); } }
+  }
+</style>
