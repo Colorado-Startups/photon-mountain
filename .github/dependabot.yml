@@ -35,6 +35,12 @@ updates:
       site:
         patterns: ["*"]
         update-types: ["minor", "patch"]
+    # TypeScript 7 is the native rewrite; @astrojs/check 0.9.12 runs on the 6
+    # API, so astro check fails on 7.0.2 (PR #89, 2026-11-16). Drop this when
+    # Astro's checker supports 7.
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: "deps"
     labels:
