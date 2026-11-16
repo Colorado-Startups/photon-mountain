@@ -17,3 +17,8 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Git Crafter quality runs and the built pages (never committed)
+quality/data/
+quality/history/
+quality/dist/

@@ -14,8 +14,8 @@ name: cloud-test
 # script once, which proves the wiring; the path filter keeps every other pull request from spending minutes.
 # Pin the shared workflow to a full commit SHA of Colorado-Startups/.github main, never a branch.
 #
-# In this repo the allowlist holds the gate self-tests (gate-selftests.yml), the atlas parity check
-# (marker-parity.yml), the comparison map geometry check (comparison-map-verify.yml) and the deliverable renders
+# In this repo the allowlist holds the gate self-tests and the atlas parity check (ci.yml's short job), the
+# comparison map geometry check (ci.yml's standard job) and the deliverable renders
 # (03_deliverables/infographics/BUILD.md). A render's outputs come back as an artifact: gh run download <id>.
 on:
   pull_request:
@@ -55,6 +55,6 @@ jobs:
       ref: ${{ inputs.ref }}
       script: ${{ inputs.script || 'selftests' }}
       shards: ${{ inputs.shards || '1' }}
-      # 3.11 matches gate-selftests.yml and comparison-map-verify.yml. pip installs requirements.txt only for the
+      # 3.11 is the version the deliverable builds were last checked on. pip installs requirements.txt only for the
       # entries that list it: the geometry check and the three renders that need matplotlib or reportlab.
       python: "3.11"

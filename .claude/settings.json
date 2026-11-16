@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Read",
@@ -33,6 +34,15 @@
       "Bash(python3 04_tools/marker_parity.py:*)",
       "Bash(bash .claude/hooks/pm-check-voice.sh:*)",
       "Bash(bash .claude/hooks/pm-check-facts.sh:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)"
     ]
   },
   "hooks": {
