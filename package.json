@@ -12,6 +12,7 @@
     "dev": "npm run -w @photon-mountain/site dev",
     "build": "npm run -w @photon-mountain/site build",
     "check": "npm run -w @photon-mountain/site check",
-    "test": "npm run -w @photon-mountain/site test"
+    "test": "npm run -w @photon-mountain/site test",
+    "test:e2e": "npm run -w @photon-mountain/site test:e2e"
   }
 }

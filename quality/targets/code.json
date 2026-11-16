@@ -1,0 +1,12 @@
+[
+  {
+    "id": "code.loc_change_pct",
+    "params": {
+      "areas": ["04_tools", "site/src"],
+      "client_dist": { "dir": "site/dist", "source": "site" },
+      "test_suites": [
+        { "label": "site unit", "cwd": "site", "args": [], "cover": { "site/src": "src/**/*.ts" } }
+      ]
+    }
+  }
+]

@@ -3,7 +3,8 @@ name: ci
 # From Git Crafter templates/ci/ci.yml at v7.0.2: the CI standard on GitHub's standard hosted runners (free on a
 # public repo). ci-ok is the check the ruleset requires. The short job runs every gate self-test and the four-file
 # marker parity check on each change, and fails when the site's emitted tokens or favicon drift from their source.
-# The standard job type-checks, unit-tests and builds the site, then runs the comparison-map geometry check, in a venv because
+# The standard job type-checks, unit-tests and builds the site, runs Playwright with axe on every route at
+# desktop and phone width, and scans the built site with the brand's franchise-name gate (pinned brand commit), then runs the comparison-map geometry check, in a venv because
 # the runner's own Python refuses pip installs, when the site, the infographics or their inputs change.
 on:
   pull_request:
@@ -46,6 +47,10 @@ jobs:
         npm run check
         npm test
         npm run build
+        (cd site && npx playwright install --with-deps chromium >/dev/null && npx playwright test)
+        git clone -q --filter=blob:none --no-checkout https://github.com/Colorado-Startups/brand "$RUNNER_TEMP/brand"
+        git -C "$RUNNER_TEMP/brand" checkout -q 581e7e9d85e0be3ce98ddabfeb84f43cbdc680a6 -- tools data
+        python3 -I "$RUNNER_TEMP/brand/tools/franchise_gate.py" --dir site/dist
         python3 -m venv "$RUNNER_TEMP/venv"
         "$RUNNER_TEMP/venv/bin/pip" install --quiet -r requirements.txt
         cd 03_deliverables/infographics

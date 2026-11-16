@@ -1,0 +1,13 @@
+[
+  {
+    "id": "usability.reading_grade",
+    "params": {
+      "origin": "https://photon-mountain-site.coloradostartups.workers.dev",
+      "key_pages": ["/"],
+      "tasks": [
+        { "label": "See the corridor", "path": "/" }
+      ],
+      "crawl_skip": ["/data/", "/cdn-cgi/"]
+    }
+  }
+]
