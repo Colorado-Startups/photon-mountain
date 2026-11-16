@@ -1,0 +1,60 @@
+{
+  "$comment": "The headline figures the site shows, one record each. This file is the one machine-readable source; site/src/data/figures.test.ts fails when a figure's match text is missing from the document it cites. Clock: today (operating or counted now), 2026 (opening or targeted this year), horizon (later).",
+  "figures": [
+    {
+      "id": "cpia_companies",
+      "value": "250+",
+      "label": "Colorado photonics companies",
+      "whose": "Colorado Photonics Industry Association",
+      "source": "https://coloradophotonics.org/",
+      "read": "2026-11-12",
+      "clock": "today",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "more than 250 photonics companies"
+    },
+    {
+      "id": "cpia_workers",
+      "value": "8,000+",
+      "label": "Colorado photonics workers",
+      "whose": "Colorado Photonics Industry Association",
+      "source": "https://coloradophotonics.org/",
+      "read": "2026-11-12",
+      "clock": "today",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "more than 8,000 workers"
+    },
+    {
+      "id": "eda_award",
+      "value": "$40.5M",
+      "label": "EDA Tech Hubs award to Elevate Quantum, July 2024",
+      "whose": "U.S. Economic Development Administration",
+      "source": "https://www.eda.gov/funding/programs/regional-technology-and-innovation-hubs",
+      "read": "2026-11-12",
+      "clock": "today",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "$40.5 million EDA Tech Hubs award (July 2024)"
+    },
+    {
+      "id": "hub_total",
+      "value": "$127.5M",
+      "label": "Tech Hub total with Colorado and New Mexico matches",
+      "whose": "Elevate Quantum",
+      "source": "https://elevatequantum.org/",
+      "read": "2026-11-12",
+      "clock": "today",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "about $127.5 million"
+    },
+    {
+      "id": "arvada_fab",
+      "value": "2026",
+      "label": "Target year for the Arvada photonic-IC fab; not yet open",
+      "whose": "Colorado School of Mines",
+      "source": "https://www.mines.edu/news/all-news/2024/quantum-commons-groundbreaking-ceremony-kicks-off-quantum-future-for-colorado-rocky-mountain-west.html",
+      "read": "2026-11-16",
+      "clock": "2026",
+      "doc": "02_substance/corridor_facts_and_sources.md",
+      "match": "planned, targeted for 2026, not operating"
+    }
+  ]
+}

@@ -13,7 +13,8 @@ export default defineConfig({
   trailingSlash: "always",
   // This Mac account's port block is 3300 to 3349 (managed Mac policy, Ports); strictPort exits if it is taken.
   server: { port: 3304 },
-  vite: { build: { assetsInlineLimit }, server: { strictPort: true } },
+  // The data module reads 02_substance/ and 03_deliverables/ from the repo root, one level up.
+  vite: { build: { assetsInlineLimit }, server: { strictPort: true, fs: { allow: [".."] } } },
   integrations: [sitemap()],
   // The three brand faces (01_doctrine/brand_identity.md), self-hosted at build time through Fontsource,
   // all SIL OFL 1.1. Astro sizes each fallback from the font's own metrics, so the swap moves little.
