@@ -50,7 +50,7 @@ const ways = [
     <h2 id="paste">Paste one prompt</h2>
     <div class="prompt">
       <pre id="prompt-text">{prompt}</pre>
-      <button type="button" class="copy" data-copy="prompt-text" hidden>Copy the prompt</button>
+      <button type="button" class="copy" data-copy="prompt-text" data-done="Copied. Paste it into your assistant." hidden>Copy the prompt</button>
     </div>
     <p class="status" role="status" data-status></p>
     <ul class="ways" role="list">
@@ -68,7 +68,7 @@ const ways = [
           <b>{c.who}</b><span>{c.where}</span>
           {c.steps && <p>{c.steps}</p>}
           <pre id={c.id}>{c.code}</pre>
-          <button type="button" class="copy" data-copy={c.id} hidden>Copy</button>
+          <button type="button" class="copy" data-copy={c.id} aria-label={`Copy the ${c.who} setup`} hidden>Copy</button>
         </li>
       ))}
     </ul>
@@ -109,7 +109,11 @@ const ways = [
       const text = document.getElementById(button.dataset.copy ?? "")?.textContent ?? "";
       try {
         await navigator.clipboard.writeText(text);
-        if (status) status.textContent = "Copied. Paste it into your assistant.";
+        // The live region speaks; the button itself shows it, since the region may be off screen on a phone.
+        if (status) status.textContent = button.dataset.done ?? "Copied.";
+        const label = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => (button.textContent = label), 2000);
       } catch {
         if (status) status.textContent = "Copy did not work here. Select the prompt and copy it instead.";
       }
