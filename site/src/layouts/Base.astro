@@ -1,5 +1,6 @@
 ---
 import { Font } from "astro:assets";
+import { jsonLd, mdPath, pageFor } from "../ai/content";
 import SiteFooter from "../components/SiteFooter.astro";
 import tokens from "../styles/tokens/tokens.json";
 import "../styles/global.css";
@@ -11,6 +12,11 @@ interface Props {
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const fullTitle = title === "Photon Mountain" ? title : `${title} · Photon Mountain`;
+// The page's Markdown twin and schema.org block (src/ai/content.ts). A JSON-LD block is data, not script,
+// so the CSP's script-src does not apply; "<" is escaped so no value can close the tag.
+const page = pageFor(Astro.url.pathname);
+const ld = page && jsonLd(page.slug);
+const ldText = ld && JSON.stringify(ld).replace(/</g, "\\u003c");
 ---
 <!doctype html>
 <html lang="en">
@@ -22,6 +28,8 @@ const fullTitle = title === "Photon Mountain" ? title : `${title} · Photon Moun
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {page && <link rel="alternate" type="text/markdown" href={mdPath(page)} />}
+    {ldText && <script type="application/ld+json" is:inline set:html={ldText} />}
     <meta property="og:site_name" content="Photon Mountain" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />

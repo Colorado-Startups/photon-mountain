@@ -38,3 +38,20 @@ test("the data files parse and hold the whole record", async ({ request }) => {
   const figures = await (await request.get("/data/figures.json")).json();
   for (const f of figures.figures) expect(f.source).toMatch(/^https:\/\//);
 });
+
+test("AI readers get llms.txt, a Markdown twin of every page and JSON-LD that parses", async ({ page, request }) => {
+  const llms = await (await request.get("/llms.txt")).text();
+  expect(llms.startsWith("# Photon Mountain\n")).toBe(true);
+  const full = await request.get("/llms-full.txt");
+  expect(full.status()).toBe(200);
+  for (const path of routes) {
+    await page.goto(path);
+    const twin = await page.locator('link[rel="alternate"][type="text/markdown"]').getAttribute("href");
+    const md = await request.get(twin ?? "");
+    expect(md.status(), `${path} twin ${twin}`).toBe(200);
+    expect((await md.text()).startsWith("# ")).toBe(true);
+    for (const block of await page.locator('script[type="application/ld+json"]').allTextContents()) {
+      expect(JSON.parse(block)["@context"]).toBe("https://schema.org");
+    }
+  }
+});
