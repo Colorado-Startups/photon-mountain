@@ -3,6 +3,7 @@
 import rosterMd from "../../../02_substance/colorado_photonics_companies.md?raw";
 import geoRaw from "../../../03_deliverables/maps/photon_mountain_corridor.geojson?raw";
 import figuresFile from "../../../02_substance/figures.json";
+import clocksFile from "../../../02_substance/clocks.json";
 import { parseAnchors, parseCompanies, parseSites } from "./parse";
 
 export interface Figure {
@@ -17,6 +18,12 @@ export const companies = parseCompanies(rosterMd);
 export const corridorCompanies = companies.filter((c) => c.ring === "Core" || c.ring === "Ring");
 export const anchors = parseAnchors(rosterMd);
 export const figures = figuresFile.figures as Figure[];
+
+export interface ClockItem {
+  id: string; clock: "today" | "2026" | "horizon"; when: string; title: string; text: string; place: string; doc: string; match: string;
+}
+/** The three clocks: operating today, opening or targeted in 2026, and on the horizon. */
+export const clocks = clocksFile.items as ClockItem[];
 
 export const repo = "https://github.com/Colorado-Startups/photon-mountain";
 export const meta = {
