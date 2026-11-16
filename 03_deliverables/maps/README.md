@@ -18,6 +18,7 @@ The rest of the repo is CC0 1.0; `../../LICENSING.md` lists every exception. The
 |---|---|
 | `photon_mountain_corridor.geojson` | The canonical set: 53 point markers plus the boundary polygon. |
 | `photon_mountain_corridor.kml` | The same 53 markers for Google Earth and Maps. |
+| `index.html` | The interactive MapLibre map in the Photon Mountain identity. It fetches `photon_mountain_corridor.geojson` at load, so it carries no copy of the roster. `.github/workflows/pages.yml` publishes both at `/map/`. Serve this folder over HTTP to open it locally. |
 | `photon_mountain_boundary_map.html` | Self-contained Leaflet map, opens in a browser. |
 | `PhotonMountainMap.jsx` | React component carrying the same roster. |
 | `felt_boundary.geojson` | Boundary polygon only, for import into Felt. |

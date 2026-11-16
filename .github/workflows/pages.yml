@@ -1,0 +1,84 @@
+name: pages
+
+# Publishes the corridor map to GitHub Pages at /map/: the MapLibre page
+# 03_deliverables/maps/index.html and the one data file it fetches,
+# photon_mountain_corridor.geojson. The site root redirects to /map/.
+#
+# A pull request that touches the map assembles the site, which fails if either
+# file is missing, and publishes nothing. Only a push to main publishes. Pages
+# itself must be switched on once in the repo settings (Source: GitHub
+# Actions) before the first deploy can land.
+#
+# Actions are pinned by full commit SHA with their version comment, as in the
+# repo's other workflows; Dependabot's github-actions entry bumps them.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '03_deliverables/maps/index.html'
+      - '03_deliverables/maps/photon_mountain_corridor.geojson'
+      - '.github/workflows/pages.yml'
+  pull_request:
+    paths:
+      - '03_deliverables/maps/index.html'
+      - '03_deliverables/maps/photon_mountain_corridor.geojson'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A deploy always finishes; a newer push queues behind it.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build the map site
+    runs-on: ubuntu-slim
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Assemble the site
+        run: |
+          set -euo pipefail
+          mkdir -p site/map
+          cp 03_deliverables/maps/index.html site/map/index.html
+          cp 03_deliverables/maps/photon_mountain_corridor.geojson site/map/
+          cat > site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Photon Mountain</title>
+          <meta http-equiv="refresh" content="0; url=map/">
+          <link rel="canonical" href="map/">
+          <p><a href="map/">The Photon Mountain corridor map</a></p>
+          HTML
+
+      - name: List the site
+        run: ls -R site
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: site
+
+  deploy:
+    name: deploy to GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-slim
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

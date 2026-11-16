@@ -18,11 +18,11 @@ This repository is the corridor's open record. It holds the brand, the researche
 |---|---|
 | [`01_doctrine/`](01_doctrine/) | The locked brand identity, the voice rules, and the usage guidelines |
 | [`02_substance/`](02_substance/) | Corridor research: the anchor institutions, the company roster, and the why-and-how documents, each with dated sources |
-| [`03_deliverables/`](03_deliverables/) | The corridor map (HTML, GeoJSON, KML), the launch infographic, and the Silicon Valley comparison maps |
+| [`03_deliverables/`](03_deliverables/) | The corridor map (an interactive MapLibre page, GeoJSON, KML), the launch infographic, and the Silicon Valley comparison maps |
 | [`04_tools/`](04_tools/) | The gates: a voice lint, a brand-token check, and a map-parity check, all standard-library Python |
 | [`00_project_system/`](00_project_system/) | The work queue and the task lifecycle |
 
-The live corridor map is on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
+The interactive corridor map is [`03_deliverables/maps/index.html`](03_deliverables/maps/index.html). It publishes to https://colorado-startups.github.io/photon-mountain/map/ once GitHub Pages is switched on. The same atlas is also on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
 
 ## Contribute
 
