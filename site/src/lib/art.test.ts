@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import sharp from "sharp";
-import { checkHash, variants } from "../../scripts/art.mjs";
+import { checkHash, safeName, variants } from "../../scripts/art.mjs";
 import { clips, image, images, label, srcset, variant } from "./art";
 
 const original = (file: string) => readFileSync(new URL(`../../art/originals/${file}`, import.meta.url));
@@ -22,6 +22,13 @@ describe("the art manifest", () => {
     for (const c of clips) for (const s of c.sources) expect(createHash("sha256").update(original(s.file)).digest("hex"), s.file).toBe(s.sha256);
   });
 
+  it("credits the photo behind every painting, and names a CC BY photographer", () => {
+    for (const i of images.filter((x) => x.landmark)) {
+      expect(i.photo?.url, i.id).toMatch(/^https:\/\/commons\.wikimedia\.org\//);
+      if (i.photo?.licence.startsWith("CC BY")) expect(i.photo.by, i.id).not.toBe("");
+    }
+  });
+
   it("builds srcsets only up to each image's own width", () => {
     expect(srcset(image("crest"))).toBe("/art/crest-480.webp 480w");
     expect(srcset(image("boulder"))).toBe("/art/boulder-480.webp 480w, /art/boulder-960.webp 960w, /art/boulder-1440.webp 1440w");
@@ -32,6 +39,11 @@ describe("the art manifest", () => {
 });
 
 describe("the art build", () => {
+  it("refuses a manifest name that could leave public/art/", () => {
+    expect(safeName("boulder.jpg")).toBe("boulder.jpg");
+    for (const bad of ["../x.jpg", "a/b.png", "", "UPPER.jpg", ".hidden"]) expect(() => safeName(bad), bad).toThrow(/unsafe name/);
+  });
+
   it("refuses a file whose hash moved", () => {
     expect(() => checkHash("x", Buffer.from("x"), "0".repeat(64))).toThrow(/is not the brand's/);
   });

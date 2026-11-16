@@ -1,5 +1,5 @@
 {
-  "$comment": "The art this site shows, copied byte for byte from Colorado-Startups/brand at the commit below. The brand repo owns the art: its direction, render queue, call counter and licences (art/LICENSES.md). Every file is AI-made and carries its provenance XMP; scripts/art.mjs refuses a file whose hash differs from this list and keeps that XMP in every variant it makes. No copyright is claimed in the images (brand decision 5).",
+  "$comment": "The art this site shows, copied byte for byte from Colorado-Startups/brand at the commit below. The brand repo owns the art: its direction, render queue, call counter and licences (art/LICENSES.md). Every file is AI-made and carries its provenance XMP; scripts/art.mjs refuses a file whose hash differs from this list and keeps that XMP in every variant it makes. No copyright is claimed in the images (brand decision 5). Each painting names the photo it was made from (brand art/render/src/SOURCES.md); a CC BY photo's credit shows wherever the painting does.",
   "brand_commit": "581e7e9d85e0be3ce98ddabfeb84f43cbdc680a6",
   "label": "AI-made",
   "images": [
@@ -13,7 +13,13 @@
       "place": "Boulder",
       "alt": "Painting of Boulder's Flatirons as a city of light at dusk: glowing portals set in the red rock slabs, waterfalls, a great golden tree on the ridge, robed elves on stone bridges, and dragons in the starry sky.",
       "caption": "Boulder, the research anchor, painted as a city of light.",
-      "model": "FIBO 2.0 (Bria), an edit of a public-domain photo by Jimbo Herndan"
+      "model": "FIBO 2.0 (Bria), an edit of a public-domain photo by Jimbo Herndan",
+      "landmark": "The Flatirons, tilted slabs of red sandstone above the town",
+      "photo": {
+        "by": "Jimbo Herndan",
+        "licence": "Public domain",
+        "url": "https://commons.wikimedia.org/wiki/File:Flatirons_2007.jpg"
+      }
     },
     {
       "id": "golden",
@@ -25,7 +31,13 @@
       "place": "Golden",
       "alt": "Painting of Golden's Table Mountain as a dwarven kingdom: a great stone gate with glowing windows cut into the cliff, armored dwarves with carts and steam engines on the road, and a stone serpent coiled in the grass by the creek.",
       "caption": "Golden, the forge of the corridor, painted as a mountain kingdom.",
-      "model": "FIBO 2.0 (Bria), an edit of a CC BY photo of the Table Mountains"
+      "model": "FIBO 2.0 (Bria), an edit of a CC BY photo of the Table Mountains",
+      "landmark": "North and South Table Mountain, with Clear Creek",
+      "photo": {
+        "by": "James St. John",
+        "licence": "CC BY 2.0",
+        "url": "https://commons.wikimedia.org/wiki/File:Lava_flows_capping_North_Table_Mountain_%26_South_Table_Mountain_(Denver_Formation,_Upper_Cretaceous;_Golden,_Colorado,_USA).jpg"
+      }
     },
     {
       "id": "denver",
@@ -37,7 +49,13 @@
       "place": "Denver",
       "alt": "Painting of Denver's skyline and the Front Range behind a white-walled citadel with a golden great hall, knights on glowing white horses, townsfolk on the hill, white gryphons in the sky, and golden aspens.",
       "caption": "Denver, the metro anchor, painted as a citadel of the plain.",
-      "model": "FIBO 2.0 (Bria), an edit of a public-domain USFWS photo"
+      "model": "FIBO 2.0 (Bria), an edit of a public-domain USFWS photo",
+      "landmark": "The downtown skyline below the Front Range",
+      "photo": {
+        "by": "USFWS Mountain-Prairie",
+        "licence": "Public domain",
+        "url": "https://commons.wikimedia.org/wiki/File:Denver_Skyline_(15242286069).jpg"
+      }
     },
     {
       "id": "crest",
@@ -57,8 +75,18 @@
       "id": "light-loop",
       "poster": "boulder",
       "sources": [
-        { "file": "light-loop.webm", "type": "video/webm", "brand_path": "dist/clips/photonics.webm", "sha256": "494c8b69c52433dd6977debd54d47b2632f302b527c7226b87cff55f0d651425" },
-        { "file": "light-loop.mp4", "type": "video/mp4", "brand_path": "dist/clips/photonics.mp4", "sha256": "9923f4ace75554f8a64d48c7799978c89e0af795ae563f834c222370353bdeb7" }
+        {
+          "file": "light-loop.webm",
+          "type": "video/webm",
+          "brand_path": "dist/clips/photonics.webm",
+          "sha256": "494c8b69c52433dd6977debd54d47b2632f302b527c7226b87cff55f0d651425"
+        },
+        {
+          "file": "light-loop.mp4",
+          "type": "video/mp4",
+          "brand_path": "dist/clips/photonics.mp4",
+          "sha256": "9923f4ace75554f8a64d48c7799978c89e0af795ae563f834c222370353bdeb7"
+        }
       ],
       "seconds": 4.04,
       "alt": "Looping video of the Boulder painting: the portals in the rock glow and pulse, and motes of light drift up from the lanterns.",
