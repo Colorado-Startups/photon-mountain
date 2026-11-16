@@ -23,11 +23,11 @@ Exit codes: 0 = tokens match the identity doc and fonts resolve, 1 = drift.
 """
 
 import argparse
+import importlib.util
 import json
 import os
 import re
 import sys
-import tempfile
 
 # ---------------------------------------------------------------- paths -----
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -275,7 +275,7 @@ def emit(out_dir):
 
 
 # ----------------------------------------------------------------- tests ----
-def _tokens_from_identity_doc():
+def tokens_from_identity_doc():
     """Re-read the COLOR_* block out of brand_identity.md."""
     if not os.path.isfile(IDENTITY_DOC):
         return None, "identity doc not found at %s" % IDENTITY_DOC
@@ -288,194 +288,12 @@ def _tokens_from_identity_doc():
 
 
 def self_test():
-    ok = True
-
-    declared, err = _tokens_from_identity_doc()
-    if err:
-        print("self-test: %s: FAIL" % err)
-        return 1
-
-    # Derived neutrals are computed from the palette, not declared in the doc,
-    # so they are checked by contrast below rather than by name comparison.
-    derived = {"COLOR_RULE_HAIRLINE", "COLOR_TEXT_DIM_ON_DARK",
-               "COLOR_TEXT_SECONDARY_ON_DARK"}
-    mine = {k: v for k, v in globals().items()
-            if k.startswith("COLOR_") and isinstance(v, str)
-            and k not in derived}
-
-    missing = sorted(set(declared) - set(mine))
-    extra = sorted(set(mine) - set(declared))
-    drifted = sorted(k for k in set(declared) & set(mine)
-                     if declared[k].upper() != mine[k].upper())
-
-    if missing:
-        ok = False
-        print("self-test: in the identity doc but not this module: %s: FAIL"
-              % ", ".join(missing))
-    if extra:
-        ok = False
-        print("self-test: in this module but not the identity doc: %s: FAIL"
-              % ", ".join(extra))
-    for k in drifted:
-        ok = False
-        print("self-test: %s doc=%s module=%s: FAIL" % (k, declared[k], mine[k]))
-    if not (missing or extra or drifted):
-        print("self-test: %d palette tokens match the identity doc: OK"
-              % len(declared))
-
-    # Every font the type scale names must actually resolve.
-    absent = [f for role in FONT
-              for f in [font_path(role)] if not os.path.isfile(f)]
-    if absent:
-        ok = False
-        for f in absent:
-            print("self-test: missing font %s: FAIL" % os.path.basename(f))
-    else:
-        print("self-test: %d font files resolve: OK" % len(FONT))
-
-    # The contrast figures brand_identity.md states, re-derived here. If the
-    # palette is edited without re-checking contrast, this catches it.
-    expected = [
-        (COLOR_SUMMIT_NIGHT, COLOR_WHITE, 17.2),
-        (COLOR_SUMMIT_NIGHT, COLOR_SNOWFIELD, 16.0),
-        (COLOR_GRANITE, COLOR_WHITE, 6.8),
-        (COLOR_WHITE, COLOR_SUMMIT_NIGHT, 17.2),
-        (COLOR_ALPENGLOW, COLOR_SUMMIT_NIGHT, 5.5),
-        (COLOR_ALPENGLOW_DEEP, COLOR_WHITE, 5.2),
-        (COLOR_VIOLET_DEEP, COLOR_WHITE, 7.3),
-        (COLOR_GOLD, COLOR_SUMMIT_NIGHT, 9.2),
-        (COLOR_GOLD_DEEP, COLOR_WHITE, 5.5),
-        (COLOR_GOLD_DEEP, COLOR_SNOWFIELD, 5.1),
-    ]
-    bad = [(f, b, e, contrast_ratio(f, b)) for f, b, e in expected
-           if abs(contrast_ratio(f, b) - e) > 0.1]
-    if bad:
-        ok = False
-        for f, b, e, got in bad:
-            print("self-test: contrast %s on %s doc=%.1f computed=%.1f: FAIL"
-                  % (f, b, e, got))
-    else:
-        print("self-test: %d contrast ratios match the identity doc: OK"
-              % len(expected))
-
-    # Derived on-dark neutrals must still clear AA against Summit Night, and
-    # the hairline rule must stay visibly lighter than Granite without
-    # vanishing into white.
-    derived_checks = [
-        ("text_dim_on_dark", COLOR_TEXT_DIM_ON_DARK, COLOR_SUMMIT_NIGHT, 4.5),
-        ("text_secondary_on_dark", COLOR_TEXT_SECONDARY_ON_DARK,
-         COLOR_SUMMIT_NIGHT, 4.5),
-    ]
-    failed = [(n, contrast_ratio(fg, bg), floor)
-              for n, fg, bg, floor in derived_checks
-              if contrast_ratio(fg, bg) < floor]
-    if failed:
-        ok = False
-        for n, got, floor in failed:
-            print("self-test: derived %s contrast %.1f below AA %.1f: FAIL"
-                  % (n, got, floor))
-    else:
-        print("self-test: %d derived on-dark neutrals clear AA: OK"
-              % len(derived_checks))
-
-    hairline_vs_white = contrast_ratio(COLOR_RULE_HAIRLINE, COLOR_WHITE)
-    if not 1.05 <= hairline_vs_white <= 2.0:
-        ok = False
-        print("self-test: hairline rule contrast %.2f outside 1.05-2.00: FAIL"
-              % hairline_vs_white)
-    else:
-        print("self-test: hairline rule reads on white (%.2f): OK"
-              % hairline_vs_white)
-
-    # The gate must actually bite. The failing case is the real one found on
-    # 2026-09-21: on-light violet over a Summit Night panel, at 2.37.
-    try:
-        check_pairing(COLOR_VIOLET_DEEP, COLOR_SUMMIT_NIGHT, where="self-test")
-    except ContrastError:
-        try:
-            check_pairing(COLOR_VIOLET_BRIGHT, COLOR_SUMMIT_NIGHT)
-            check_pairing(COLOR_ALPENGLOW, COLOR_WHITE, large=True)
-            print("self-test: contrast gate raises on the known-bad pairing "
-                  "and passes the good ones: OK")
-        except ContrastError as exc:
-            ok = False
-            print("self-test: gate rejected a valid pairing (%s): FAIL" % exc)
-    else:
-        ok = False
-        print("self-test: contrast gate did NOT raise on violet-deep over "
-              "summit-night: FAIL")
-
-    # No accent color may be offered as a body-text role.
-    leaked = sorted(r for r in ("text_primary", "text_secondary", "text_on_dark")
-                    if ROLE[r] in ACCENT_COLORS)
-    if leaked:
-        ok = False
-        print("self-test: accent color used for body text role(s) %s: FAIL"
-              % ", ".join(leaked))
-    else:
-        print("self-test: no accent color in a body-text role: OK")
-
-    # Gold: every pairing the identity doc allows passes the gate, and gold
-    # text is refused even where its ratio would clear AA (9.2 on Summit Night).
-    gold_pairs = [(COLOR_GOLD_DEEP, COLOR_SNOWFIELD, False),
-                  (COLOR_GOLD_DEEP, COLOR_WHITE, False),
-                  (COLOR_GOLD_DEEP, COLOR_GOLD_TINT, False),
-                  (COLOR_SUMMIT_NIGHT, COLOR_GOLD_TINT, False),
-                  (COLOR_GOLD, COLOR_SUMMIT_NIGHT, True)]
-    def refusal(fg, bg, graphic=False):
-        try:
-            return check_pairing(fg, bg, where="gold", graphic=graphic) and None
-        except ContrastError as exc:
-            return str(exc)
-    gold_bad = [m for m in (refusal(*p) for p in gold_pairs) if m]
-    if not refusal(COLOR_GOLD, COLOR_SUMMIT_NIGHT):
-        gold_bad.append("the gate let Gold carry text")
-    for msg in gold_bad:
-        ok = False
-        print("self-test: %s: FAIL" % msg)
-    if not gold_bad:
-        print("self-test: %d gold pairings pass the gate, gold text is "
-              "refused: OK" % len(gold_pairs))
-
-    # Type scale: the doc's STEPn lines match, steps ascend, and each lands
-    # inside a web range the doc names.
-    doc = open(IDENTITY_DOC, encoding="utf-8").read()
-    doc_steps = {k.lower(): float(v) for k, v in
-                 re.findall(r"^(STEP\d+)\s*=\s*([0-9.]+)", doc, re.M)}
-    steps = list(TYPE_STEP_REM.values())
-    in_range = all(any(lo <= s * 16 <= hi for lo, hi in TYPE_RANGES_WEB_PX.values())
-                   for s in steps)
-    if (doc_steps != TYPE_STEP_REM
-            or steps != sorted(set(steps)) or not in_range):
-        ok = False
-        print("self-test: type scale differs from the doc, repeats a step or "
-              "leaves the doc's ranges: FAIL")
-    else:
-        print("self-test: %d type steps match the doc and its ranges: OK"
-              % len(steps))
-
-    # --emit: both files carry this module's tokens, and a rerun is identical.
-    with tempfile.TemporaryDirectory() as tmp:
-        runs = []
-        for _ in range(2):
-            emit(tmp)
-            runs.append([open(os.path.join(tmp, n), encoding="utf-8").read()
-                         for n in ("tokens.json", "tokens.css")])
-    js = json.loads(runs[0][0])
-    css = dict(re.findall(r"--([a-z0-9-]+): ([^;]+);", runs[0][1]))
-    want_css = {"color-" + k.replace("_", "-"): v for k, v in js["color"].items()}
-    want_css.update(js["type"])
-    if (set(js) != {"color", "type"} or runs[0] != runs[1] or css != want_css
-            or any(js["color"][k] != v for k, v in COLOR.items())
-            or list(js["type"]) != list(TYPE_STEP_REM)):
-        ok = False
-        print("self-test: --emit output drifts from the module: FAIL")
-    else:
-        print("self-test: --emit writes %d colors and %d type steps, twice "
-              "the same: OK" % (len(js["color"]), len(js["type"])))
-
-    print("self-test:", "PASS" if ok else "FAIL")
-    return 0 if ok else 1
+    """Run brand_tokens_selftest.py, loaded by path so it works under python3 -I."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "brand_tokens_selftest.py")
+    spec = importlib.util.spec_from_file_location("brand_tokens_selftest", path)
+    checks = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(checks)
+    return checks.run(sys.modules[__name__])
 
 
 def main(argv=None):

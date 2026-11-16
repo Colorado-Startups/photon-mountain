@@ -69,6 +69,7 @@ cowork_project_instructions.md  Mirror of the Cowork Settings > Instructions fie
 04_tools/            The gates, all standard library, all with --self-test
   voice_lint.py      Dashes, sentence length, hedges, AI tells, unattributed figures (vendored from Git Crafter; edit it there)
   brand_tokens.py    The single source of brand values in code; checks itself against brand_identity.md
+  brand_tokens_selftest.py   That check, one small function per rule; brand_tokens.py --self-test loads it by path
   marker_parity.py   The corridor atlas's four files must carry the same 53 markers
   voice_exempt.txt   Files the voice gate skips, as data, with a contract test in the hook's --self-test
 .claude/             Travels with the repo
