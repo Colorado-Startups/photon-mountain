@@ -1,0 +1,13 @@
+[
+  {
+    "id": "issues.open_bugs",
+    "params": {
+      "repo": "Colorado-Startups/photon-mountain",
+      "area_labels": ["doctrine", "substance", "deliverable", "tooling", "documentation", "accessibility"],
+      "project_title": "Photon Mountain",
+      "project_columns": ["Todo", "In Progress", "Done"],
+      "site_url": "https://colorado-startups.github.io/photon-mountain/",
+      "threat_model_covers": [".github/workflows/", "04_tools/", ".claude/hooks/", ".githooks/"]
+    }
+  }
+]

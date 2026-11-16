@@ -1,0 +1,30 @@
+{
+ "comment": "Photon Mountain's Process page config and maps file, from Git Crafter templates/process/config.json at v7.0.2. Ten library maps plus Guard from the Claudius pack, as the brand repo runs them. The two corridor maps (fact to page, art to page) join once their metrics exist (launch plan section 8). Keys: Git Crafter actions/pages/action.yml; maps: pages/maps/README.md.",
+ "repos": ["photon-mountain"],
+ "docs": {"maps": "quality/process/config.json"},
+ "repo_url": "https://github.com/Colorado-Startups/photon-mountain/blob/main",
+ "maps": [
+  {"use": "delivery"},
+  {"use": "board"},
+  {"use": "code"},
+  {"use": "triage"},
+  {"use": "secure"},
+  {"use": "document"},
+  {"use": "contribute"},
+  {"use": "adopt"},
+  {"use": "measure"},
+  {"use": "deploy"},
+  {"use": "guard"}
+ ],
+ "data": "quality/process/data/org.json",
+ "history": null,
+ "out": "quality/dist",
+ "pages": {"process": "process.html"},
+ "tabs": ["build", "ci", "testing"],
+ "heading": "Photon Mountain",
+ "collector": "Git Crafter actions/pages",
+ "nav": [
+  {"href": "index.html", "label": "Quality, Speed and Consumption", "icon": "speed"},
+  {"page": "process", "label": "Process", "icon": "plan"}
+ ]
+}

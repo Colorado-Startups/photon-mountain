@@ -1,0 +1,27 @@
+{
+ "comment": "Photon Mountain's Quality, Speed and Consumption config, from Git Crafter templates/quality/config.json at v7.0.2 plus the six Claudius tabs as [id, Name] pairs, the pack pinned by full SHA (v1.0.0). Dropped: discussions (no metrics; Discussions is off). The web tab (pages) stays on for photonmountain.co; its params arrive with the site in launch plan step 1.4. Keys: Git Crafter quality/CONFIG.md.",
+ "tabs": [
+  "code",
+  "documentation",
+  "issues",
+  "pull-requests",
+  "actions",
+  "projects",
+  "security",
+  "dependabot",
+  "scanning",
+  "insights",
+  "settings",
+  "pages",
+  ["claude", "Claude"],
+  ["claude-settings", "Claude settings"],
+  ["desktop-app", "Claude desktop app"],
+  ["blockers", "Blockers"],
+  ["tokens", "Tokens"],
+  ["instructions", "Instructions"]
+ ],
+ "web": true,
+ "packs": [
+  "Colorado-Startups/claudius@7c1453ae46d85bb5ce82397e2b23c3b5e8769ceb"
+ ]
+}
