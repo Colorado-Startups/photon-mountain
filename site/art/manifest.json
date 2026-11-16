@@ -1,0 +1,69 @@
+{
+  "$comment": "The art this site shows, copied byte for byte from Colorado-Startups/brand at the commit below. The brand repo owns the art: its direction, render queue, call counter and licences (art/LICENSES.md). Every file is AI-made and carries its provenance XMP; scripts/art.mjs refuses a file whose hash differs from this list and keeps that XMP in every variant it makes. No copyright is claimed in the images (brand decision 5).",
+  "brand_commit": "581e7e9d85e0be3ce98ddabfeb84f43cbdc680a6",
+  "label": "AI-made",
+  "images": [
+    {
+      "id": "boulder",
+      "file": "boulder.jpg",
+      "brand_path": "dist/places/boulder.jpg",
+      "sha256": "2816f12e39305c407c7e400702f734c79440429f52ef3724a5971d066bf9072c",
+      "width": 1440,
+      "height": 720,
+      "place": "Boulder",
+      "alt": "Painting of Boulder's Flatirons as a city of light at dusk: glowing portals set in the red rock slabs, waterfalls, a great golden tree on the ridge, robed elves on stone bridges, and dragons in the starry sky.",
+      "caption": "Boulder, the research anchor, painted as a city of light.",
+      "model": "FIBO 2.0 (Bria), an edit of a public-domain photo by Jimbo Herndan"
+    },
+    {
+      "id": "golden",
+      "file": "golden.jpg",
+      "brand_path": "dist/places/golden.jpg",
+      "sha256": "10737f40c1cdff6ec90255fe2c25e68f8ef8a72e2724e9b15dc908bf9092b3c9",
+      "width": 1440,
+      "height": 720,
+      "place": "Golden",
+      "alt": "Painting of Golden's Table Mountain as a dwarven kingdom: a great stone gate with glowing windows cut into the cliff, armored dwarves with carts and steam engines on the road, and a stone serpent coiled in the grass by the creek.",
+      "caption": "Golden, the forge of the corridor, painted as a mountain kingdom.",
+      "model": "FIBO 2.0 (Bria), an edit of a CC BY photo of the Table Mountains"
+    },
+    {
+      "id": "denver",
+      "file": "denver.jpg",
+      "brand_path": "dist/places/denver.jpg",
+      "sha256": "cb8192cc9038eb9fada893a98480ba041dd722ab1dbc0b08ba605d8f0f0404ea",
+      "width": 1440,
+      "height": 720,
+      "place": "Denver",
+      "alt": "Painting of Denver's skyline and the Front Range behind a white-walled citadel with a golden great hall, knights on glowing white horses, townsfolk on the hill, white gryphons in the sky, and golden aspens.",
+      "caption": "Denver, the metro anchor, painted as a citadel of the plain.",
+      "model": "FIBO 2.0 (Bria), an edit of a public-domain USFWS photo"
+    },
+    {
+      "id": "crest",
+      "file": "crest.png",
+      "brand_path": "dist/crests/photon-mountain-512.png",
+      "sha256": "1e226de5209a9ff15098180b4b4e7b1cf88d0e306ed9118c295d684432dcc9c1",
+      "width": 512,
+      "height": 512,
+      "place": "Photon Mountain",
+      "alt": "The Photon Mountain crest: a white and gold dragon of light on a violet shield, in a gold rim with golden wings.",
+      "caption": "The light dragon, Photon Mountain's crest.",
+      "model": "FIBO 2.0 (Bria), an edit of the Colorado Startups emblem"
+    }
+  ],
+  "clips": [
+    {
+      "id": "light-loop",
+      "poster": "boulder",
+      "sources": [
+        { "file": "light-loop.webm", "type": "video/webm", "brand_path": "dist/clips/photonics.webm", "sha256": "494c8b69c52433dd6977debd54d47b2632f302b527c7226b87cff55f0d651425" },
+        { "file": "light-loop.mp4", "type": "video/mp4", "brand_path": "dist/clips/photonics.mp4", "sha256": "9923f4ace75554f8a64d48c7799978c89e0af795ae563f834c222370353bdeb7" }
+      ],
+      "seconds": 4.04,
+      "alt": "Looping video of the Boulder painting: the portals in the rock glow and pulse, and motes of light drift up from the lanterns.",
+      "caption": "Light from Boulder, looped.",
+      "model": "LTX-2.5 image-to-video of the Boulder painting"
+    }
+  ]
+}

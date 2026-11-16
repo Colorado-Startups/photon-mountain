@@ -30,3 +30,6 @@ site/.astro/
 
 # The assembled Pages site (pages.yml)
 _pages/
+
+# Art variants written by site/scripts/art.mjs at build
+site/public/art/
