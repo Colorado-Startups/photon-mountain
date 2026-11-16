@@ -17,58 +17,111 @@
         }
       ],
       "skip_dirs": [
+        "node_modules",
         "worktrees",
+        "vendor",
+        "dist",
+        "build",
+        "coverage",
+        ".venv",
+        ".astro",
+        ".wrangler",
         "local",
-        "quality"
+        "quality",
+        "_pages"
       ],
       "areas": [
         {
           "doc": "README.md",
-          "area": ["00_project_system/", "01_doctrine/", "02_substance/", "03_deliverables/", "04_tools/", "LICENSES/"]
+          "area": [
+            "00_project_system/",
+            "01_doctrine/",
+            "02_substance/",
+            "03_deliverables/",
+            "04_tools/",
+            "LICENSES/"
+          ]
         },
         {
           "doc": "CLAUDE.md",
-          "area": [".claude/", ".githooks/", ".github/workflows/", "04_tools/"]
+          "area": [
+            ".claude/",
+            ".githooks/",
+            ".github/workflows/",
+            "04_tools/"
+          ]
         },
         {
           "doc": "AGENTS.md",
-          "area": ["CLAUDE.md", ".claude/"]
+          "area": [
+            "CLAUDE.md",
+            ".claude/"
+          ]
         },
         {
           "doc": "CONTRIBUTING.md",
-          "area": [".github/ISSUE_TEMPLATE/", ".github/pull_request_template.md", ".github/dco.yml", ".githooks/"]
+          "area": [
+            ".github/ISSUE_TEMPLATE/",
+            ".github/pull_request_template.md",
+            ".github/dco.yml",
+            ".githooks/"
+          ]
         },
         {
           "doc": "SECURITY.md",
-          "area": [".github/workflows/", ".githooks/", ".claude/hooks/"]
+          "area": [
+            ".github/workflows/",
+            ".githooks/",
+            ".claude/hooks/"
+          ]
         },
         {
           "doc": "THREAT-MODEL.md",
-          "area": ["04_tools/", ".githooks/", ".github/workflows/", ".claude/hooks/"]
+          "area": [
+            "04_tools/",
+            ".githooks/",
+            ".github/workflows/",
+            ".claude/hooks/"
+          ]
         },
         {
           "doc": "SUPPORT.md",
-          "area": [".github/ISSUE_TEMPLATE/"]
+          "area": [
+            ".github/ISSUE_TEMPLATE/"
+          ]
         },
         {
           "doc": "GOVERNANCE.md",
-          "area": [".github/CODEOWNERS"]
+          "area": [
+            ".github/CODEOWNERS"
+          ]
         },
         {
           "doc": "MAINTAINERS.md",
-          "area": [".github/CODEOWNERS"]
+          "area": [
+            ".github/CODEOWNERS"
+          ]
         },
         {
           "doc": "LICENSING.md",
-          "area": ["LICENSE", "LICENSES/"]
+          "area": [
+            "LICENSE",
+            "LICENSES/"
+          ]
         },
         {
           "doc": "MASTER_PLAN.md",
-          "area": ["00_project_system/"]
+          "area": [
+            "00_project_system/"
+          ]
         },
         {
           "doc": "project_context.md",
-          "area": ["01_doctrine/", "02_substance/", "03_deliverables/"]
+          "area": [
+            "01_doctrine/",
+            "02_substance/",
+            "03_deliverables/"
+          ]
         },
         {
           "doc": "cowork_project_instructions.md",
@@ -76,15 +129,23 @@
         },
         {
           "doc": ".claude/**",
-          "area": [".claude/", "04_tools/voice_lint.py"]
+          "area": [
+            ".claude/",
+            "04_tools/voice_lint.py"
+          ]
         },
         {
           "doc": "00_project_system/github_setup_plan.md",
-          "area": [".github/", ".githooks/"]
+          "area": [
+            ".github/",
+            ".githooks/"
+          ]
         },
         {
           "doc": "**",
-          "area": ["{dir}/"]
+          "area": [
+            "{dir}/"
+          ]
         }
       ]
     }
