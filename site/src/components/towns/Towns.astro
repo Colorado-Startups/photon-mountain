@@ -33,7 +33,10 @@ const cards = TOWNS.map((t) => ({ ...t, ...townStats(t, companies, anchors), img
               <source type="image/webp" srcset={srcset(c.img)} sizes="(min-width: 60rem) 34rem, 100vw" />
               <img src={variant(c.img, 960)} alt={c.img.alt} width={c.img.width} height={c.img.height} loading="lazy" decoding="async" />
             </picture>
-            <figcaption>{c.img.caption} <span class="tag">{label}</span></figcaption>
+            <figcaption>
+              {c.img.caption} <span class="tag">{label}</span>
+              {c.img.photo && <span class="credit">Photo: <a href={c.img.photo.url}>{c.img.photo.by}</a>, {c.img.photo.licence}</span>}
+            </figcaption>
           </figure>
         ) : (
           <p class="clock"><span class="tag2">2026</span> The photonic-IC fab at the Quantum Commons is targeted for 2026 and not yet open.</p>
@@ -62,6 +65,8 @@ const cards = TOWNS.map((t) => ({ ...t, ...townStats(t, companies, anchors), img
   figure img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; }
   figcaption { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.6rem 1rem; background: var(--ink); color: var(--color-text-secondary-on-dark); font-size: var(--step0); }
   .tag { padding: 0.1rem 0.5rem; border-radius: 999rem; border: var(--hairline) solid var(--gold); color: var(--color-white); font-family: var(--font-mono); font-size: var(--step0); }
+  .credit { color: var(--color-text-dim-on-dark); }
+  .credit a { color: var(--color-white); }
   .clock { align-self: end; margin: 0 1.25rem 1.25rem; padding: 1rem; border: 0.125rem dashed var(--gold); border-radius: 0.75rem; color: var(--ink-2); max-width: none; }
   .tag2 { display: inline-block; margin-right: 0.5rem; padding: 0.1rem 0.5rem; border-radius: 999rem; background: var(--ink); color: var(--color-white); font-family: var(--font-mono); font-size: var(--step0); }
 </style>

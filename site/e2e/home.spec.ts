@@ -42,4 +42,10 @@ test.describe("the home page", () => {
     await expect(towns).toHaveText(["Boulder", "Golden", "Arvada", "Denver"]);
     await expect(page.locator("[data-section=towns] .clock")).toContainText("targeted for 2026");
   });
+
+  test("credits the photo behind each town painting, Golden's CC BY photographer included", async ({ page }) => {
+    await page.goto("/");
+    const golden = page.locator("[data-section=towns] li", { has: page.locator("h3", { hasText: "Golden" }) });
+    await expect(golden.locator("figcaption")).toContainText("James St. John, CC BY 2.0");
+  });
 });
