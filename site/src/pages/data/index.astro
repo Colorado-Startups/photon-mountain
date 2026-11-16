@@ -1,5 +1,6 @@
 ---
-// The data page: the record as files, as plain text an assistant reads, and as one prompt to paste.
+// The data page: the record as files, as plain text an assistant reads, as one prompt to paste, and as a
+// read-only MCP server (src/mcp/). Setup follows each tool's docs, read 2026-11-16.
 // It lists what src/ai/content.ts lists, so this page and llms.txt cannot drift apart.
 import Base from "../../layouts/Base.astro";
 import { DATA, PAGES, SITE, mdPath } from "../../ai/content";
@@ -20,13 +21,22 @@ const flow = [
   { t: "Files and text", s: `${DATA.length} files, llms.txt, ${PAGES.length} Markdown pages` },
   { t: "Your assistant", s: "Claude, Claude Code, OpenCode or any model" },
 ];
+const mcpUrl = `${SITE}/mcp`;
+const tools = ["search", "list_companies", "list_anchors", "list_sites", "get_site", "get_figures"];
+const json = (v: object) => JSON.stringify(v, null, 2);
+const connect = [
+  { id: "mcp-claude", who: "Claude", where: "claude.ai and the apps", steps: "Customize, then Connectors, then + Add and Add custom connector. Paste this address, choose No sign in, and add it.", code: mcpUrl },
+  { id: "mcp-code", who: "Claude Code", where: "In your terminal", code: `claude mcp add --transport http photon-mountain ${mcpUrl}` },
+  { id: "mcp-opencode", who: "OpenCode", where: "In opencode.json", code: json({ $schema: "https://opencode.ai/config.json", mcp: { servers: { "photon-mountain": { type: "remote", url: mcpUrl, oauth: false } } } }) },
+  { id: "mcp-opencode-v1", who: "OpenCode before V2", where: "In opencode.json", code: json({ $schema: "https://opencode.ai/config.json", mcp: { "photon-mountain": { type: "remote", url: mcpUrl, enabled: true } } }) },
+];
 const ways = [
   { who: "Claude", how: "Paste it in claude.ai or the app, then ask." },
   { who: "Claude Code", how: "Paste it at the prompt in your terminal." },
   { who: "OpenCode", how: "Paste it in a session, with any model." },
 ];
 ---
-<Base title="Connect your AI" description="Download the Photon Mountain record, or point Claude, Claude Code or OpenCode at it with one prompt.">
+<Base title="Connect your AI" description="Download the Photon Mountain record, point an assistant at it with one prompt, or connect Claude, Claude Code or OpenCode over MCP.">
   <section class="head wrap">
     <p class="eyebrow">Open data</p>
     <h1>Connect your AI</h1>
@@ -40,11 +50,27 @@ const ways = [
     <h2 id="paste">Paste one prompt</h2>
     <div class="prompt">
       <pre id="prompt-text">{prompt}</pre>
-      <button type="button" class="copy" data-copy="prompt-text" hidden>Copy the prompt</button>
+      <button type="button" class="copy" data-copy="prompt-text" data-done="Copied. Paste it into your assistant." hidden>Copy the prompt</button>
     </div>
     <p class="status" role="status" data-status></p>
     <ul class="ways" role="list">
       {ways.map((w) => <li><b>{w.who}</b><span>{w.how}</span></li>)}
+    </ul>
+  </section>
+
+  <section class="block wrap" aria-labelledby="mcp">
+    <h2 id="mcp">Connect over MCP</h2>
+    <p class="note">A read-only server with six tools. No key, no sign-in.</p>
+    <ul class="tools" role="list">{tools.map((t) => <li>{t}</li>)}</ul>
+    <ul class="connect" role="list">
+      {connect.map((c) => (
+        <li>
+          <b>{c.who}</b><span>{c.where}</span>
+          {c.steps && <p>{c.steps}</p>}
+          <pre id={c.id}>{c.code}</pre>
+          <button type="button" class="copy" data-copy={c.id} aria-label={`Copy the ${c.who} setup`} hidden>Copy</button>
+        </li>
+      ))}
     </ul>
   </section>
 
@@ -83,7 +109,11 @@ const ways = [
       const text = document.getElementById(button.dataset.copy ?? "")?.textContent ?? "";
       try {
         await navigator.clipboard.writeText(text);
-        if (status) status.textContent = "Copied. Paste it into your assistant.";
+        // The live region speaks; the button itself shows it, since the region may be off screen on a phone.
+        if (status) status.textContent = button.dataset.done ?? "Copied.";
+        const label = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => (button.textContent = label), 2000);
       } catch {
         if (status) status.textContent = "Copy did not work here. Select the prompt and copy it instead.";
       }
@@ -106,6 +136,12 @@ const ways = [
   .status { min-height: 1.5em; font-size: var(--step0); color: var(--ink-2); }
   .ways, .texts { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.75rem; margin: 0; padding: 0; }
   .ways li, .texts li { display: grid; gap: 0.125rem; padding: 0.75rem 1rem; background: var(--surface); border: var(--hairline) solid var(--rule); border-radius: 0.5rem; }
+  .tools { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; }
+  .tools li { font-family: var(--font-mono); font-size: var(--step0); padding: 0.25rem 0.625rem; border: var(--hairline) solid var(--gold); border-radius: 1rem; background: var(--surface); }
+  .connect { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1rem; margin: 0; padding: 0; }
+  .connect li { display: grid; gap: 0.5rem; align-content: start; justify-items: start; padding: 1rem; background: var(--surface); border: var(--hairline) solid var(--rule); border-radius: 0.5rem; }
+  .connect span, .connect p { color: var(--ink-2); font-size: var(--step0); }
+  .connect pre { margin: 0; width: 100%; padding: 0.75rem; background: var(--gold-wash); border-radius: 0.375rem; font-family: var(--font-mono); font-size: var(--step0); white-space: pre-wrap; overflow-wrap: anywhere; }
   .scroll { overflow-x: auto; }
   table { border-collapse: collapse; width: 100%; font-size: var(--step0); }
   th, td { text-align: left; padding: 0.625rem 0.75rem; border-bottom: var(--hairline) solid var(--rule); }

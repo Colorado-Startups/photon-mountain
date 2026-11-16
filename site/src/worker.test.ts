@@ -23,6 +23,19 @@ describe("the Worker", () => {
     expect(seen).toEqual(["/no-such-page/"]);
   });
 
+  it("serves the server card and the AI catalog with their media types", async () => {
+    const card = await worker.fetch(new Request("https://photonmountain.co/mcp/server-card"), env());
+    expect(card.headers.get("content-type")).toBe("application/mcp-server-card+json");
+    expect((await card.json()).remotes[0].url).toBe("https://photonmountain.co/mcp");
+    const cat = await worker.fetch(new Request("https://photonmountain.co/.well-known/ai-catalog.json"), env());
+    expect(cat.headers.get("content-type")).toBe("application/ai-catalog+json");
+    expect((await cat.json()).entries[0].url).toBe("https://photonmountain.co/mcp/server-card");
+    expect(card.headers.get("cache-control")).toBe("public, max-age=3600");
+    const at = (method: string) => worker.fetch(new Request("https://photonmountain.co/mcp/server-card", { method }), env());
+    expect((await at("OPTIONS")).status).toBe(204);
+    expect((await at("POST")).status).toBe(405);
+  });
+
   it("answers 429 with its own headers when the rate limit says no", async () => {
     const res = await call(env(false));
     expect(res.status).toBe(429);
