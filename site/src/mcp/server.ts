@@ -10,6 +10,8 @@ import { TOWNS, inTown } from "../lib/home";
 import { SEGMENTS } from "../lib/light";
 import { CATS } from "../lib/mapdata";
 
+export const VERSION = "1.0.0";
+
 export interface McpRecord { companies: Company[]; anchors: Anchor[]; sites: Site[]; figures: Figure[] }
 
 /** Hosts the handler answers on; any other Host header is refused (DNS-rebinding guard). */
@@ -64,7 +66,7 @@ const town = z.enum(TOWNS.map((t) => t.name) as [string, ...string[]]).optional(
 export function createServer(r: McpRecord): McpServer {
   const t = tools(r);
   const server = new McpServer(
-    { name: "photon-mountain", version: "1.0.0" },
+    { name: "photon-mountain", version: VERSION },
     { instructions: "Photon Mountain is Colorado's Front Range corridor for computing with light: Boulder, Golden, Arvada and Denver. Every row names its source; cite it. Figures carry a clock: today (operating now), 2026 (targeted this year) or horizon (later). Keep them apart." },
   );
   server.registerTool("search", { title: "Search the record", description: "Find companies, research anchors and map sites by name, city or what they build.", annotations: readOnly,

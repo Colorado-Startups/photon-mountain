@@ -1,6 +1,8 @@
-// The Worker in front of the static site. wrangler.jsonc runs it first only for /mcp; every page and data
-// file is served as a static asset without it. A path that matches no asset also lands here, and goes back
-// to the asset layer for its 404 page. The MCP tools read the built /data/ files, so the record has one copy.
+// The Worker in front of the static site. wrangler.jsonc runs it first only for /mcp, its server card and the
+// AI catalog; every page and data file is served as a static asset without it. A path that matches no asset
+// also lands here, and goes back to the asset layer for its 404 page. The MCP tools read the built /data/
+// files, so the record has one copy.
+import { CARD_TYPE, CATALOG_TYPE, aiCatalog, serverCard } from "./mcp/card";
 import { type McpRecord, mcpHandler } from "./mcp/server";
 
 export interface Env {
@@ -38,6 +40,10 @@ function withHeaders(res: Response): Response {
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+    const doc = (body: object, type: string) =>
+      withHeaders(new Response(JSON.stringify(body, null, 1), { headers: { "content-type": type, "access-control-allow-origin": "*" } }));
+    if (url.pathname === "/mcp/server-card") return doc(serverCard(url.origin), CARD_TYPE);
+    if (url.pathname === "/.well-known/ai-catalog.json") return doc(aiCatalog(url.origin), CATALOG_TYPE);
     if (url.pathname !== "/mcp") return env.ASSETS.fetch(request);
     // About one call a second per address, counted per Cloudflare location (rate-limit binding docs).
     const { success } = await env.MCP_LIMIT.limit({ key: request.headers.get("cf-connecting-ip") ?? "unknown" });
