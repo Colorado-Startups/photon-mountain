@@ -17,6 +17,7 @@ export const HEADERS: Record<string, string> = {
   "X-Robots-Tag": "noindex",
 };
 
+const MAX_BODY = 16_384;
 let handler: Promise<ReturnType<typeof mcpHandler>> | undefined;
 
 async function load(env: Env, base: URL): Promise<McpRecord> {
@@ -42,8 +43,15 @@ export default {
     // About one call a second per address, counted per Cloudflare location (rate-limit binding docs).
     const { success } = await env.MCP_LIMIT.limit({ key: request.headers.get("cf-connecting-ip") ?? "unknown" });
     if (!success) return withHeaders(new Response("Too many requests. Try again in a minute.", { status: 429, headers: { "Retry-After": "60" } }));
-    // One handler per isolate; a failed load is dropped so the next request tries again.
+    // The tools take small JSON; a large body would spend CPU before any tool runs.
+    if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY) return withHeaders(new Response("Request too large.", { status: 413 }));
+    // One handler per isolate; a failed load is dropped so the next request tries again, and answers 503.
     handler ??= load(env, url).then(mcpHandler).catch((err) => { handler = undefined; throw err; });
-    return withHeaders(await (await handler).fetch(request));
+    try {
+      return withHeaders(await (await handler).fetch(request));
+    } catch (err) {
+      console.error("mcp: the record did not load", err);
+      return withHeaders(new Response("The record is not available right now. Try again in a minute.", { status: 503, headers: { "Retry-After": "60" } }));
+    }
   },
 };
