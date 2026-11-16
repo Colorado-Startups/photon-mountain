@@ -13,6 +13,14 @@ const OUT = here("../public/art/");
 
 const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 
+const SAFE = /^[a-z0-9-]+(\.[a-z0-9]+)?$/;
+
+/** Throws unless a manifest id or file name is a plain name, so no entry writes outside public/art/. */
+export function safeName(name) {
+  if (typeof name !== "string" || !SAFE.test(name)) throw new Error(`art: unsafe name ${JSON.stringify(name)}`);
+  return name;
+}
+
 /** Throws when a file's bytes differ from the manifest's hash. */
 export function checkHash(name, buf, expected) {
   const got = sha256(buf);
@@ -33,6 +41,8 @@ async function main() {
   const manifest = JSON.parse(await readFile(here("../art/manifest.json"), "utf8"));
   await mkdir(OUT, { recursive: true });
   for (const img of manifest.images) {
+    safeName(img.id);
+    safeName(img.file);
     const buf = await readFile(ORIGINALS + img.file);
     checkHash(img.file, buf, img.sha256);
     for (const v of await variants(buf, img.width)) await writeFile(`${OUT}${img.id}-${v.width}.webp`, v.data);
@@ -40,6 +50,7 @@ async function main() {
   }
   for (const clip of manifest.clips) {
     for (const src of clip.sources) {
+      safeName(src.file);
       checkHash(src.file, await readFile(ORIGINALS + src.file), src.sha256);
       await copyFile(ORIGINALS + src.file, OUT + src.file);
     }

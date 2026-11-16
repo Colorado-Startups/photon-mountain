@@ -5,6 +5,8 @@ export const WIDTHS = [480, 960, 1440];
 
 export interface ArtImage {
   id: string; file: string; width: number; height: number; place: string; alt: string; caption: string; model: string;
+  landmark?: string;
+  photo?: { by: string; licence: string; url: string };
 }
 
 export const images = manifest.images as ArtImage[];

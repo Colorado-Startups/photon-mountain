@@ -1,13 +1,89 @@
 ---
-// Launch plan wave 2 or 3 replaces this stub page; its route is already in e2e/routes.ts.
+// The world of Photon Mountain: the real places first, then the paintings made from them, every one labeled
+// AI-made, with what each kept from the real place and how it was made. The art is the brand repo's.
 import Base from "../../layouts/Base.astro";
+import { clips, image, images, label, srcset, variant } from "../../lib/art";
+
+const crest = image("crest");
+const paintings = images.filter((i) => i.landmark);
+const loop = clips[0];
+const poster = image(loop.poster);
+const steps = [
+  { n: "1", t: "A photo of the real place", s: "Public-domain or openly licensed" },
+  { n: "2", t: "Painted with FIBO 2.0", s: "The landmark stays where it is" },
+  { n: "3", t: "Provenance kept", s: "The model and source ride in each file" },
+  { n: "4", t: "Labeled AI-made", s: "On every picture and clip" },
+];
 ---
-<Base title="The world of Photon Mountain" description="The paintings of Boulder, Golden and Denver, and the light dragon of Photon Mountain.">
-  <section class="wrap stub-page">
-    <h1>The world of Photon Mountain</h1>
-    <p>The paintings of Boulder, Golden and Denver, and the light dragon of Photon Mountain.</p>
+<Base title="The world of Photon Mountain" description="Boulder, Golden and Denver, painted as the cities of light they are becoming, with the light dragon of Photon Mountain.">
+  <section class="intro wrap">
+    <div>
+      <p class="eyebrow">Place first, then the story</p>
+      <h1>The world of Photon Mountain</h1>
+      <p class="lede">Three real towns, painted as cities of light. Each painting keeps its landmark.</p>
+    </div>
+    <figure class="crest">
+      <img src={variant(crest, 480)} srcset={srcset(crest)} sizes="16rem" alt={crest.alt} width={crest.width} height={crest.height} decoding="async" />
+      <figcaption>{crest.caption} <span class="tag">{label}</span></figcaption>
+    </figure>
+  </section>
+
+  <ol class="steps wrap" role="list" aria-label="How each painting is made">
+    {steps.map((x) => <li><span class="n">{x.n}</span><span class="t">{x.t}</span><span class="s">{x.s}</span></li>)}
+  </ol>
+
+  <ul class="gallery wrap" role="list">
+    {paintings.map((p) => (
+      <li>
+        <figure>
+          <picture>
+            <source type="image/webp" srcset={srcset(p)} sizes="(min-width: 72rem) 72rem, 100vw" />
+            <img src={variant(p, 960)} alt={p.alt} width={p.width} height={p.height} loading="lazy" decoding="async" />
+          </picture>
+          <figcaption>
+            <span class="place">{p.place}</span>
+            <span>Kept: {p.landmark}</span>
+            <span class="model">{p.model}</span>
+            {p.photo && <span class="credit">Photo: <a href={p.photo.url}>{p.photo.by}</a>, {p.photo.licence}</span>}
+            <span class="tag">{label}</span>
+          </figcaption>
+        </figure>
+      </li>
+    ))}
+  </ul>
+
+  <section class="loop wrap" aria-labelledby="loop-title">
+    <h2 id="loop-title">Light from Boulder</h2>
+    <figure>
+      <video controls muted loop playsinline preload="none" poster={variant(poster, 960)} width={poster.width} height={poster.height} aria-label={loop.alt}>
+        {loop.sources.map((s) => <source src={`/art/${s.file}`} type={s.type} />)}
+      </video>
+      <figcaption>{loop.caption} {loop.model}. <span class="tag">{label}</span></figcaption>
+    </figure>
   </section>
 </Base>
+
 <style>
-  .stub-page { display: grid; gap: 1rem; padding-block: 4rem; }
+  .intro { display: grid; gap: 2rem; align-items: center; padding-block: 3.5rem 1.5rem; }
+  @media (min-width: 48rem) { .intro { grid-template-columns: minmax(0, 1fr) 16rem; } }
+  .lede { margin-top: 1rem; font-size: var(--step3); color: var(--ink-2); }
+  .crest { margin: 0; display: grid; gap: 0.5rem; justify-items: center; }
+  .crest img { width: 16rem; height: auto; border-radius: 1rem; background: var(--ink); }
+  .crest figcaption { display: flex; gap: 0.5rem; align-items: center; font-size: var(--step0); color: var(--ink-2); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.75rem; padding: 0 0 2rem; margin-block: 0; list-style: none; }
+  .steps li { display: grid; gap: 0.2rem; padding: 1rem; border-radius: 0.75rem; border: var(--hairline) solid var(--rule); background: var(--surface); }
+  .n { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--ink); color: var(--color-white); font: 700 var(--step1) var(--font-display); }
+  .t { font-weight: 600; }
+  .s { color: var(--ink-2); font-size: var(--step0); }
+  .gallery { display: grid; gap: 2rem; padding: 0 0 2rem; margin-block: 0; list-style: none; }
+  figure { margin: 0; }
+  .gallery img, .loop video { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border-radius: 1rem 1rem 0 0; background: var(--ink); }
+  .gallery figcaption, .loop figcaption { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; padding: 0.75rem 1rem; border-radius: 0 0 1rem 1rem; background: var(--ink); color: var(--color-text-secondary-on-dark); font-size: var(--step0); }
+  .place { font: 700 var(--step2) var(--font-display); color: var(--color-white); }
+  .model, .credit { color: var(--color-text-dim-on-dark); }
+  .credit a { color: var(--color-white); }
+  .tag { padding: 0.1rem 0.5rem; border-radius: 999rem; border: var(--hairline) solid var(--gold); font-family: var(--font-mono); }
+  .gallery .tag, .loop .tag { color: var(--color-white); }
+  .crest .tag { color: var(--ink); }
+  .loop { display: grid; gap: 1rem; padding-block: 1rem 4rem; }
 </style>
