@@ -144,7 +144,10 @@ run_check() {
   if [ "$status" -eq 0 ]; then
     return 0
   fi
-  if [ "$status" -eq 1 ] && printf '%s\n' "$output" | grep -qE ':[0-9]+: FAIL \['; then
+  # A here-string, not `printf | grep -q`: under pipefail, grep -q exits at the
+  # first match, printf can then die of SIGPIPE, and the pipeline reads as 141
+  # (no match). That made a real FAIL look like a crash and fail open.
+  if [ "$status" -eq 1 ] && grep -qE ':[0-9]+: FAIL \[' <<<"$output"; then
     return 1
   fi
   # Non-zero with no FAIL finding is a crash, not a verdict. Fail open, loudly.
@@ -184,7 +187,7 @@ self_test() {
   # A warning is advisory. It must print and still exit 0.
   local warn_out
   warn_out="$(run_check "$tmp/warn.md" 2>/dev/null)"
-  if [ "$?" -eq 0 ] && printf '%s\n' "$warn_out" | grep -qE ':[0-9]+: WARN \['; then
+  if [ "$?" -eq 0 ] && grep -qE ':[0-9]+: WARN \[' <<<"$warn_out"; then
     echo "self-test: warning-only sample prints and exits 0: OK"
   else
     ok=1; echo "self-test: warning-only sample did not print and exit 0: FAIL"
@@ -197,6 +200,18 @@ self_test() {
     echo "self-test: a lint crash fails open: OK"
   else
     ok=1; echo "self-test: a lint crash blocked like a FAIL: FAIL"
+  fi
+
+  # Output larger than a pipe buffer, so a `printf | grep -q` under pipefail
+  # would die of SIGPIPE. A real FAIL must still block.
+  local i
+  { printf '# Many\n\n'; for i in $(seq 1 2500); do
+      printf 'Line %s has an em dash %s here.\n\n' "$i" "$(printf '\xe2\x80\x94')"; done; } > "$tmp/many.md"
+  run_check "$tmp/many.md" >/dev/null 2>&1
+  if [ "$?" -eq 1 ]; then
+    echo "self-test: a FAIL in large output still blocks: OK"
+  else
+    ok=1; echo "self-test: a FAIL in large output failed open: FAIL"
   fi
 
   run_check "$tmp/thing.py" >/dev/null 2>&1
