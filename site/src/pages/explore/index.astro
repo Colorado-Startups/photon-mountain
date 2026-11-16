@@ -10,11 +10,14 @@ import { SEGMENTS } from "../../lib/light";
 const entries = toEntries(companies, anchors);
 const coms = entries.filter((e) => e.kind === "company");
 const bySeg = tally(coms, "segment");
-const byRing = tally(coms, "ring");
+const byRing = tally(entries, "ring");
+const comRing = tally(coms, "ring");
 const byTown = tally(entries, "towns");
 const kinds = tally(entries, "kind");
 const segs = SEGMENTS.map((s) => ({ id: slug(s.short), label: s.short, n: bySeg[slug(s.short)] ?? 0, branch: s.branch }));
-const rings = ["Core", "Ring", "Statewide", "Roots only"].map((r) => ({ id: slug(r), label: r, n: byRing[slug(r)] ?? 0 }));
+const RINGS = ["Core", "Ring", "Statewide", "Roots only"];
+const rings = RINGS.map((r) => ({ id: slug(r), label: r, n: byRing[slug(r)] ?? 0 }));
+const comRings = RINGS.map((r) => ({ id: slug(r), label: r, n: comRing[slug(r)] ?? 0 }));
 const max = Math.max(...segs.map((s) => s.n));
 const groups = [
   { key: "kind", label: "Kind", chips: [{ id: "company", label: "Companies", n: kinds.company ?? 0 }, { id: "anchor", label: "Research anchors", n: kinds.anchor ?? 0 }] },
@@ -39,10 +42,10 @@ const groups = [
       </figure>
       <figure class="chart">
         <figcaption>Companies by where they sit</figcaption>
-        <div class="stack" role="img" aria-label={rings.map((r) => `${r.label} ${r.n}`).join(", ")}>
-          {rings.filter((r) => r.n > 0).map((r) => <span class={`seg r-${r.id}`} style={`--n: ${r.n}`}></span>)}
+        <div class="stack" role="img" aria-label={comRings.map((r) => `${r.label} ${r.n}`).join(", ")}>
+          {comRings.filter((r) => r.n > 0).map((r) => <span class={`seg r-${r.id}`} style={`--n: ${r.n}`}></span>)}
         </div>
-        <ul class="keys" role="list">{rings.map((r) => <li><span class={`k r-${r.id}`} aria-hidden="true"></span>{r.label} <b>{r.n}</b></li>)}</ul>
+        <ul class="keys" role="list">{comRings.map((r) => <li><span class={`k r-${r.id}`} aria-hidden="true"></span>{r.label} <b>{r.n}</b></li>)}</ul>
       </figure>
     </div>
   </section>
@@ -83,6 +86,8 @@ const groups = [
     const shown = root.querySelector<HTMLElement>("[data-shown]");
     const f: Filters = fromQuery(location.search);
     const groups = ["kind", "ring", "segment", "town"] as const;
+    // A query value with no chip (a stale or mistyped link) would hide everything with no way back; drop it.
+    for (const g of groups) f[g] = f[g].filter((v) => chips.some((b) => b.dataset.key === g && b.dataset.val === v));
     if (input) input.value = f.q;
     const apply = () => {
       const q = f.q.trim().toLowerCase();

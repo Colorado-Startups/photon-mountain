@@ -27,4 +27,21 @@ test.describe("the explorer", () => {
     expect(await visible.count()).toBeGreaterThan(0);
     for (const c of await visible.all()) await expect(c.locator("a.src")).toHaveAttribute("href", /^https?:\/\//);
   });
+
+  test("each Where chip's count is what it shows, anchors included", async ({ page }) => {
+    await page.goto("/explore/");
+    for (const ring of ["core", "statewide"]) {
+      const chip = page.locator(`.chip[data-key=ring][data-val=${ring}]`);
+      const n = Number(await chip.locator(".cn").textContent());
+      await chip.click();
+      await expect(page.locator("[data-cards] > li:not([hidden])")).toHaveCount(n);
+      await chip.click();
+    }
+  });
+
+  test("ignores a query value no chip knows", async ({ page }) => {
+    await page.goto("/explore/?segment=no-such-thing");
+    await expect(page.locator("[data-shown]")).toHaveText(/^Showing all/);
+  });
 });
+
