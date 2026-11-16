@@ -117,7 +117,11 @@ Avoid: revolutionary; world-class (unattributed); hub (as a bare noun); "the Sil
 
 - The name is **Photon Mountain**: two words, both capitalized, never hyphenated, never abbreviated in external copy (no "PM," no "PhoMo").
 - Programs and sub-efforts are named under the master brand: "Photon Mountain [Program]". No sub-brand gets its own logo in v1.
-- The domains are photonmountain.com and photonmountain.org (registered 2026-06-23).
+- The site's domain is **photonmountain.co**, registered 2026-11-16; the site launches there. photonmountain.com and photonmountain.org were registered 2026-06-23.
+
+### Footer lines (added 2026-11-16)
+
+A footer ends with two lines, in this order and these exact words: "a Colorado Startups project", then "A joint effort with Colorado Compute". Set both in Inter Regular in the secondary text color (Granite on light surfaces). Never call the two organizations a coalition, and never merge their marks. Source: the Colorado Startups brand repo, `data/architecture.yaml` (`lockups.endorsement` and `colorado-compute`), read 2026-11-16.
 
 ---
 
@@ -146,7 +150,7 @@ Approved draft SVGs live at `01_doctrine/brand_assets/` (`concept_d_summit_sun.s
 
 ### Palette
 
-Light-derived and locally true: alpenglow on the peaks at dawn, a violet laser line, the night sky over the summit, snowfield, granite. No turquoise, no pine green, no flag gold anywhere (Colorado AI carryover is prohibited).
+Light-derived and locally true: alpenglow on the peaks at dawn, a violet laser line, the night sky over the summit, snowfield, granite, and the gold of full sun. Gold joined on 2026-11-16, per Paul; Alpenglow and Laser Violet stay. No turquoise, no pine green, and no Colorado flag gold (`#FFD100`) anywhere (Colorado AI carryover is prohibited).
 
 | Token | Hex | Role |
 |---|---|---|
@@ -160,6 +164,9 @@ Light-derived and locally true: alpenglow on the peaks at dawn, a violet laser l
 | Violet Bright | `#8F75FF` | Violet as text on dark surfaces. |
 | Violet Deep | `#5636D6` | Violet as text on light surfaces. |
 | Dawn Tint | `#FFE9E2` | Soft warm background tint. |
+| Gold | `#F2B233` | Third accent. Graphic only: fills, rules, map and chart marks. Never text. |
+| Gold Deep | `#8A6212` | Gold as text on light surfaces. |
+| Gold Tint | `#FFF3D6` | Soft gold background tint. |
 
 Contrast, computed 2026-07-05 (WCAG 2.1 relative-luminance method):
 
@@ -168,8 +175,10 @@ Contrast, computed 2026-07-05 (WCAG 2.1 relative-luminance method):
 - On dark: White on Summit Night 17.2; Alpenglow on Summit Night 5.5; Violet Bright on Summit Night 5.0 (AA).
 - Accent text on light: Alpenglow Deep on White 5.2; Violet Deep on White 7.3 (AA).
 - Graphic-or-large-only: Alpenglow on White 3.1; Laser Violet on White 4.4 (pass AA for large text only; never body text).
+- Gold text, computed 2026-11-16: Gold Deep on White 5.5, on Snowfield 5.1, on Gold Tint 5.0. Summit Night on Gold Tint 15.6 (AA).
+- Gold graphics, computed 2026-11-16: Gold on Summit Night 9.2, above WCAG's 3.0 floor for graphics. Gold on White scores 1.9 and on Snowfield 1.8. On light surfaces gold is decoration only, and a mark that carries meaning uses Gold Deep.
 
-Usage rules: Summit Night and the neutrals carry most of every layout. Alpenglow is the one loud thing per piece. Laser Violet is the supporting accent for data, links, and secondary highlights. Never set body text in an accent color.
+Usage rules: Summit Night and the neutrals carry most of every layout. Alpenglow is the one loud thing per piece. Laser Violet is the supporting accent for data, links, and secondary highlights. Gold is graphic only; Gold Deep carries gold text, and Gold Tint is a soft ground. Never set body text in an accent color.
 
 ### Typography
 
@@ -182,6 +191,8 @@ All three families are open-source (SIL Open Font License), on Google Fonts, and
 | Data, figures, code | Space Mono | Regular 400, Bold 700 |
 
 Space Grotesk is a proportional relative of Space Mono, so display and data feel like one family. Type scale for PT-6: display 40 to 64, headline 24 to 32, body 10.5 to 12 (print points) or 16 to 18 (web px), caption in Granite.
+
+The web scale (added 2026-11-16) has eight rem steps, `step0` to `step7`: 14, 16, 18, 24, 32, 40, 48 and 64 px. Captions are 14 px. The STEPn lines in the tokens block below are canonical.
 
 ### Supporting system
 
@@ -202,10 +213,23 @@ COLOR_LASER_VIOLET = "#7B5CFF"
 COLOR_VIOLET_BRIGHT = "#8F75FF"
 COLOR_VIOLET_DEEP  = "#5636D6"
 COLOR_DAWN_TINT    = "#FFE9E2"
+COLOR_GOLD         = "#F2B233"
+COLOR_GOLD_DEEP    = "#8A6212"
+COLOR_GOLD_TINT    = "#FFF3D6"
 FONT_DISPLAY = "Space Grotesk"   # Google Fonts, OFL
 FONT_BODY    = "Inter"           # Google Fonts, OFL
 FONT_MONO    = "Space Mono"      # Google Fonts, OFL
+STEP0 = 0.875   # rem; caption, 14 px
+STEP1 = 1       # body, 16 px
+STEP2 = 1.125   # body, 18 px
+STEP3 = 1.5     # headline, 24 px
+STEP4 = 2       # headline, 32 px
+STEP5 = 2.5     # display, 40 px
+STEP6 = 3       # display, 48 px
+STEP7 = 4       # display, 64 px
 ```
+
+For the web, `python3 04_tools/brand_tokens.py --emit DIR` writes these tokens to `DIR/tokens.json` and `DIR/tokens.css`.
 
 ---
 
@@ -233,6 +257,7 @@ FONT_MONO    = "Space Mono"      # Google Fonts, OFL
 
 ## Changelog
 
+- 2026-11-16 · Gold joins the palette, per Paul; Alpenglow and Laser Violet stay. Added Gold, Gold Deep and Gold Tint with their contrast, a web type scale in rem steps, the domain photonmountain.co, and the two footer lines.
 - 2026-11-12 · Usage policy v2, per Paul: "people can use whatever." Nothing is reserved, and the content is CC0 1.0. Section 4 updated, and the separate trademarks file removed.
 - 2026-07-05 · Tagline system and mark locked by Paul. Master tagline "Build with light."; the essence updated to match, from "Build on light". Supporting line "The era of intelligence, built with light." The mark is Summit Sun, picked from a four-concept review (`brand_assets/mark_review.html`); First Light demoted to an exploration.
 - 2026-07-05 · v1 locked (PT-4). Strategy, verbal identity, visual identity, governance note. Tagline pick and final mark assets await Paul's sign-off.

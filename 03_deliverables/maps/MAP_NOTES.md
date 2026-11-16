@@ -9,6 +9,20 @@ A site earns a dot only if its headline work is (a) light or photonics itself, o
 
 Approximate pins awaiting better imagery or site plans: Quantum Commons PIC Fab (campus pin; building not yet visible in imagery), NLR EMAPS (east side of campus, under construction, completion expected 2027), STEP (campus extent), RAIL (placed from the campus map), Flatirons Control Center (sited from builder descriptions), Quantum Commons Labs (georeferenced from satellite imagery), Glo Park (development parcel), plus the address-anchored Mines dots (CoorsTek Center, Colorado Fuel Cell Center; pins welcome). Dated statuses to re-verify when touched: Glo Park's projected early-2026 opening (per 2023 reporting), the CoCo train's November 2026 ballot question, NCAR's NSF restructuring review, CU Denver's Engineering, Design and Computing Building (unverified, project pages taken down), Quantum Commons fab and labs build-out through 2026, NQN completion (2028-29), and EMAPS completion (2027).
 
+## Revision 8a (2026-11-16): the 7z building facts re-checked; seven note corrections
+
+Every note Revision 7z left unchecked was read against a primary source on 2026-11-16. Seven notes changed, each byte-identical across the GeoJSON, KML, HTML and JSX:
+
+- **NLR South Table Mountain.** The building count is dropped, because no NLR page gives one. The acreage stands, per NLR.
+- **CU Denver.** CityCenter works from Room 1110, per CU Denver. Smart Futures Lab paused its incubator and accelerator after its EDA funding ended, per the lab.
+- **Colorado Fuel Cell Center.** Mines and NLR now partner through the Golden Nexus, which includes USGS, per Mines.
+- **MSU Denver AES Building.** York lists a facility there in its FY2025 annual report. Its headquarters is in Greenwood Village, per the same filing.
+- **Discovery Learning Center.** The NCF is now part of COSINC, which serves more than 370 users, per CU Boulder. The old "100-plus researchers" is dropped.
+- **NIST Building 3.** The National Academies date occupancy to May 2018, and NIST's 2026 master plan dates completion to 2017. The note names both.
+- **STEP.** "Renovation underway" is dropped. No 2025 or 2026 NLR source gives its status.
+
+Confirmed unchanged: NIST's 206 acres and Buildings 1 and 24, per NIST's May 2026 master plan. ESIF's 185,000 sq ft and 15 labs, and the Flatirons Campus's 305 acres, per NLR. Venture Partners, per CU. The Old Main (1876) and Guggenheim (1906) dates, per CU and Mines. Building 1's Central Radio Propagation Laboratory name was found only in search results. The roster stays at 53 markers, and `04_tools/marker_parity.py` passes. The live Felt map needs these seven edits as well as 7z's four.
+
 ## Revision 8 (2026-11-15): an interactive MapLibre page in the identity; no roster, geometry or convention change
 
 `index.html` is a new MapLibre GL page that fetches `photon_mountain_corridor.geojson` at load. It carries no copy of the roster, so the four-file invariant and `04_tools/marker_parity.py` are unchanged. `.github/workflows/pages.yml` publishes the page and that one GeoJSON at `/map/` on the repo's GitHub Pages site.

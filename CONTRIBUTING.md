@@ -63,7 +63,7 @@ Three scripts, all with `--self-test`:
 
 Plus `03_deliverables/infographics/photon_mountain_map_verify.py`, which checks the **comparison maps'** geometry and needs matplotlib. It does not check the corridor atlas; `marker_parity.py` does.
 
-The three shell gates take `--self-test` too: `.githooks/pre-commit`, `.claude/hooks/pm-check-voice.sh`, and `.claude/hooks/pm-guard-bypass.sh`. CI runs all six in `gate-selftests.yml`.
+The three shell gates take `--self-test` too: `.githooks/pre-commit`, `.claude/hooks/pm-check-voice.sh`, and `.claude/hooks/pm-guard-bypass.sh`. CI runs all six in the short job of `.github/workflows/ci.yml`.
 
 ### What blocks and what warns
 
