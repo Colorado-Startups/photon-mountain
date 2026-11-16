@@ -6,10 +6,18 @@
 <title>Photon Mountain corridor map</title>
 <meta name="description" content="The Photon Mountain corridor on Colorado's Front Range: the road-drawn boundary and 53 sites built with light, energy and compute, each with its note.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
+/*
+  The brand fonts are self-hosted. pages.yml copies these six files from
+  01_doctrine/brand_assets/fonts/ (SIL OFL 1.1) into fonts/ beside this page.
+  A local preview without that folder falls back to the system stacks below.
+*/
+@font-face{font-family:'Inter';font-weight:400;font-style:normal;font-display:swap;src:url('fonts/Inter-Regular.ttf') format('truetype')}
+@font-face{font-family:'Inter';font-weight:600;font-style:normal;font-display:swap;src:url('fonts/Inter-SemiBold.ttf') format('truetype')}
+@font-face{font-family:'Space Grotesk';font-weight:500;font-style:normal;font-display:swap;src:url('fonts/SpaceGrotesk-Medium.ttf') format('truetype')}
+@font-face{font-family:'Space Grotesk';font-weight:700;font-style:normal;font-display:swap;src:url('fonts/SpaceGrotesk-Bold.ttf') format('truetype')}
+@font-face{font-family:'Space Mono';font-weight:400;font-style:normal;font-display:swap;src:url('fonts/SpaceMono-Regular.ttf') format('truetype')}
+@font-face{font-family:'Space Mono';font-weight:700;font-style:normal;font-display:swap;src:url('fonts/SpaceMono-Bold.ttf') format('truetype')}
 /*
   Every hex below is a token from 04_tools/brand_tokens.py: the ten COLOR_*
   palette values, plus ROLE rule_hairline (#D9DBDE) and the two derived on-dark
@@ -117,7 +125,7 @@ aside{width:360px;max-width:100%;background:var(--surface);border-left:1px solid
 .pop-name{font:700 1rem/1.2 'Space Grotesk',system-ui,sans-serif;margin:0 0 6px}
 .pop-note{font-size:.84rem;line-height:1.45;margin:0}
 .maplibregl-ctrl-attrib{font-size:11px}
-#status{position:absolute;left:12px;bottom:34px;background:var(--surface);color:var(--text);border:1px solid var(--edge);padding:8px 10px;font:400 .76rem 'Space Mono',ui-monospace,monospace}
+#status{position:absolute;left:12px;bottom:34px;max-width:calc(100% - 24px);background:var(--surface);color:var(--text);border:1px solid var(--edge);padding:8px 10px;font:400 .76rem 'Space Mono',ui-monospace,monospace}
 @media (max-width: 760px){
   main{flex-direction:column}
   #map{min-height:60vh}
@@ -402,10 +410,22 @@ aside{width:360px;max-width:100%;background:var(--surface);border-left:1px solid
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', restyle);
   new MutationObserver(restyle).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
+  // A marker outside the seven categories is drawn nowhere, so name it here.
+  // A roster change that adds a category then shows up on the page.
+  function reportUnknown() {
+    const unknown = points().filter(f => !catOf(f.properties.category));
+    if (unknown.length) say(`${unknown.length} marker(s) use a category this page does not know. Not shown: ` +
+      unknown.map(f => `${f.properties.name} (${f.properties.category})`).join('; '));
+  }
+
+  // A fetch error and a drawing error get separate messages, each with its cause.
   fetch('photon_mountain_corridor.geojson')
-    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(json => { data = json; buildPanel(); if (styleReady) addOverlay(); fitAll(); })
-    .catch(() => say('The corridor data did not load. Open the GeoJSON file from the header link.'));
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(json => {
+      data = json;
+      try { reportUnknown(); buildPanel(); if (styleReady) addOverlay(); fitAll(); }
+      catch (err) { console.error(err); say('The corridor data loaded, but the page could not draw it: ' + err.message); }
+    }, err => say('The corridor data did not load (' + err.message + '). Open the GeoJSON file from the header link.'));
 })();
 </script>
 </body>
