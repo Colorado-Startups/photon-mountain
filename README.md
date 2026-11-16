@@ -8,6 +8,8 @@ Brand: [Colorado Startups brand guide](https://colorado-startups.github.io/brand
 
 Photon Mountain is Colorado's Front Range corridor for computing with light: photonic chips, sensors, solar, and laser fusion, anchored by Boulder, Golden, Arvada, and Denver.
 
+[![Map of Photon Mountain: the loop of eight roads around Boulder, Golden, Arvada and Denver](https://coloradostartups.org/maps/photon-mountain.svg)](https://colorado-startups.github.io/photon-mountain/map/)
+
 Silicon Valley was named for the material of the last computing era. Photon Mountain is named for the medium of the next one.
 
 This repository is the corridor's open record. It holds the brand, the researched substance behind every claim, and the maps and infographics built from it. It is not an application. Each substance document names its sources and the date its claims were last searched. That honesty is the point.
