@@ -1,21 +1,32 @@
 ---
-// The first frame of photonmountain.co. Wave 2 of the launch plan replaces this with the hero painting,
-// the counters, the map and the explorer; until then it states the thesis and points at the live atlas.
+// The home page composes one component per section, each in its own folder, so each launch plan wave 2
+// step changes only its folder. Order: hero, light, towns, clocks, versus.
 import Base from "../layouts/Base.astro";
+import Hero from "../components/hero/Hero.astro";
+import Light from "../components/light/Light.astro";
+import Towns from "../components/towns/Towns.astro";
+import Clocks from "../components/clocks/Clocks.astro";
+import Versus from "../components/versus/Versus.astro";
 ---
 <Base title="Photon Mountain" description="Colorado's Front Range corridor for computing with light: Boulder, Golden, Arvada and Denver.">
-  <section class="hero wrap">
+  <section class="intro wrap">
     <p class="eyebrow">Boulder · Golden · Arvada · Denver</p>
     <h1>Build with light.</h1>
     <p class="lede">The era of intelligence, built with light.</p>
     <ul class="go" role="list">
-      <li><a href="https://colorado-startups.github.io/photon-mountain/map/">See the corridor map</a></li>
-      <li><a href="https://github.com/Colorado-Startups/photon-mountain/tree/main/02_substance">Read the sources</a></li>
+      <li><a href="/map/">See the map</a></li>
+      <li><a href="/explore/">Find a lab or company</a></li>
+      <li><a href="/data/">Connect your AI</a></li>
     </ul>
   </section>
+  <Hero />
+  <Light />
+  <Towns />
+  <Clocks />
+  <Versus />
 </Base>
 <style>
-  .hero { display: grid; gap: 1.25rem; padding-block: 5rem 3rem; }
+  .intro { display: grid; gap: 1.25rem; padding-block: 5rem 3rem; }
   .lede { font-size: var(--step3); color: var(--ink-2); }
   .go { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0; margin: 0.5rem 0 0; list-style: none; }
   .go a { display: inline-block; padding: 0.75rem 1.1rem; border: var(--hairline) solid var(--rule); border-radius: 0.5rem; background: var(--surface); color: var(--ink); font-weight: 600; text-decoration: none; }

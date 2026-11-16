@@ -1,0 +1,35 @@
+[
+  {
+    "id": "design.raw_hex",
+    "params": {
+      "comment": "photonmountain.co, measured on the live preview until the custom domain attaches at launch plan step 4.4; the origin then becomes https://photonmountain.co.",
+      "origin": "https://photon-mountain-site.coloradostartups.workers.dev",
+      "key_pages": [
+        "/",
+        "/map/",
+        "/explore/",
+        "/world/",
+        "/data/"
+      ],
+      "widths": [
+        1280,
+        375
+      ],
+      "src_dirs": [
+        "site/src"
+      ],
+      "raw_scan_exempt": [
+        {
+          "file": "site/src/styles/tokens/tokens.css",
+          "why": "the token file, emitted by 04_tools/brand_tokens.py --emit"
+        }
+      ],
+      "tokens": {
+        "file": "site/src/styles/tokens/tokens.json",
+        "colors": "color",
+        "type": "type",
+        "type_prefix": "step"
+      }
+    }
+  }
+]
