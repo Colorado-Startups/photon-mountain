@@ -1,0 +1,23 @@
+---
+// The first frame of photonmountain.co. Wave 2 of the launch plan replaces this with the hero painting,
+// the counters, the map and the explorer; until then it states the thesis and points at the live atlas.
+import Base from "../layouts/Base.astro";
+---
+<Base title="Photon Mountain" description="Colorado's Front Range corridor for computing with light: Boulder, Golden, Arvada and Denver.">
+  <section class="hero wrap">
+    <p class="eyebrow">Boulder · Golden · Arvada · Denver</p>
+    <h1>Build with light.</h1>
+    <p class="lede">The era of intelligence, built with light.</p>
+    <ul class="go" role="list">
+      <li><a href="https://colorado-startups.github.io/photon-mountain/map/">See the corridor map</a></li>
+      <li><a href="https://github.com/Colorado-Startups/photon-mountain/tree/main/02_substance">Read the sources</a></li>
+    </ul>
+  </section>
+</Base>
+<style>
+  .hero { display: grid; gap: 1.25rem; padding-block: 5rem 3rem; }
+  .lede { font-size: var(--step3); color: var(--ink-2); }
+  .go { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0; margin: 0.5rem 0 0; list-style: none; }
+  .go a { display: inline-block; padding: 0.75rem 1.1rem; border: var(--hairline) solid var(--rule); border-radius: 0.5rem; background: var(--surface); color: var(--ink); font-weight: 600; text-decoration: none; }
+  .go a:hover { border-color: var(--gold); background: var(--gold-wash); }
+</style>
