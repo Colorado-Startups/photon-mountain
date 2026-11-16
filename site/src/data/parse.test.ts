@@ -45,6 +45,9 @@ describe("cell helpers", () => {
     expect(splitCity("Longmont (Ring)")).toEqual({ city: "Longmont", ring: "Ring" });
     expect(splitCity("Thornton (Statewide)")).toEqual({ city: "Thornton", ring: "Statewide" });
     expect(splitCity("Somewhere")).toEqual({ city: "Somewhere", ring: "Other" });
+    expect(splitCity("Boulder and Louisville (Core and Ring)")).toEqual({ city: "Boulder and Louisville", ring: "Core" });
+    expect(splitCity("Centennial / Louisville (Statewide/Ring)")).toEqual({ city: "Centennial / Louisville", ring: "Ring" });
+    expect(splitCity("Golden (Quantum Commons)")).toEqual({ city: "Golden", ring: "Other" });
   });
 });
 

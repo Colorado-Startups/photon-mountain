@@ -36,13 +36,21 @@ export function plain(cell: string): string {
     .trim();
 }
 
-/** "Boulder (Core)" to the city and its corridor ring. */
+/** "Boulder (Core)" to the city and its corridor ring. A company in two places ("Core and Ring",
+    "Statewide/Ring") takes the more central one. */
 export function splitCity(cell: string): { city: string; ring: Ring } {
   const m = /^(.*?)\s*\(([^)]+)\)\s*$/.exec(plain(cell));
   if (!m) return { city: plain(cell), ring: "Other" };
   const tag = m[2].toLowerCase();
-  const ring: Ring =
-    tag === "core" ? "Core" : tag === "ring" ? "Ring" : tag === "statewide" ? "Statewide" : tag.includes("roots") ? "Roots only" : "Other";
+  const ring: Ring = tag.includes("core")
+    ? "Core"
+    : /\bring\b/.test(tag)
+      ? "Ring"
+      : tag.includes("statewide")
+        ? "Statewide"
+        : tag.includes("roots")
+          ? "Roots only"
+          : "Other";
   return { city: m[1], ring };
 }
 
