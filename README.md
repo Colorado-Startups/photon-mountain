@@ -14,15 +14,20 @@ Silicon Valley was named for the material of the last computing era. Photon Moun
 
 This repository is the corridor's open record. It holds the brand, the researched substance behind every claim, and the maps and infographics built from it. It is not an application. Each substance document names its sources and the date its claims were last searched. That honesty is the point.
 
-## What is here
+## Folder map
 
 | Folder | What it holds |
 |---|---|
+| [`00_project_system/`](00_project_system/) | The work queue and the task lifecycle |
 | [`01_doctrine/`](01_doctrine/) | The locked brand identity, the voice rules, and the usage guidelines |
 | [`02_substance/`](02_substance/) | Corridor research: the anchor institutions, the company roster, and the why-and-how documents, each with dated sources |
 | [`03_deliverables/`](03_deliverables/) | The corridor map (an interactive MapLibre page, GeoJSON, KML), the launch infographic, and the Silicon Valley comparison maps |
 | [`04_tools/`](04_tools/) | The gates: a voice lint, a brand-token check, and a map-parity check, all standard-library Python |
-| [`00_project_system/`](00_project_system/) | The work queue and the task lifecycle |
+| [`LICENSES/`](LICENSES/) | The full text of every license the repo uses, listed in [`LICENSING.md`](LICENSING.md) |
+| [`quality/`](quality/) | The configs and targets that Git Crafter's Quality and Process pages read for this repo |
+| [`.claude/`](.claude/) | Claude Code settings, hooks, skills, commands and agents that travel with the repo |
+| [`.githooks/`](.githooks/) | The pre-commit gate; enable it once per clone with `git config core.hooksPath .githooks` |
+| [`.github/`](.github/) | Workflows, issue and pull request forms, Dependabot and CODEOWNERS |
 
 The interactive corridor map is [`03_deliverables/maps/index.html`](03_deliverables/maps/index.html). It is live at https://colorado-startups.github.io/photon-mountain/map/. The same atlas is also on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
 
@@ -40,4 +45,4 @@ Start with [`CONTRIBUTING.md`](CONTRIBUTING.md), then pick an issue labeled [goo
 
 Nothing is reserved, including the name and the Summit Sun mark. The fonts, the vendored voice lint and the Code of Conduct keep their own licenses. [`LICENSING.md`](LICENSING.md) lists every exception.
 
-Photon Mountain is a Colorado Startups project, in collaboration with Colorado AI.
+Photon Mountain is a Colorado Startups project, a joint effort with Colorado Compute.
