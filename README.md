@@ -24,7 +24,7 @@ This repository is the corridor's open record. It holds the brand, the researche
 | [`04_tools/`](04_tools/) | The gates: a voice lint, a brand-token check, and a map-parity check, all standard-library Python |
 | [`00_project_system/`](00_project_system/) | The work queue and the task lifecycle |
 
-The interactive corridor map is [`03_deliverables/maps/index.html`](03_deliverables/maps/index.html). It publishes to https://colorado-startups.github.io/photon-mountain/map/ once GitHub Pages is switched on. The same atlas is also on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
+The interactive corridor map is [`03_deliverables/maps/index.html`](03_deliverables/maps/index.html). It is live at https://colorado-startups.github.io/photon-mountain/map/. The same atlas is also on [Felt](https://felt.com/map/Photon-Mountain-the-corridor-built-with-light-OSOsyDNWTDe1acx9BDkkJ4D).
 
 ## Contribute
 
