@@ -1,13 +1,166 @@
 ---
-// Launch plan wave 2 or 3 replaces this stub page; its route is already in e2e/routes.ts.
+// The explorer: every company and anchor institution in the record, server-rendered so it reads without script,
+// with build-time charts and chips whose counts come from the same filter the browser runs (lib/explore.ts).
 import Base from "../../layouts/Base.astro";
+import { anchors, companies } from "../../data/corridor";
+import { slug, tally, toEntries } from "../../lib/explore";
+import { TOWNS } from "../../lib/home";
+import { SEGMENTS } from "../../lib/light";
+
+const entries = toEntries(companies, anchors);
+const coms = entries.filter((e) => e.kind === "company");
+const bySeg = tally(coms, "segment");
+const byRing = tally(entries, "ring");
+const comRing = tally(coms, "ring");
+const byTown = tally(entries, "towns");
+const kinds = tally(entries, "kind");
+const segs = SEGMENTS.map((s) => ({ id: slug(s.short), label: s.short, n: bySeg[slug(s.short)] ?? 0, branch: s.branch }));
+const RINGS = ["Core", "Ring", "Statewide", "Roots only"];
+const rings = RINGS.map((r) => ({ id: slug(r), label: r, n: byRing[slug(r)] ?? 0 }));
+const comRings = RINGS.map((r) => ({ id: slug(r), label: r, n: comRing[slug(r)] ?? 0 }));
+const max = Math.max(...segs.map((s) => s.n));
+const groups = [
+  { key: "kind", label: "Kind", chips: [{ id: "company", label: "Companies", n: kinds.company ?? 0 }, { id: "anchor", label: "Research anchors", n: kinds.anchor ?? 0 }] },
+  { key: "ring", label: "Where", chips: rings },
+  { key: "town", label: "Town", chips: TOWNS.map((t) => ({ id: t.id, label: t.name, n: byTown[t.id] ?? 0 })) },
+  { key: "segment", label: "What they build", chips: segs },
+];
 ---
 <Base title="Labs, universities and companies" description="Search and filter the corridor's labs, universities and companies, each with its source.">
-  <section class="wrap stub-page">
+  <section class="head wrap">
+    <p class="eyebrow">The record</p>
     <h1>Labs, universities and companies</h1>
-    <p>Search and filter the corridor's labs, universities and companies, each with its source.</p>
+    <p class="lede">{coms.length} companies and {kinds.anchor} research anchors, each with its source. <a href="/data/companies.csv">Download the CSV</a>.</p>
+    <div class="charts">
+      <figure class="chart">
+        <figcaption>Companies by what they build</figcaption>
+        <ul class="bars" role="list">
+          {segs.map((s) => (
+            <li><span class="lab">{s.label}</span><span class={`bar ${s.branch}`} style={`--w: ${s.n / max}`}></span><b>{s.n}</b></li>
+          ))}
+        </ul>
+      </figure>
+      <figure class="chart">
+        <figcaption>Companies by where they sit</figcaption>
+        <div class="stack" role="img" aria-label={comRings.map((r) => `${r.label} ${r.n}`).join(", ")}>
+          {comRings.filter((r) => r.n > 0).map((r) => <span class={`seg r-${r.id}`} style={`--n: ${r.n}`}></span>)}
+        </div>
+        <ul class="keys" role="list">{comRings.map((r) => <li><span class={`k r-${r.id}`} aria-hidden="true"></span>{r.label} <b>{r.n}</b></li>)}</ul>
+      </figure>
+    </div>
+  </section>
+
+  <section class="tool wrap" data-explore>
+    <div class="controls">
+      <label class="search"><span>Search</span><input type="search" name="q" placeholder="NIST, lasers, Longmont" autocomplete="off" data-q /></label>
+      {groups.map((g) => (
+        <div class="group" role="group" aria-label={g.label}>
+          <span class="glabel">{g.label}</span>
+          {g.chips.map((c) => <button type="button" class="chip" aria-pressed="false" data-key={g.key} data-val={c.id}>{c.label} <span class="cn">{c.n}</span></button>)}
+        </div>
+      ))}
+      <p class="shown" role="status" data-shown>Showing all {entries.length}</p>
+    </div>
+    <ul class="cards" role="list" data-cards>
+      {entries.map((e) => (
+        <li class={`card ${e.kind}`} data-kind={e.kind} data-ring={slug(e.ring)} data-segment={e.segment} data-towns={e.towns.join(" ")} data-text={`${e.name} ${e.city} ${e.what}`.toLowerCase()}>
+          <p class="meta"><span class="pill">{e.kind === "anchor" ? "Anchor" : e.ring}</span>{e.city}</p>
+          <h2 class="name">{e.name}</h2>
+          <p class="what">{e.what}</p>
+          <p class="tie">{e.tie}</p>
+          {e.source && <a class="src" href={e.source.url}>{e.source.label}</a>}
+        </li>
+      ))}
+    </ul>
   </section>
 </Base>
+
+<script>
+  import { fromQuery, type Filters } from "../../lib/explore";
+
+  const root = document.querySelector<HTMLElement>("[data-explore]");
+  if (root) {
+    const cards = [...root.querySelectorAll<HTMLElement>("[data-cards] > li")];
+    const chips = [...root.querySelectorAll<HTMLButtonElement>(".chip")];
+    const input = root.querySelector<HTMLInputElement>("[data-q]");
+    const shown = root.querySelector<HTMLElement>("[data-shown]");
+    const f: Filters = fromQuery(location.search);
+    const groups = ["kind", "ring", "segment", "town"] as const;
+    // A query value with no chip (a stale or mistyped link) would hide everything with no way back; drop it.
+    for (const g of groups) f[g] = f[g].filter((v) => chips.some((b) => b.dataset.key === g && b.dataset.val === v));
+    if (input) input.value = f.q;
+    const apply = () => {
+      const q = f.q.trim().toLowerCase();
+      let n = 0;
+      for (const c of cards) {
+        const d = c.dataset;
+        const ok =
+          (f.kind.length === 0 || f.kind.includes(d.kind ?? "")) &&
+          (f.ring.length === 0 || f.ring.includes(d.ring ?? "")) &&
+          (f.segment.length === 0 || f.segment.includes(d.segment ?? "")) &&
+          (f.town.length === 0 || (d.towns ?? "").split(" ").some((t) => f.town.includes(t))) &&
+          (!q || (d.text ?? "").includes(q));
+        c.hidden = !ok;
+        if (ok) n++;
+      }
+      for (const b of chips) b.setAttribute("aria-pressed", String(f[b.dataset.key as (typeof groups)[number]].includes(b.dataset.val ?? "")));
+      if (shown) shown.textContent = n === cards.length ? `Showing all ${n}` : `Showing ${n} of ${cards.length}`;
+      const p = new URLSearchParams();
+      if (f.q) p.set("q", f.q);
+      for (const g of groups) if (f[g].length) p.set(g, f[g].join(","));
+      history.replaceState(null, "", p.size ? `?${p}` : location.pathname);
+    };
+    for (const b of chips) b.addEventListener("click", () => {
+      const list = f[b.dataset.key as (typeof groups)[number]];
+      const v = b.dataset.val ?? "";
+      const i = list.indexOf(v);
+      if (i >= 0) list.splice(i, 1); else list.push(v);
+      apply();
+    });
+    input?.addEventListener("input", () => { f.q = input.value; apply(); });
+    apply();
+  }
+</script>
+
 <style>
-  .stub-page { display: grid; gap: 1rem; padding-block: 4rem; }
+  .head { display: grid; gap: 1rem; padding-block: 2.5rem 1rem; }
+  .lede { color: var(--ink-2); }
+  .charts { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .chart { margin: 0; padding: 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); }
+  .chart figcaption { font-weight: 600; margin-bottom: 0.75rem; }
+  .chart ul { padding: 0; margin: 0; list-style: none; }
+  .bars { display: grid; gap: 0.4rem; }
+  .bars li { display: grid; grid-template-columns: 10rem minmax(0, 1fr) 2rem; gap: 0.5rem; align-items: center; font-size: var(--step0); }
+  .bar { height: 0.75rem; width: calc(var(--w) * 100%); border-radius: 999rem; background: var(--accent); }
+  .bar.energy { background: var(--gold); }
+  .chart b { font-family: var(--font-mono); text-align: right; }
+  .stack { display: flex; height: 1.25rem; border-radius: 999rem; overflow: hidden; }
+  .seg { flex: var(--n); }
+  .r-core { background: var(--ink); }
+  .r-ring { background: var(--accent); }
+  .r-statewide { background: var(--color-violet-bright); }
+  .r-roots-only { background: var(--rule); }
+  .keys { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.75rem; font-size: var(--step0); }
+  .keys li { display: flex; gap: 0.35rem; align-items: center; }
+  .k { width: 0.75rem; height: 0.75rem; border-radius: 0.2rem; }
+  .tool { display: grid; gap: 1rem; padding-bottom: 4rem; }
+  .controls { display: grid; gap: 0.75rem; padding: 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); }
+  .search { display: grid; gap: 0.25rem; font-weight: 600; }
+  .search input { min-height: 2.75rem; padding: 0.5rem 0.75rem; border: var(--hairline) solid var(--rule); border-radius: 0.5rem; font: inherit; font-weight: 400; background: var(--ground); color: var(--ink); }
+  .group { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+  .glabel { font-family: var(--font-mono); font-size: var(--step0); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); min-width: 9rem; }
+  .chip { min-height: 2.25rem; padding: 0.3rem 0.8rem; border: var(--hairline) solid var(--rule); border-radius: 999rem; background: var(--ground); color: var(--ink); font: 500 var(--step0) var(--font-body); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--color-white); border-color: var(--ink); }
+  .cn { font-family: var(--font-mono); }
+  .shown { color: var(--ink-2); font-size: var(--step0); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); gap: 0.75rem; padding: 0; margin: 0; list-style: none; }
+  .card { display: grid; gap: 0.35rem; align-content: start; padding: 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); }
+  .card[hidden] { display: none; }
+  .card.anchor { border-color: var(--gold); }
+  .meta { display: flex; gap: 0.5rem; align-items: center; font-size: var(--step0); color: var(--ink-2); }
+  .pill { padding: 0.05rem 0.5rem; border-radius: 999rem; background: var(--gold-wash); color: var(--ink); font-family: var(--font-mono); font-size: var(--step0); }
+  .name { font-size: var(--step2); }
+  .what { font-size: var(--step0); }
+  .tie { font-size: var(--step0); color: var(--ink-2); }
+  .src { font-size: var(--step0); }
 </style>
