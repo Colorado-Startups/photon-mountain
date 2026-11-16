@@ -3,11 +3,31 @@
     "id": "usability.reading_grade",
     "params": {
       "origin": "https://photon-mountain-site.coloradostartups.workers.dev",
-      "key_pages": ["/"],
-      "tasks": [
-        { "label": "See the corridor", "path": "/" }
+      "key_pages": [
+        "/",
+        "/map/",
+        "/explore/",
+        "/world/",
+        "/data/"
       ],
-      "crawl_skip": ["/data/", "/cdn-cgi/"]
+      "tasks": [
+        {
+          "label": "See the map",
+          "path": "/map/"
+        },
+        {
+          "label": "Find a lab or company",
+          "path": "/explore/"
+        },
+        {
+          "label": "Connect your AI",
+          "path": "/data/"
+        }
+      ],
+      "crawl_skip": [
+        "/data/",
+        "/cdn-cgi/"
+      ]
     }
   }
 ]
