@@ -166,8 +166,6 @@ Both are genuine laser-fusion programs. Commercial fusion power is a long-term r
 | TrelliSense | Boulder (Core) | HQ | Laser-based, ground-level methane sensor networks for oil and gas, farms, and landfills. Its site gives Boulder; CPIA lists Superior. | [trellisense.com](https://www.trellisense.com/) |
 | Kraken Robotics (formerly 3D at Depth) | Longmont (Ring) | Facility (parent Kraken Robotics, Mount Pearl, Newfoundland) | Subsea LiDAR. Kraken said on 2025-03-13 that 3D at Depth's headquarters and production facility are in Longmont. | [krakenrobotics.com](https://www.krakenrobotics.com/news-releases/kraken-robotics-expands-u-s-footprint-with-acquisition-of-3d-at-depth/) |
 | Avantes USA | Lafayette (Ring) | Office (parent Avantes B.V., Apeldoorn, Netherlands, part of Nynomic AG) | Fiber-optic spectrometers and spectroscopy systems, per the company (read 2026-11-16). | [avantes.com](https://www.avantes.com/about-us/offices/avantes-usa/) |
-| Phasics Corp | Boulder (Core) | Office (parent PHASICS S.A., Saint-Aubin, France) | SID4 wavefront sensors and optics test benches. The company calls Boulder its US branch and does not say what work happens there (read 2026-11-16). | [phasics.com](https://www.phasics.com/en/company/) |
-| XIMEA Corp | Lakewood (Statewide) | Office (sales subsidiary of XIMEA GmbH, Münster, Germany) | Industrial and scientific cameras, including hyperspectral and X-ray lines. Lakewood is sales only, per the company (read 2026-11-16). | [ximea.com](https://www.ximea.com/) |
 
 ---
 
@@ -209,7 +207,6 @@ Colorado's deepest bench is precision optics, coatings, and electro-optic and no
 | FiveNine Optics | Boulder (Core) | HQ | Ion-beam-sputtered optical coatings and ultra-low-loss mirrors, per the company (read 2026-11-16). | [fivenineoptics.com](https://www.fivenineoptics.com/contact) |
 | Perkins Precision Developments | Longmont (Ring) | HQ | Custom laser mirrors, polarization optics, beam splitters, and lenses. It also applies ion-beam-sputtered coatings for UV, visible, and near-infrared light, per the company (read 2026-11-16). | [perkinsprecision.com](https://www.perkinsprecision.com/) |
 | LTI Optics | Westminster (Ring) | HQ | Photopia, software for designing and analyzing illumination optics, plus photometric testing and optical consulting. Its site gives Westminster; CPIA lists Arvada (read 2026-11-16). | [ltioptics.com](https://www.ltioptics.com/en/contact.html) |
-| Rocky Mountain Laboratories | Golden (Core) | HQ | A surface-analysis service lab (XPS, Auger, SIMS) that tests optical surfaces for contamination for precision optics makers. It serves optics makers and does not build optics (read 2026-11-16). | [rockymountainlabs.com](https://rockymountainlabs.com/optical-surface-contamination-testing/) |
 
 ---
 
@@ -283,6 +280,9 @@ These are major Colorado quantum names, but their qubit is not a photon, so they
 - **Sunrun**, **SunPower**: national installers with Colorado branch offices only.
 - **Oblate Optics**: meta-optics for laser applications, from UV to LWIR, per APOMA. Not in Colorado. Its own award post says it is headquartered and operating in Rochester, New York, and APOMA gives a San Diego, California address. Sources: [APOMA](https://apoma.org/directory/oblate-optics/), [oblateoptics.com](https://www.oblateoptics.com/post/oblate-optics-wins-apoma-optics-innovator-award-at-luminate-finals) (read 2026-11-16).
 - **ASD Inc.** (Analytical Spectral Devices, formerly Boulder): field spectroradiometers (FieldSpec, TerraSpec, LabSpec). Moved here 2026-11-16, because no source confirms a Colorado site. The Colorado corporation, incorporated 1990 at 2555 55th St, Boulder, merged into Malvern Instruments Incorporated effective 2017-12-31, per the Colorado Secretary of State. SciAps announced on 2025-05-22 that it now carries the three product lines. SciAps lists only an Andover, Massachusetts address, and profiles place its manufacturing in Laramie, Wyoming. Malvern Panalytical Inc. holds Colorado authority in good standing, with a Massachusetts principal office, which shows it may do business here, not that a Boulder site operates. Sources: [Colorado Secretary of State business search](https://www.coloradosos.gov/biz/BusinessEntityCriteriaExt.do) (ID 19901010567, read 2026-11-16), [sciaps.com](https://www.sciaps.com/post/sciaps-expands-portfolio-with-legendary-asd-spectroradiometers), [malvernpanalytical.com](https://www.malvernpanalytical.com/en/products/product-range/asd-range).
+- **Phasics Corp** (Boulder): the US branch of PHASICS S.A., Saint-Aubin, France, which makes SID4 wavefront sensors. The company does not say that any work happens in Boulder, so it is an office, not a builder (read 2026-11-16). Source: [phasics.com](https://www.phasics.com/en/company/).
+- **XIMEA Corp** (Lakewood): the sales subsidiary of XIMEA GmbH, Münster, Germany; Lakewood is sales only, per the company (read 2026-11-16). Source: [ximea.com](https://www.ximea.com/).
+- **Rocky Mountain Laboratories** (Golden): a surface-analysis service lab (XPS, Auger, SIMS) that tests optical surfaces for optics makers and does not build optics (read 2026-11-16). Source: [rockymountainlabs.com](https://rockymountainlabs.com/optical-surface-contamination-testing/).
 
 ## 10. Watchlist (unverified, worth a second pass)
 
