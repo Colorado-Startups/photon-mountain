@@ -1,33 +1,29 @@
 name: pages
 
-# Publishes the corridor map to GitHub Pages at /map/: the MapLibre page
-# 03_deliverables/maps/index.html, the one data file it fetches,
-# photon_mountain_corridor.geojson, and the brand fonts it uses, copied from
-# 01_doctrine/brand_assets/fonts/. The site root redirects to /map/.
+# One GitHub Pages site, from Git Crafter templates/ci/pages.yml at v7.0.2 joined with this repo's map:
+#   /map/                     the MapLibre corridor map, its GeoJSON and the brand fonts it uses
+#   /quality/                 the Quality, Speed and Consumption page (quality/config.json)
+#   /quality/process.html     the Process page (quality/process/config.json)
+# The root redirects to /map/ until photonmountain.co takes the map (launch plan step 4.5).
 #
-# A pull request that touches the map checks the GeoJSON (53 points, each in
-# one of the seven categories) and assembles the site. Either fails on a bad or
-# missing file, and a pull request publishes nothing. Only a push to main publishes. Pages
-# itself must be switched on once in the repo settings (Source: GitHub
-# Actions) before the first deploy can land.
-#
-# Actions are pinned by full commit SHA with their version comment, as in the
-# repo's other workflows; Dependabot's github-actions entry bumps them.
-
+# Every run checks the GeoJSON (53 points, each in one of the seven categories) and builds both Git Crafter
+# pages, which runs the docs.unmapped gate. A pull request publishes nothing; only main does. A daily run keeps
+# the scorecard's time-based rows current. The site is assembled in _pages/, never site/, which holds the
+# Astro source from step 1.1. The quality-reader App's token reaches the collector on main only; while
+# QUALITY_APP_CLIENT_ID is unset, the admin-only metrics read not measured.
 on:
   push:
     branches: [main]
-    paths:
-      - '03_deliverables/maps/index.html'
-      - '03_deliverables/maps/photon_mountain_corridor.geojson'
-      - '.github/workflows/pages.yml'
-      - '01_doctrine/brand_assets/fonts/**'
   pull_request:
     paths:
-      - '03_deliverables/maps/index.html'
-      - '03_deliverables/maps/photon_mountain_corridor.geojson'
-      - '.github/workflows/pages.yml'
-      - '01_doctrine/brand_assets/fonts/**'
+      - "**/*.md"
+      - "quality/**"
+      - "03_deliverables/maps/index.html"
+      - "03_deliverables/maps/photon_mountain_corridor.geojson"
+      - "01_doctrine/brand_assets/fonts/**"
+      - ".github/workflows/pages.yml"
+  schedule:
+    - cron: "37 11 * * *"
   workflow_dispatch:
 
 permissions:
@@ -40,13 +36,23 @@ concurrency:
 
 jobs:
   build:
-    name: build the map site
-    runs-on: ubuntu-slim
-    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # The collectors read this repo's pull requests, runs, checks, deploys and issues; a read refused is not measured.
+    permissions:
+      contents: read
+      actions: read
+      checks: read
+      deployments: read
+      issues: read
+      pull-requests: read
+      vulnerability-alerts: read
     steps:
+      # Full history: the docs collector dates each doc against its area's last commit.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Check the corridor data
         run: |
@@ -61,38 +67,63 @@ jobs:
           if [ -n "$bad" ]; then echo "::error::markers outside the seven categories:"; echo "$bad"; exit 1; fi
           echo "53 point features, each in one of the seven categories"
 
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26
+
+      - id: admin-app
+        if: github.ref == 'refs/heads/main' && vars.QUALITY_APP_CLIENT_ID != ''
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.QUALITY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.QUALITY_APP_KEY }}
+          permission-administration: read
+          permission-environments: read
+          permission-secrets: read
+          permission-secret-scanning-alerts: read
+          permission-security-events: read
+          permission-vulnerability-alerts: read
+          permission-organization-administration: read
+          permission-members: read
+          permission-organization-projects: read
+
+      - uses: SoulCraft-Org/git-crafter/actions/pages@8023bd4683416f6d420bd20d137960b09c06b91e # v7.0.2
+        with:
+          pages: process quality
+          config: quality/process/config.json
+          quality-config: quality/config.json
+          admin-read-token: ${{ github.ref == 'refs/heads/main' && steps.admin-app.outputs.token || '' }}
+
       - name: Assemble the site
         run: |
           set -euo pipefail
-          mkdir -p site/map/fonts
-          cp 03_deliverables/maps/index.html site/map/index.html
-          cp 03_deliverables/maps/photon_mountain_corridor.geojson site/map/
-          # Self-hosted brand fonts: only the six faces the page uses, with their licences.
+          mkdir -p _pages/map/fonts _pages/quality
+          cp 03_deliverables/maps/index.html 03_deliverables/maps/photon_mountain_corridor.geojson _pages/map/
+          # Self-hosted brand fonts: only the six faces the map uses, with their licences.
           fonts=01_doctrine/brand_assets/fonts
           cp "$fonts"/Inter-Regular.ttf "$fonts"/Inter-SemiBold.ttf \
              "$fonts"/SpaceGrotesk-Medium.ttf "$fonts"/SpaceGrotesk-Bold.ttf \
              "$fonts"/SpaceMono-Regular.ttf "$fonts"/SpaceMono-Bold.ttf \
              "$fonts"/OFL-Inter.txt "$fonts"/OFL-SpaceGrotesk.txt "$fonts"/OFL-SpaceMono.txt \
-             site/map/fonts/
-          cat > site/index.html <<'HTML'
+             _pages/map/fonts/
+          cp -R quality/dist/. _pages/quality/
+          test -s _pages/quality/index.html || { echo "::error::the Quality page did not build"; exit 1; }
+          cat > _pages/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
           <title>Photon Mountain</title>
           <meta http-equiv="refresh" content="0; url=map/">
           <link rel="canonical" href="map/">
-          <p><a href="map/">The Photon Mountain corridor map</a></p>
+          <p><a href="map/">The Photon Mountain corridor map</a> · <a href="quality/">Quality, Speed and Consumption</a></p>
           HTML
-
-      - name: List the site
-        run: ls -R site
+          find _pages -maxdepth 2 | sort
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
-          path: site
+          path: _pages
 
   deploy:
-    name: deploy to GitHub Pages
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-slim

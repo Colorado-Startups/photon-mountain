@@ -2,6 +2,7 @@ name: Fact correction
 description: A corridor claim in this repository is wrong, stale, or missing its source.
 title: "[fact] "
 labels: ["fact-correction"]
+type: Bug
 body:
   - type: markdown
     attributes:

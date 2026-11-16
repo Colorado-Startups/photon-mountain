@@ -1,0 +1,41 @@
+---
+import { Font } from "astro:assets";
+import SiteFooter from "../components/SiteFooter.astro";
+import tokens from "../styles/tokens/tokens.json";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title === "Photon Mountain" ? title : `${title} · Photon Mountain`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:site_name" content="Photon Mountain" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content={tokens.color.snowfield} />
+    <Font cssVariable="--font-display" preload={[{ weight: 700, style: "normal" }]} />
+    <Font cssVariable="--font-body" preload={[{ weight: 400, style: "normal" }]} />
+    <Font cssVariable="--font-mono" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

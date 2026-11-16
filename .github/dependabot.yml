@@ -6,8 +6,8 @@
 # updates itself; this file is what keeps the pins current.
 #
 # The doctrine tooling in 04_tools/ is standard library by design, so there is
-# no pip entry. An npm entry joins when the site's package.json lands (launch
-# plan step 1.1).
+# no pip entry. The npm entry covers the site workspace (site/), resolved from
+# the root package-lock.json.
 
 version: 2
 updates:
@@ -22,5 +22,18 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: "ci"
+    labels:
+      - "tooling"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14
+    groups:
+      site:
+        patterns: ["*"]
+    commit-message:
+      prefix: "deps"
     labels:
       - "tooling"

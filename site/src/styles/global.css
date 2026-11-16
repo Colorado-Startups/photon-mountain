@@ -1,0 +1,55 @@
+/* Photon Mountain site base. Every color and type size comes from tokens/tokens.css, emitted by
+   04_tools/brand_tokens.py; this file holds no raw color or pixel value. Light ground: the corridor's
+   subject is light. Gold is graphic only; gold-deep carries gold text. */
+@import "./tokens/tokens.css";
+
+:root {
+  --ground: var(--color-snowfield);
+  --surface: var(--color-white);
+  --ink: var(--color-summit-night);
+  --ink-2: var(--color-granite);
+  --rule: var(--color-rule-hairline);
+  --accent: var(--color-violet-deep);
+  --gold: var(--color-gold);
+  --gold-ink: var(--color-gold-deep);
+  --gold-wash: var(--color-gold-tint);
+  --hairline: 0.0625rem;
+  --gutter: max(1rem, env(safe-area-inset-left, 0rem));
+  --measure: 40rem;
+  --wide: 72rem;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step1);
+  line-height: 1.55;
+  padding-inline: var(--gutter);
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step6); }
+h2 { font-size: var(--step4); }
+h3 { font-size: var(--step3); }
+p { margin: 0; max-width: var(--measure); }
+a { color: var(--accent); text-underline-offset: 0.18em; }
+a:focus-visible, button:focus-visible { outline: 0.1875rem solid var(--accent); outline-offset: 0.1875rem; border-radius: 0.25rem; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+
+.wrap { max-width: var(--wide); margin-inline: auto; }
+.eyebrow { font-family: var(--font-mono); font-size: var(--step0); letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); }
+.skip { position: absolute; left: -100vw; }
+.skip:focus { left: var(--gutter); top: 0.5rem; background: var(--surface); padding: 0.5rem 0.75rem; z-index: 10; }
+
+@media (min-width: 48rem) { h1 { font-size: var(--step7); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

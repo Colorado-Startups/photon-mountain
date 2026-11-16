@@ -1,0 +1,92 @@
+[
+  {
+    "id": "docs.dead_paths",
+    "params": {
+      "doc_set_left_out": [
+        {
+          "glob": ".github/pull_request_template.md",
+          "why": "the PR form; PR bodies are scored on the Pull requests tab"
+        },
+        {
+          "glob": "CODE_OF_CONDUCT.md",
+          "why": "the Contributor Covenant 3.0 as published, with only the contact and moderators filled in (its own Attribution section)"
+        },
+        {
+          "glob": "TRANSFER_PLAN.md",
+          "why": "the founding record of the spin-out from Colorado AI, closed 2026-07-05 and kept whole"
+        }
+      ],
+      "skip_dirs": [
+        "worktrees",
+        "local",
+        "quality"
+      ],
+      "areas": [
+        {
+          "doc": "README.md",
+          "area": ["00_project_system/", "01_doctrine/", "02_substance/", "03_deliverables/", "04_tools/", "LICENSES/"]
+        },
+        {
+          "doc": "CLAUDE.md",
+          "area": [".claude/", ".githooks/", ".github/workflows/", "04_tools/"]
+        },
+        {
+          "doc": "AGENTS.md",
+          "area": ["CLAUDE.md", ".claude/"]
+        },
+        {
+          "doc": "CONTRIBUTING.md",
+          "area": [".github/ISSUE_TEMPLATE/", ".github/pull_request_template.md", ".github/dco.yml", ".githooks/"]
+        },
+        {
+          "doc": "SECURITY.md",
+          "area": [".github/workflows/", ".githooks/", ".claude/hooks/"]
+        },
+        {
+          "doc": "THREAT-MODEL.md",
+          "area": ["04_tools/", ".githooks/", ".github/workflows/", ".claude/hooks/"]
+        },
+        {
+          "doc": "SUPPORT.md",
+          "area": [".github/ISSUE_TEMPLATE/"]
+        },
+        {
+          "doc": "GOVERNANCE.md",
+          "area": [".github/CODEOWNERS"]
+        },
+        {
+          "doc": "MAINTAINERS.md",
+          "area": [".github/CODEOWNERS"]
+        },
+        {
+          "doc": "LICENSING.md",
+          "area": ["LICENSE", "LICENSES/"]
+        },
+        {
+          "doc": "MASTER_PLAN.md",
+          "area": ["00_project_system/"]
+        },
+        {
+          "doc": "project_context.md",
+          "area": ["01_doctrine/", "02_substance/", "03_deliverables/"]
+        },
+        {
+          "doc": "cowork_project_instructions.md",
+          "area": []
+        },
+        {
+          "doc": ".claude/**",
+          "area": [".claude/", "04_tools/voice_lint.py"]
+        },
+        {
+          "doc": "00_project_system/github_setup_plan.md",
+          "area": [".github/", ".githooks/"]
+        },
+        {
+          "doc": "**",
+          "area": ["{dir}/"]
+        }
+      ]
+    }
+  }
+]
