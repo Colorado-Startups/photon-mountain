@@ -27,3 +27,6 @@ quality/dist/
 node_modules/
 site/dist/
 site/.astro/
+
+# The assembled Pages site (pages.yml)
+_pages/
