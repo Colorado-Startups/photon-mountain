@@ -167,66 +167,62 @@ def split_prefix(note):
     return None, note
 
 
+def _count_findings(rosters):
+    counts = {k: len(v) for k, v in rosters.items()}
+    if len(set(counts.values())) == 1:
+        return []
+    return ["marker counts differ: %s"
+            % ", ".join("%s=%d" % kv for kv in sorted(counts.items()))]
+
+
+def _roster_findings(name, roster, ref, places):
+    """Markers missing from or extra in one copy, and coordinates that moved."""
+    findings = ["%s: missing marker %r" % (name, n) for n in sorted(set(ref) - set(roster))]
+    findings += ["%s: unexpected marker %r" % (name, n) for n in sorted(set(roster) - set(ref))]
+    for n in sorted(set(ref) & set(roster)):
+        a, b = ref[n], roster[n]
+        if (round(a[0], places), round(a[1], places)) != (round(b[0], places), round(b[1], places)):
+            findings.append(
+                "%s: %r coordinates differ beyond %d decimals: "
+                "geojson=(%s, %s) %s=(%s, %s)"
+                % (name, n, places, a[0], a[1], name, b[0], b[1]))
+    return findings
+
+
+def _note_finding(name, n, ref_entry, entry):
+    """The note-prefix rule for one marker: the copy's note is its category, then the geojson note."""
+    ref_note, cat = (ref_entry[3] or "").strip(), ref_entry[2]
+    prefix_cat, body = split_prefix((entry[3] or "").strip())
+    if body != ref_note:
+        return "%s: %r note body differs from the geojson note" % (name, n)
+    if prefix_cat is None:
+        return "%s: %r note does not start with a locked category prefix" % (name, n)
+    if cat and prefix_cat.lower() != str(cat).lower():
+        return ("%s: %r note prefix %r does not match the geojson category %r"
+                % (name, n, prefix_cat, cat))
+    return None
+
+
 def compare(rosters, places=DEFAULT_PLACES):
     """Return a list of human-readable drift findings. Empty means parity."""
-    findings = []
-    ref_name = "geojson"
-    ref = rosters[ref_name]
-
-    counts = {k: len(v) for k, v in rosters.items()}
-    if len(set(counts.values())) != 1:
-        findings.append("marker counts differ: %s"
-                        % ", ".join("%s=%d" % kv for kv in sorted(counts.items())))
-
+    ref = rosters["geojson"]
+    findings = _count_findings(rosters)
     for name, roster in sorted(rosters.items()):
-        if name == ref_name:
-            continue
-        missing = sorted(set(ref) - set(roster))
-        extra = sorted(set(roster) - set(ref))
-        for n in missing:
-            findings.append("%s: missing marker %r" % (name, n))
-        for n in extra:
-            findings.append("%s: unexpected marker %r" % (name, n))
-
-        for n in sorted(set(ref) & set(roster)):
-            a, b = ref[n], roster[n]
-            if (round(a[0], places), round(a[1], places)) != \
-               (round(b[0], places), round(b[1], places)):
-                findings.append(
-                    "%s: %r coordinates differ beyond %d decimals: "
-                    "geojson=(%s, %s) %s=(%s, %s)"
-                    % (name, n, places, a[0], a[1], name, b[0], b[1]))
-
+        if name != "geojson":
+            findings += _roster_findings(name, roster, ref, places)
     # The note-prefix rule, for the two formats that carry it.
     for name in ("html", "jsx"):
-        roster = rosters.get(name)
-        if not roster:
-            continue
-        for n in sorted(set(ref) & set(roster)):
-            ref_note = (ref[n][3] or "").strip()
-            cat = ref[n][2]
-            prefix_cat, body = split_prefix((roster[n][3] or "").strip())
-            if body != ref_note:
-                findings.append(
-                    "%s: %r note body differs from the geojson note" % (name, n))
-            elif prefix_cat is None:
-                findings.append(
-                    "%s: %r note does not start with a locked category prefix"
-                    % (name, n))
-            elif cat and prefix_cat.lower() != str(cat).lower():
-                findings.append(
-                    "%s: %r note prefix %r does not match the geojson category %r"
-                    % (name, n, prefix_cat, cat))
+        roster = rosters.get(name) or {}
+        found = (_note_finding(name, n, ref[n], roster[n]) for n in sorted(set(ref) & set(roster)))
+        findings += [f for f in found if f]
     return findings
 
 
 # ------------------------------------------------------------------ tests ---
-def self_test():
-    ok = True
+def _good_rosters():
     ref = {"A": (40.0, -105.0, "National Lab", "A note."),
            "B & C": (39.5, -105.5, "Transit Station", "Another note.")}
-
-    good = {
+    return {
         "geojson": ref,
         "kml": {"A": (40.000000, -105.000000, None, "A note."),
                 # 4e-7 of rounding, the real-world KML case
@@ -234,53 +230,54 @@ def self_test():
         "html": {"A": (40.0, -105.0, "natlab", "National Lab. A note."),
                  "B & C": (39.5, -105.5, "transit", "Transit Station. Another note.")},
     }
-    found = compare(good, places=DEFAULT_PLACES)
+
+
+def _changed(name, marker, entry):
+    """The good rosters with one marker replaced (entry) or dropped (None)."""
+    rosters = {k: dict(v) for k, v in _good_rosters().items()}
+    if entry is None:
+        del rosters[name][marker]
+    else:
+        rosters[name][marker] = entry
+    return rosters
+
+
+def _caught(rosters, needle, what):
+    if any(needle in f for f in compare(rosters)):
+        return True, "self-test: %s is caught: OK" % what
+    return False, "self-test: %s was NOT caught: FAIL" % what
+
+
+def _check_clean():
+    found = compare(_good_rosters(), places=DEFAULT_PLACES)
     if found:
-        ok = False
-        print("self-test: clean roster reported drift: FAIL")
-        for f in found:
-            print("   ", f)
-    else:
-        print("self-test: clean roster passes, KML rounding absorbed: OK")
+        return False, "\n".join(["self-test: clean roster reported drift: FAIL"] + ["    " + f for f in found])
+    return True, "self-test: clean roster passes, KML rounding absorbed: OK"
 
-    moved = {k: dict(v) for k, v in good.items()}
-    moved["kml"]["A"] = (40.01, -105.0, None, "A note.")   # ~1.1 km
-    if any("coordinates differ" in f for f in compare(moved)):
-        print("self-test: a real coordinate move is caught: OK")
-    else:
-        ok = False
-        print("self-test: a real coordinate move was NOT caught: FAIL")
 
-    # Unescaping is the KML reader's job, not compare()'s, so test that layer.
+def _check_unescape():
+    """Unescaping is the KML reader's job, not compare()'s, so test that layer."""
     cases = [("B &amp; C", "B & C"),
              ("<![CDATA[NLR S&amp;TF]]>", "NLR S&TF"),
              ("  Plain Name  ", "Plain Name")]
-    bad = [(raw, want, _clean_xml(raw)) for raw, want in cases
-           if _clean_xml(raw) != want]
-    if bad:
-        ok = False
-        for raw, want, got in bad:
-            print("self-test: _clean_xml(%r) gave %r, wanted %r: FAIL"
-                  % (raw, got, want))
-    else:
-        print("self-test: KML entity and CDATA unescaping: OK")
+    bad = ["self-test: _clean_xml(%r) gave %r, wanted %r: FAIL" % (raw, _clean_xml(raw), want)
+           for raw, want in cases if _clean_xml(raw) != want]
+    return (False, "\n".join(bad)) if bad else (True, "self-test: KML entity and CDATA unescaping: OK")
 
-    dropped = {k: dict(v) for k, v in good.items()}
-    del dropped["html"]["A"]
-    if any("missing marker" in f for f in compare(dropped)):
-        print("self-test: a dropped marker is caught: OK")
-    else:
-        ok = False
-        print("self-test: a dropped marker was NOT caught: FAIL")
 
-    crossed = {k: dict(v) for k, v in good.items()}
-    crossed["html"]["A"] = (40.0, -105.0, "natlab", "Transit Station. A note.")
-    if any("prefix" in f for f in compare(crossed)):
-        print("self-test: a category/note mismatch is caught: OK")
-    else:
-        ok = False
-        print("self-test: a category/note mismatch was NOT caught: FAIL")
-
+def self_test():
+    results = [
+        _check_clean(),
+        _caught(_changed("kml", "A", (40.01, -105.0, None, "A note.")),   # ~1.1 km
+                "coordinates differ", "a real coordinate move"),
+        _check_unescape(),
+        _caught(_changed("html", "A", None), "missing marker", "a dropped marker"),
+        _caught(_changed("html", "A", (40.0, -105.0, "natlab", "Transit Station. A note.")),
+                "prefix", "a category/note mismatch"),
+    ]
+    for _, line in results:
+        print(line)
+    ok = all(passed for passed, _ in results)
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
