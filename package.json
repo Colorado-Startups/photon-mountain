@@ -1,0 +1,17 @@
+{
+  "name": "photon-mountain",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "workspaces": [
+    "site"
+  ],
+  "scripts": {
+    "dev": "npm run -w @photon-mountain/site dev",
+    "build": "npm run -w @photon-mountain/site build",
+    "check": "npm run -w @photon-mountain/site check",
+    "test": "npm run -w @photon-mountain/site test"
+  }
+}

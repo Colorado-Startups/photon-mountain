@@ -2,8 +2,9 @@ name: ci
 
 # From Git Crafter templates/ci/ci.yml at v7.0.2: the CI standard on GitHub's standard hosted runners (free on a
 # public repo). ci-ok is the check the ruleset requires. The short job runs every gate self-test and the four-file
-# marker parity check on each change. The standard job runs the comparison-map geometry check, in a venv because
-# the runner's own Python refuses pip installs, only when the infographics or their requirements change.
+# marker parity check on each change, and fails when the site's emitted tokens or favicon drift from their source.
+# The standard job type-checks and builds the site, then runs the comparison-map geometry check, in a venv because
+# the runner's own Python refuses pip installs, when the site, the infographics or their inputs change.
 on:
   pull_request:
   push:
@@ -23,6 +24,10 @@ jobs:
       standard-paths: |
         03_deliverables/infographics/**
         requirements.txt
+        site/**
+        package.json
+        package-lock.json
+        04_tools/brand_tokens.py
         .github/workflows/ci.yml
       short: |
         python3 04_tools/voice_lint.py --self-test
@@ -32,7 +37,12 @@ jobs:
         bash .claude/hooks/pm-check-voice.sh --self-test
         bash .claude/hooks/pm-guard-bypass.sh --self-test
         bash .githooks/pre-commit --self-test
+        python3 04_tools/brand_tokens.py --emit "$RUNNER_TEMP/tokens" >/dev/null
+        diff -r "$RUNNER_TEMP/tokens" site/src/styles/tokens
+        cmp 01_doctrine/brand_assets/summit_sun_mark_onecolor.svg site/public/favicon.svg
       standard: |
+        npm run check
+        npm run build
         python3 -m venv "$RUNNER_TEMP/venv"
         "$RUNNER_TEMP/venv/bin/pip" install --quiet -r requirements.txt
         cd 03_deliverables/infographics

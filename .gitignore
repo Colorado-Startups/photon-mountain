@@ -22,3 +22,8 @@ Thumbs.db
 quality/data/
 quality/history/
 quality/dist/
+
+# The site build (launch plan step 1.1)
+node_modules/
+site/dist/
+site/.astro/

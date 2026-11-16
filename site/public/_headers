@@ -1,0 +1,12 @@
+# Security headers for every static asset (Cloudflare Workers static assets). Responses the Worker builds
+# itself, such as /mcp, set their own headers in code; this file does not reach them.
+# X-Robots-Tag keeps the preview out of search until Paul's yes at launch plan step 4.4, which removes it.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com https://tiles.openfreemap.org https://tiles.mapterhorn.com; worker-src 'self' blob:; media-src 'self'; form-action 'none'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-Robots-Tag: noindex
