@@ -1,9 +1,9 @@
 {
-  "$comment": "The only commands .github/workflows/cloud-test.yml can run. Format: cloud-test/README.md in Colorado-Startups/.github. Paths in pip and artifacts start at the checkout root; cwd sets where before and run start. The self-tests mirror gate-selftests.yml, check:marker-parity mirrors marker-parity.yml, verify:comparison-maps mirrors comparison-map-verify.yml, and the render and vision entries follow 03_deliverables/infographics/BUILD.md.",
+  "$comment": "The only commands .github/workflows/cloud-test.yml can run. Format: cloud-test/README.md in Colorado-Startups/.github. Paths in pip and artifacts start at the checkout root; cwd sets where before and run start. The self-tests and check:marker-parity mirror ci.yml's short job, verify:comparison-maps mirrors its standard job, and the render and vision entries follow 03_deliverables/infographics/BUILD.md.",
   "version": 1,
   "scripts": {
     "selftests": {
-      "$comment": "All six gate self-tests, in gate-selftests.yml order, stopping at the first failure. The pull_request default. The log shows every one; the job summary shows the last.",
+      "$comment": "All six gate self-tests, in ci.yml's short-job order, stopping at the first failure. The pull_request default. The log shows every one; the job summary shows the last.",
       "before": [
         ["python3", "04_tools/voice_lint.py", "--self-test"],
         ["python3", "04_tools/brand_tokens.py", "--self-test"],
