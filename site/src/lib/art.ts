@@ -24,6 +24,7 @@ export function srcset(img: ArtImage): string {
 
 /** The smallest variant at or above a target width, for a poster or a preload. */
 export function variant(img: ArtImage, target: number): string {
-  const w = WIDTHS.filter((x) => x <= img.width).find((x) => x >= target) ?? Math.min(img.width, WIDTHS[WIDTHS.length - 1]);
+  const widths = WIDTHS.filter((x) => x <= img.width);
+  const w = widths.find((x) => x >= target) ?? widths[widths.length - 1];
   return `/art/${img.id}-${w}.webp`;
 }
