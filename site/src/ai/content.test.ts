@@ -38,7 +38,7 @@ describe("the Markdown twins and the full record", () => {
 });
 
 describe("JSON-LD", () => {
-  it("describes the place, the list and the dataset, and nothing on the world page", () => {
+  it("describes the place, the list and the dataset, and nothing on the map or world pages", () => {
     expect(jsonLd("index")).toMatchObject({ "@type": "Place", name: "Photon Mountain" });
     expect(jsonLd("explore")).toMatchObject({ "@type": "ItemList", numberOfItems: anchors.length + companies.length });
     const ds = jsonLd("data") as { "@type": string; distribution: { license: string }[] };
@@ -46,5 +46,6 @@ describe("JSON-LD", () => {
     expect(ds.distribution).toHaveLength(DATA.length);
     for (const d of ds.distribution) expect(d.license).toMatch(/^https:\/\//);
     expect(jsonLd("world")).toBeNull();
+    expect(jsonLd("map")).toBeNull();
   });
 });

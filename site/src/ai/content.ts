@@ -107,14 +107,15 @@ export function llmsFull(): string {
 
 const publisher = { "@type": "Organization", name: "Colorado Startups", url: "https://coloradostartups.org/" };
 
-/** The page's schema.org description, or null where none fits. */
+/** The page's schema.org description, or null where none fits. A source link is the page that backs a row,
+ * not the organization's own site, so it rides as subjectOf. The Dataset lives on /data/ alone. */
 export function jsonLd(slug: string): object | null {
   const ctx = "https://schema.org";
   if (slug === "index") return { "@context": ctx, "@type": "Place", name: "Photon Mountain", description: ABOUT, url: `${SITE}/`,
     containsPlace: TOWNS.map((t) => ({ "@type": "City", name: `${t.name}, Colorado` })) };
   if (slug === "explore") return { "@context": ctx, "@type": "ItemList", name: "Photon Mountain labs, universities and companies", numberOfItems: anchors.length + companies.length,
-    itemListElement: [...anchors, ...companies].map((x, i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "Organization", name: x.name, ...(x.source ? { url: x.source.url } : {}) } })) };
-  if (slug === "data" || slug === "map") return { "@context": ctx, "@type": "Dataset", name: "The Photon Mountain record",
+    itemListElement: [...anchors, ...companies].map((x, i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "Organization", name: x.name, ...(x.source ? { subjectOf: { "@type": "WebPage", url: x.source.url } } : {}) } })) };
+  if (slug === "data") return { "@context": ctx, "@type": "Dataset", name: "The Photon Mountain record",
     description: "Companies, research anchors, map sites and headline figures for Colorado's computing-with-light corridor, each with its source.",
     url: `${SITE}/data/`, creator: publisher, isAccessibleForFree: true,
     spatialCoverage: { "@type": "Place", name: "Boulder, Golden, Arvada and Denver, Colorado" },
