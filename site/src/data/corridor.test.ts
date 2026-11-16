@@ -22,7 +22,8 @@ describe("the corridor record", () => {
       expect(c.name, "a company name").not.toBe("");
       expect(c.city, `${c.name} city`).not.toBe("");
       expect(c.ring, `${c.name} ring`).not.toBe("Other");
-      expect(c.source?.url, `${c.name} source`).toMatch(/^https:\/\//);
+      // A few company sites still serve plain HTTP only (XUV Lasers, read 2026-11-16); a link is not a resource.
+      expect(c.source?.url, `${c.name} source`).toMatch(/^https?:\/\//);
     }
   });
 
