@@ -21,7 +21,8 @@ flowchart LR
 | [pages.yml](.github/workflows/pages.yml) | The deploy job's write token is misused | Elevation | Write scopes on the deploy job only, from `main` | None known |
 | [04_tools/](04_tools/) | A change weakens a gate, then passes it | Tampering | Gate changes get a review | CI runs the changed copy |
 | [.githooks/](.githooks/), [.claude/hooks/](.claude/hooks/) | A client-side gate is skipped | Repudiation | Required CI reruns them; Claude cannot pass `--no-verify` | People can, by design |
+| [03_deliverables/maps/](03_deliverables/maps/) | A marker, note or the boundary is changed to mislead | Tampering | `ci / ci-ok` runs the four-file marker parity check; the map notes need a dated revision entry | A person checks the boundary |
 | Substance docs | A false or stale claim ships | Spoofing | Lint flags bare figures; dated sources; correction form | A person checks the source |
-| `main` | An unreviewed change lands | Elevation | Rulesets: pull request, three required checks, no force push | One human maintainer |
+| `main` | An unreviewed change lands | Elevation | Rulesets: pull request, four required checks, no force push | One human maintainer |
 
 Report findings: [SECURITY.md](SECURITY.md).
