@@ -1,10 +1,12 @@
 // The live corridor map, loaded only when the reader asks: MapLibre GL JS from npm, the OpenFreeMap Positron
 // basemap, Mapterhorn relief, and the repo's GeoJSON, styled per MAP_NOTES.md revisions 7x, 7s and 8.
 // Every color is a token from tokens.json; popups are built with textContent, never HTML.
+import type { Map as MapLibreMap } from "maplibre-gl";
 import tokens from "../../styles/tokens/tokens.json";
 import { BUILDING_TIER, CATS, TIER_ZOOM } from "../../lib/mapdata";
 
 type Color = keyof typeof tokens.color;
+type Gl = typeof import("maplibre-gl");
 const c = (k: string) => tokens.color[k as Color];
 const STYLE = "https://tiles.openfreemap.org/styles/positron";
 
@@ -32,13 +34,77 @@ async function loadStyles(): Promise<void> {
   });
 }
 
+// MapLibre looks for its worker next to its own module, which bundling moves; hand it the emitted file.
+async function loadMapLibre(): Promise<Gl> {
+  const [gl, worker] = await Promise.all([import("maplibre-gl"), import("maplibre-gl/dist/maplibre-gl-worker.mjs?url"), loadStyles()]);
+  gl.setWorkerUrl(worker.default);
+  return gl;
+}
+
+const match = (field: (x: (typeof CATS)[number]) => unknown, fallback: unknown) => ["match", ["get", "category"], ...CATS.flatMap((x) => [x.id, field(x)]), fallback];
+const tier = ["in", ["get", "name"], ["literal", BUILDING_TIER]];
+const pointFilter = (visible: string[], building: boolean) =>
+  ["all", ["==", ["geometry-type"], "Point"], building ? tier : ["!", tier], ["in", ["get", "category"], ["literal", visible]]] as never;
+const SITE_PAINT = {
+  "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, match((x) => (x.big ? 7 : 5), 5), 14, match((x) => (x.big ? 10 : 7.5), 7.5), 17, match((x) => (x.big ? 13 : 10), 10)],
+  "circle-color": match((x) => c(x.fill), c("granite")),
+  "circle-stroke-color": match((x) => c(x.stroke), c("white")),
+  "circle-stroke-width": match((x) => x.ring, 1.5),
+} as never;
+
+/** Relief under the labels, the boundary in four strokes, then the sites in two zoom tiers. */
+function addCorridorLayers(map: MapLibreMap, data: object, visible: string[], boundaryOn: boolean) {
+  const before = map.getStyle().layers.find((l) => l.type === "symbol" && "source-layer" in l && l["source-layer"] === "place")?.id;
+  map.addSource("dem", { type: "raster-dem", tiles: ["https://tiles.mapterhorn.com/{z}/{x}/{y}.webp"], encoding: "terrarium", tileSize: 512, maxzoom: 14, attribution: '<a href="https://mapterhorn.com/attribution">© Mapterhorn</a>' });
+  map.addLayer({ id: "hillshade", type: "hillshade", source: "dem", paint: { "hillshade-exaggeration": 0.35, "hillshade-shadow-color": c("granite"), "hillshade-highlight-color": c("white"), "hillshade-accent-color": c("granite") } }, before);
+  map.addSource("pm", { type: "geojson", data: data as never, attribution: 'Corridor data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL' });
+  const isRing = ["==", ["geometry-type"], "Polygon"] as never;
+  const join = { "line-join": "round", "line-cap": "round" } as const;
+  map.addLayer({ id: "boundary-fill", type: "fill", source: "pm", filter: isRing, paint: { "fill-color": c("laser_violet"), "fill-opacity": 0.18 } }, before);
+  map.addLayer({ id: "boundary-glow", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("laser_violet"), "line-width": 14, "line-blur": 6, "line-opacity": 0.45 } }, before);
+  map.addLayer({ id: "boundary-casing", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("summit_night"), "line-width": 5.5, "line-opacity": 0.6 } }, before);
+  map.addLayer({ id: "boundary-line", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("laser_violet"), "line-width": 3 } }, before);
+  for (const id of BOUNDARY) map.setLayoutProperty(id, "visibility", boundaryOn ? "visible" : "none");
+  map.addLayer({ id: "sites", type: "circle", source: "pm", filter: pointFilter(visible, false), paint: SITE_PAINT });
+  map.addLayer({ id: "sites-building", type: "circle", source: "pm", minzoom: TIER_ZOOM, filter: pointFilter(visible, true), paint: SITE_PAINT });
+}
+
+/** A site's popup: category, name and note, each as text. */
+function popupContent(f: Point): HTMLElement {
+  const p = f.properties ?? {};
+  const el = document.createElement("div");
+  const rows: [string, unknown][] = [["pop-cat", p.category], ["pop-name", p.name], ["pop-note", p.note]];
+  for (const [cls, text] of rows) {
+    const line = document.createElement("p");
+    line.className = cls;
+    line.textContent = String(text ?? "");
+    el.append(line);
+  }
+  return el;
+}
+
+// Resolve once the style is in and the corridor layers sit on it (the style.load handler added first runs
+// first); tiles stream in after. A tile or source error is never fatal. Only a style or network failure
+// before then, or 20 seconds with no style, rejects: the map is removed and the page keeps its poster.
+function whenStyled(map: MapLibreMap): Promise<void> {
+  let settled = false;
+  return new Promise<void>((resolve, reject) => {
+    const fail = (err: unknown) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      map.remove();
+      reject(err instanceof Error ? err : new Error("the map could not draw"));
+    };
+    const timer = setTimeout(() => fail(new Error("the map took too long to load")), 20_000);
+    map.once("style.load", () => { if (settled) return; settled = true; clearTimeout(timer); resolve(); });
+    map.on("error", (e: { error?: unknown; sourceId?: string; tile?: unknown }) => { if (!e.sourceId && !e.tile) fail(e.error); });
+  });
+}
+
 export async function openLiveMap(container: HTMLElement, say: (msg: string) => void): Promise<LiveMap> {
   const [gl, data] = await Promise.all([
-    // MapLibre looks for its worker next to its own module, which bundling moves; hand it the emitted file.
-    Promise.all([import("maplibre-gl"), import("maplibre-gl/dist/maplibre-gl-worker.mjs?url"), loadStyles()]).then(([m, worker]) => {
-      m.setWorkerUrl(worker.default);
-      return m;
-    }),
+    loadMapLibre(),
     fetch("/data/corridor.geojson").then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
   ]);
   const points = (data.features as Feature[]).filter((f) => f.geometry.type === "Point") as Point[];
@@ -50,85 +116,32 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
   map.addControl(new gl.NavigationControl({ showCompass: false }), "top-left");
   map.addControl(new gl.ScaleControl({ unit: "imperial" }), "bottom-left");
   map.on("error", (e) => { if (/tiles|style|Failed to fetch/i.test(String(e?.error?.message))) say("Some map tiles did not load. The site list still works."); });
+  const fit = () => {
+    const b = new gl.LngLatBounds();
+    for (const xy of ring.geometry.coordinates[0]) b.extend(xy);
+    map.fitBounds(b, { padding: 36, duration: 600 });
+  };
+  map.on("style.load", () => { addCorridorLayers(map, data, visible, boundaryOn); fit(); });
 
-  const match = (field: (x: (typeof CATS)[number]) => unknown, fallback: unknown) => ["match", ["get", "category"], ...CATS.flatMap((x) => [x.id, field(x)]), fallback];
-  const tier = ["in", ["get", "name"], ["literal", BUILDING_TIER]];
-  const pointFilter = (building: boolean) => ["all", ["==", ["geometry-type"], "Point"], building ? tier : ["!", tier], ["in", ["get", "category"], ["literal", visible]]];
-
-  map.on("style.load", () => {
-    const layers = map.getStyle().layers;
-    const before = layers.find((l) => l.type === "symbol" && "source-layer" in l && l["source-layer"] === "place")?.id;
-    map.addSource("dem", { type: "raster-dem", tiles: ["https://tiles.mapterhorn.com/{z}/{x}/{y}.webp"], encoding: "terrarium", tileSize: 512, maxzoom: 14, attribution: '<a href="https://mapterhorn.com/attribution">© Mapterhorn</a>' });
-    map.addLayer({ id: "hillshade", type: "hillshade", source: "dem", paint: { "hillshade-exaggeration": 0.35, "hillshade-shadow-color": c("granite"), "hillshade-highlight-color": c("white"), "hillshade-accent-color": c("granite") } }, before);
-    map.addSource("pm", { type: "geojson", data, attribution: 'Corridor data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL' });
-    const isRing = ["==", ["geometry-type"], "Polygon"] as never;
-    const join = { "line-join": "round", "line-cap": "round" } as const;
-    map.addLayer({ id: "boundary-fill", type: "fill", source: "pm", filter: isRing, paint: { "fill-color": c("laser_violet"), "fill-opacity": 0.18 } }, before);
-    map.addLayer({ id: "boundary-glow", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("laser_violet"), "line-width": 14, "line-blur": 6, "line-opacity": 0.45 } }, before);
-    map.addLayer({ id: "boundary-casing", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("summit_night"), "line-width": 5.5, "line-opacity": 0.6 } }, before);
-    map.addLayer({ id: "boundary-line", type: "line", source: "pm", filter: isRing, layout: join, paint: { "line-color": c("laser_violet"), "line-width": 3 } }, before);
-    for (const id of BOUNDARY) map.setLayoutProperty(id, "visibility", boundaryOn ? "visible" : "none");
-    const paint = {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, match((x) => (x.big ? 7 : 5), 5), 14, match((x) => (x.big ? 10 : 7.5), 7.5), 17, match((x) => (x.big ? 13 : 10), 10)],
-      "circle-color": match((x) => c(x.fill), c("granite")),
-      "circle-stroke-color": match((x) => c(x.stroke), c("white")),
-      "circle-stroke-width": match((x) => x.ring, 1.5),
-    } as never;
-    map.addLayer({ id: "sites", type: "circle", source: "pm", filter: pointFilter(false) as never, paint });
-    map.addLayer({ id: "sites-building", type: "circle", source: "pm", minzoom: TIER_ZOOM, filter: pointFilter(true) as never, paint });
-    fit();
-  });
-
-  let popup: InstanceType<typeof gl.Popup> | null = null;
+  let popup: InstanceType<Gl["Popup"]> | null = null;
   const open = (f: Point) => {
-    const p = f.properties ?? {};
-    const el = document.createElement("div");
-    const rows: [string, unknown][] = [["pop-cat", p.category], ["pop-name", p.name], ["pop-note", p.note]];
-    for (const [cls, text] of rows) {
-      const line = document.createElement("p");
-      line.className = cls;
-      line.textContent = String(text ?? "");
-      el.append(line);
-    }
     popup?.remove();
-    popup = new gl.Popup({ offset: 12, maxWidth: "20rem" }).setLngLat(f.geometry.coordinates).setDOMContent(el).addTo(map);
+    popup = new gl.Popup({ offset: 12, maxWidth: "20rem" }).setLngLat(f.geometry.coordinates).setDOMContent(popupContent(f)).addTo(map);
   };
   for (const id of ["sites", "sites-building"]) {
     map.on("click", id, (e) => e.features?.[0] && open(e.features[0] as unknown as Point));
     map.on("mouseenter", id, () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", id, () => (map.getCanvas().style.cursor = ""));
   }
-
-  function fit() {
-    const b = new gl.LngLatBounds();
-    for (const xy of ring.geometry.coordinates[0]) b.extend(xy);
-    map.fitBounds(b, { padding: 36, duration: 600 });
-  }
-
-  // Resolve once the style is in and the corridor layers sit on it (the style.load handler above runs first);
-  // tiles stream in after. A tile or source error is never fatal. Only a style or network failure before
-  // then, or 20 seconds with no style, rejects: the map is removed and the page keeps its poster.
-  let styled = false;
-  await new Promise<void>((resolve, reject) => {
-    const fail = (err: unknown) => {
-      if (styled) return;
-      styled = true;
-      clearTimeout(timer);
-      map.remove();
-      reject(err instanceof Error ? err : new Error("the map could not draw"));
-    };
-    const timer = setTimeout(() => fail(new Error("the map took too long to load")), 20_000);
-    map.once("style.load", () => { if (styled) return; styled = true; clearTimeout(timer); resolve(); });
-    map.on("error", (e: { error?: unknown; sourceId?: string; tile?: unknown }) => { if (!e.sourceId && !e.tile) fail(e.error); });
-  });
+  await whenStyled(map);
 
   return {
     filter(cats, boundary) {
       visible = cats;
       boundaryOn = boundary;
       if (map.getLayer("sites")) {
-        map.setFilter("sites", pointFilter(false) as never);
-        map.setFilter("sites-building", pointFilter(true) as never);
+        map.setFilter("sites", pointFilter(visible, false));
+        map.setFilter("sites-building", pointFilter(visible, true));
       }
       for (const id of BOUNDARY) if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", boundary ? "visible" : "none");
     },
@@ -142,4 +155,3 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
     fit,
   };
 }
-

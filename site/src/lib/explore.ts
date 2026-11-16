@@ -28,13 +28,23 @@ export function toEntries(companies: Company[], anchors: Anchor[]): Entry[] {
 }
 
 /** True when an entry passes every filter group; an empty group passes everything. */
+/** True when a chip group has nothing pressed, or when the entry carries one of its pressed values. */
+const any = (want: string[], have: string | string[]) => want.length === 0 || (Array.isArray(have) ? have.some((h) => want.includes(h)) : want.includes(have));
+
 export function matches(e: Entry, f: Filters): boolean {
-  const any = (want: string[], have: string | string[]) => want.length === 0 || (Array.isArray(have) ? have.some((h) => want.includes(h)) : want.includes(have));
   const q = f.q.trim().toLowerCase();
   return (
     any(f.kind, e.kind) && any(f.ring, slug(e.ring)) && any(f.segment, e.segment) && any(f.town, e.towns) &&
     (!q || `${e.name} ${e.city} ${e.what}`.toLowerCase().includes(q))
   );
+}
+
+/** The same test over a rendered card's data attributes (towns space-separated, text already lowercased). */
+export interface CardData { kind?: string; ring?: string; segment?: string; towns?: string; text?: string }
+export function matchesCard(d: CardData, f: Filters): boolean {
+  const { kind = "", ring = "", segment = "", towns = "", text = "" } = d;
+  const q = f.q.trim().toLowerCase();
+  return any(f.kind, kind) && any(f.ring, ring) && any(f.segment, segment) && any(f.town, towns.split(" ")) && (!q || text.includes(q));
 }
 
 /** Filters from a URL query: ?town=boulder&segment=lasers&q=laser (comma lists allowed). */
