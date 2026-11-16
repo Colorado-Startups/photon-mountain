@@ -67,7 +67,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, "-").replace(/(^
   .branch b { font: 700 var(--step2) var(--font-display); font-variant-numeric: tabular-nums; }
   .note { color: var(--ink-2); font-size: var(--step0); }
   @media (prefers-reduced-motion: no-preference) {
-    .photon .glyph { animation: pulse 3.2s ease-in-out infinite; }
+    .photon .glyph { animation: pulse 3.2s ease-in-out 1; }
     @keyframes pulse { 50% { box-shadow: 0 0 3rem 1rem var(--gold); } }
   }
 </style>
