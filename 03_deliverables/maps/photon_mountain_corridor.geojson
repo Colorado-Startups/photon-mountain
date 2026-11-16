@@ -6964,7 +6964,7 @@
    "properties": {
     "name": "CU Denver (CU Denver Building)",
     "category": "University Campus",
-    "note": "University of Colorado Denver; CU Denver Building, 1250 14th St at Lawrence. Also the innovation anchor: CityCenter, CU Denver's innovation and partnership portal, is at the 14th and Lawrence corner, and the building houses the Smart Futures Lab, CU Denver's smart-city startup incubator and accelerator (EDA grant funded). (Address-anchored.)",
+    "note": "University of Colorado Denver; CU Denver Building, 1250 14th St at Lawrence. Also the innovation anchor: CityCenter, CU Denver's innovation and partnership portal, works from Room 1110 of the building, per CU Denver. The building also houses the Smart Futures Lab, a smart-city incubator. Its incubator and accelerator programs paused after its EDA funding ended, per the lab. (Address-anchored.)",
     "inside_corridor": true,
     "marker-color": "#1971c2"
    },
@@ -7066,7 +7066,7 @@
    "properties": {
     "name": "NIST Communications Technology Laboratory (Building 3)",
     "category": "National Lab",
-    "note": "CTL, Building 3, renovated and reopened 2018: advanced communications metrology, home of the 5G Coexistence Testbed measuring millimeter-wave, Wi-Fi, and IoT spectrum sharing in specialized anechoic and reverberation chambers. West of the Broadway line with the campus; counted as a corridor site. (OSM building centroid; program per the National Academies 2023 facilities assessment.)",
+    "note": "CTL, Building 3, renovated and occupied May 2018 per the National Academies (NIST's 2026 master plan dates completion to 2017): advanced communications metrology, home of the 5G Coexistence Testbed measuring millimeter-wave, Wi-Fi, and IoT spectrum sharing in specialized anechoic and reverberation chambers. West of the Broadway line with the campus; counted as a corridor site. (OSM building centroid; program per the National Academies 2023 facilities assessment.)",
     "inside_corridor": true,
     "marker-color": "#f59f00"
    },
@@ -7100,7 +7100,7 @@
    "properties": {
     "name": "NLR, South Table Mountain campus",
     "category": "National Lab",
-    "note": "National Laboratory of the Rockies (formerly NREL; renamed Dec 2025), 15013 Denver West Pkwy, Golden; 327 acres, 17 buildings, per NLR. Flagship lab buildings ESIF and SERF carry their own dots. Also on campus: the net-zero Research Support Facility offices and the Innovation and Entrepreneurship Center, which runs energy-startup programs including the Wells Fargo Innovation Incubator (IN2). The EMAPS building under construction on the east side of campus carries its own dot.",
+    "note": "National Laboratory of the Rockies (formerly NREL; renamed Dec 2025), 15013 Denver West Pkwy, Golden; 327 acres, per NLR. Flagship lab buildings ESIF and SERF carry their own dots. Also on campus: the net-zero Research Support Facility offices and the Innovation and Entrepreneurship Center, which runs energy-startup programs including the Wells Fargo Innovation Incubator (IN2). The EMAPS building under construction on the east side of campus carries its own dot.",
     "inside_corridor": true,
     "marker-color": "#f59f00"
    },
@@ -7287,7 +7287,7 @@
    "properties": {
     "name": "South Table Mountain Energy Park (STEP)",
     "category": "Innovation Campus",
-    "note": "NLR-managed commercialization park on the 26-building former Camp George West section just south of the main campus; DOE took possession Jan 2023, renovation underway. Planned home of NLR's Innovation and Entrepreneurship Center and the Net Zero World Action Center; startups are intended to graduate from STEP into the adjacent Glo Park. A horizon item, not fully operating today. (Approximate, campus extent; pin welcome.)",
+    "note": "NLR-managed commercialization park on the 26-building former Camp George West section just south of the main campus; DOE took possession Jan 2023, per NREL. No 2025 or 2026 NLR source gives the renovation's status. Planned home of NLR's Innovation and Entrepreneurship Center and the Net Zero World Action Center; startups are intended to graduate from STEP into the adjacent Glo Park. A horizon item, not fully operating today. (Approximate, campus extent; pin welcome.)",
     "inside_corridor": true,
     "marker-color": "#9c36b5"
    },
@@ -7406,7 +7406,7 @@
    "properties": {
     "name": "Discovery Learning Center (NCF)",
     "category": "University Lab",
-    "note": "Gallogly Discovery Learning Center, 1095 Regent Dr, part of CU's Engineering Center complex. Named lab: the Nanomaterials Characterization Facility (NCF), the college's shared nanoscale characterization suite, serving 100-plus researchers. ECEE's photonics and quantum engineering groups sit in the adjacent Engineering Center. (OSM building footprint.)",
+    "note": "Gallogly Discovery Learning Center, 1095 Regent Dr, part of CU's Engineering Center complex. Named lab: the Nanomaterials Characterization Facility (NCF), now part of CU Boulder's COSINC shared facility, which serves more than 370 users, per CU Boulder. ECEE's photonics and quantum engineering groups sit in the adjacent Engineering Center. (OSM building footprint.)",
     "inside_corridor": true,
     "marker-color": "#2f9e44"
    },
@@ -7508,7 +7508,7 @@
    "properties": {
     "name": "Colorado Fuel Cell Center",
     "category": "University Lab",
-    "note": "Mines energy research center, 1310 Maple St, Golden: solid oxide fuel cell and hydrogen research; its test facility feeds power to the campus grid. Mines and NLR also run the joint NEXUS energy initiative. (Address-anchored; pin welcome.)",
+    "note": "Mines energy research center, 1310 Maple St, Golden: solid oxide fuel cell and hydrogen research; its test facility feeds power to the campus grid. Mines and NLR also partner through the Golden Nexus, which includes USGS, per Mines. (Address-anchored; pin welcome.)",
     "inside_corridor": true,
     "marker-color": "#2f9e44"
    },
@@ -7525,7 +7525,7 @@
    "properties": {
     "name": "MSU Denver Advanced Manufacturing labs (AES Building)",
     "category": "University Lab",
-    "note": "Aerospace and Engineering Sciences Building, 1449 7th St, Auraria campus. Named labs: the Advanced Manufacturing Sciences Institute (3D printing, laser cutting, CNC). York Space Systems' satellite production floor is in the building but private, not separately marked. (OSM building footprint.)",
+    "note": "Aerospace and Engineering Sciences Building, 1449 7th St, Auraria campus. Named labs: the Advanced Manufacturing Sciences Institute (3D printing, laser cutting, CNC). York Space Systems lists a facility in the building in its FY2025 annual report; it is private and not separately marked. York's headquarters is in Greenwood Village, per the same filing. (OSM building footprint.)",
     "inside_corridor": true,
     "marker-color": "#2f9e44"
    },
