@@ -1,7 +1,8 @@
 name: Deliverable or tooling
-description: Something in the build pipeline, the maps, or the gate scripts is broken or should change.
+description: "Something in the build pipeline, the maps, or the gate scripts is broken. A small change goes in Quick fix."
 title: "[build] "
 labels: ["tooling"]
+type: Bug
 body:
   - type: markdown
     attributes:
