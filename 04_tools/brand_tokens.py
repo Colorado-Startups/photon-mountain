@@ -9,21 +9,25 @@ document disagree, the document wins and this module is the bug.
 --self-test proves they agree: it re-reads the tokens block out of
 brand_identity.md and compares it against the constants below, then confirms
 every font file the type scale names is actually on disk. That makes palette
-drift a test failure instead of a silent render.
+drift a test failure instead of a silent render. It also checks the gold
+pairings, the STEPn type scale and --emit.
 
 Standard library only, matching 04_tools/voice_lint.py.
 
 Usage:
-  from brand_tokens import COLOR, FONT, contrast_ratio
+  from brand_tokens import COLOR, FONT, TYPE_STEP_REM, contrast_ratio
   python3 brand_tokens.py --self-test
+  python3 brand_tokens.py --emit DIR   # writes DIR/tokens.json, DIR/tokens.css
 
 Exit codes: 0 = tokens match the identity doc and fonts resolve, 1 = drift.
 """
 
 import argparse
+import json
 import os
 import re
 import sys
+import tempfile
 
 # ---------------------------------------------------------------- paths -----
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -44,6 +48,9 @@ COLOR_LASER_VIOLET = "#7B5CFF"
 COLOR_VIOLET_BRIGHT = "#8F75FF"
 COLOR_VIOLET_DEEP = "#5636D6"
 COLOR_DAWN_TINT = "#FFE9E2"
+COLOR_GOLD = "#F2B233"
+COLOR_GOLD_DEEP = "#8A6212"
+COLOR_GOLD_TINT = "#FFF3D6"
 
 COLOR = {
     "summit_night": COLOR_SUMMIT_NIGHT,
@@ -56,6 +63,9 @@ COLOR = {
     "violet_bright": COLOR_VIOLET_BRIGHT,
     "violet_deep": COLOR_VIOLET_DEEP,
     "dawn_tint": COLOR_DAWN_TINT,
+    "gold": COLOR_GOLD,
+    "gold_deep": COLOR_GOLD_DEEP,
+    "gold_tint": COLOR_GOLD_TINT,
 }
 
 def mix(a, b, t):
@@ -94,6 +104,9 @@ ROLE = {
     "accent2": COLOR_LASER_VIOLET,           # data, links, secondary highlights
     "accent2_text_on_light": COLOR_VIOLET_DEEP,
     "accent2_text_on_dark": COLOR_VIOLET_BRIGHT,
+    "accent3": COLOR_GOLD,                   # graphic only: fills, rules, marks
+    "accent3_text_on_light": COLOR_GOLD_DEEP,
+    "surface_tint_gold": COLOR_GOLD_TINT,
     "rule": COLOR_GRANITE,
     "rule_hairline": COLOR_RULE_HAIRLINE,
     "text_dim_on_dark": COLOR_TEXT_DIM_ON_DARK,
@@ -104,8 +117,12 @@ ROLE = {
 # text in an accent color"). Used by the self-test and available to callers.
 ACCENT_COLORS = frozenset({
     COLOR_ALPENGLOW, COLOR_LASER_VIOLET, COLOR_VIOLET_BRIGHT,
-    COLOR_ALPENGLOW_DEEP, COLOR_VIOLET_DEEP,
+    COLOR_ALPENGLOW_DEEP, COLOR_VIOLET_DEEP, COLOR_GOLD, COLOR_GOLD_DEEP,
 })
+
+# Colors that carry no text at any size, on any ground (Paul, 2026-11-16:
+# gold is graphic only). check_pairing refuses them unless graphic=True.
+GRAPHIC_ONLY = frozenset({COLOR_GOLD})
 
 # ------------------------------------------------------------------ type ----
 FONT_DISPLAY = "Space Grotesk"   # Google Fonts, OFL
@@ -131,6 +148,21 @@ TYPE_SCALE_PRINT = {
     "body_min": 10.5, "body_max": 12,
 }
 TYPE_SCALE_WEB_BODY = (16, 18)  # px
+
+# Web type scale in rem (1rem = 16 px), the STEPn lines of the tokens block in
+# brand_identity.md. Every step lands inside a web range that doc names.
+TYPE_STEP_REM = {
+    "step0": 0.875,  # caption, 14 px
+    "step1": 1.0,    # body, 16 px
+    "step2": 1.125,  # body, 18 px
+    "step3": 1.5,    # headline, 24 px
+    "step4": 2.0,    # headline, 32 px
+    "step5": 2.5,    # display, 40 px
+    "step6": 3.0,    # display, 48 px
+    "step7": 4.0,    # display, 64 px
+}
+TYPE_RANGES_WEB_PX = {"caption": (14, 14), "body": TYPE_SCALE_WEB_BODY,
+                      "headline": (24, 32), "display": (40, 64)}
 
 # The wordmark: "Photon Mountain" in Space Grotesk Medium, tracking a touch
 # tighter than default. PT-6 picks the exact value when the wordmark is cut.
@@ -194,25 +226,52 @@ class ContrastError(AssertionError):
 # large=True, which is WCAG's 3.0 allowance for text at or above 18pt
 # regular / 14pt bold, and is what makes Alpenglow on White legal for a
 # headline but never for body copy.
-def check_pairing(fg, bg, large=False, where=""):
+def check_pairing(fg, bg, large=False, where="", graphic=False):
     """Assert a foreground/background pairing clears WCAG AA.
 
     fg, bg  -- #RRGGBB strings, ideally from ROLE
     large   -- True for text at or above 18pt regular / 14pt bold
     where   -- optional caller label, quoted back in the error
+    graphic -- True for a non-text mark (icon, rule, chart mark), held to
+               WCAG's 3.0 non-text floor; the only use a GRAPHIC_ONLY color gets
 
     Returns True, or raises ContrastError.
     """
-    threshold = 3.0 if large else 4.5
+    label = "%s: " % where if where else ""
+    if fg.upper() in GRAPHIC_ONLY and not graphic:
+        raise ContrastError("%s%s is graphic only; gold text uses Gold Deep."
+                            % (label, fg))
+    threshold = 3.0 if (large or graphic) else 4.5
     ratio = contrast_ratio(fg, bg)
     if ratio < threshold:
         raise ContrastError(
-            "%s%s on %s scores %.2f, below the WCAG AA floor of %.1f for %s "
-            "text. Pick the on-dark or on-light variant of this role in "
+            "%s%s on %s scores %.2f, below the WCAG AA floor of %.1f for %s. "
+            "Pick the on-dark or on-light variant of this role in "
             "brand_identity.md, or pass large=True if this really is display "
-            "type." % ("%s: " % where if where else "", fg, bg, ratio,
-                       threshold, "large" if large else "body"))
+            "type." % (label, fg, bg, ratio, threshold, "graphics" if graphic
+                       else "large text" if large else "body text"))
     return True
+
+
+def emit(out_dir):
+    """Write tokens.json and tokens.css into out_dir. Same tokens, same bytes."""
+    color = dict(COLOR, rule_hairline=COLOR_RULE_HAIRLINE,
+                 text_dim_on_dark=COLOR_TEXT_DIM_ON_DARK,
+                 text_secondary_on_dark=COLOR_TEXT_SECONDARY_ON_DARK)
+    tokens = {"color": dict(sorted(color.items())),
+              "type": {k: "%grem" % v for k, v in TYPE_STEP_REM.items()}}
+    css = ["/* Generated by 04_tools/brand_tokens.py --emit. Do not edit. */",
+           ":root {"]
+    css += ["  --color-%s: %s;" % (k.replace("_", "-"), v)
+            for k, v in tokens["color"].items()]
+    css += ["  --%s: %s;" % kv for kv in tokens["type"].items()]
+    os.makedirs(out_dir, exist_ok=True)
+    for name, body in (("tokens.json", json.dumps(tokens, indent=2)),
+                       ("tokens.css", "\n".join(css + ["}"]))):
+        with open(os.path.join(out_dir, name), "w", encoding="utf-8",
+                  newline="\n") as f:
+            f.write(body + "\n")
+    return tokens
 
 
 # ----------------------------------------------------------------- tests ----
@@ -284,6 +343,9 @@ def self_test():
         (COLOR_ALPENGLOW, COLOR_SUMMIT_NIGHT, 5.5),
         (COLOR_ALPENGLOW_DEEP, COLOR_WHITE, 5.2),
         (COLOR_VIOLET_DEEP, COLOR_WHITE, 7.3),
+        (COLOR_GOLD, COLOR_SUMMIT_NIGHT, 9.2),
+        (COLOR_GOLD_DEEP, COLOR_WHITE, 5.5),
+        (COLOR_GOLD_DEEP, COLOR_SNOWFIELD, 5.1),
     ]
     bad = [(f, b, e, contrast_ratio(f, b)) for f, b, e in expected
            if abs(contrast_ratio(f, b) - e) > 0.1]
@@ -353,6 +415,65 @@ def self_test():
     else:
         print("self-test: no accent color in a body-text role: OK")
 
+    # Gold: every pairing the identity doc allows passes the gate, and gold
+    # text is refused even where its ratio would clear AA (9.2 on Summit Night).
+    gold_pairs = [(COLOR_GOLD_DEEP, COLOR_SNOWFIELD, False),
+                  (COLOR_GOLD_DEEP, COLOR_WHITE, False),
+                  (COLOR_GOLD_DEEP, COLOR_GOLD_TINT, False),
+                  (COLOR_SUMMIT_NIGHT, COLOR_GOLD_TINT, False),
+                  (COLOR_GOLD, COLOR_SUMMIT_NIGHT, True)]
+    def refusal(fg, bg, graphic=False):
+        try:
+            return check_pairing(fg, bg, where="gold", graphic=graphic) and None
+        except ContrastError as exc:
+            return str(exc)
+    gold_bad = [m for m in (refusal(*p) for p in gold_pairs) if m]
+    if not refusal(COLOR_GOLD, COLOR_SUMMIT_NIGHT):
+        gold_bad.append("the gate let Gold carry text")
+    for msg in gold_bad:
+        ok = False
+        print("self-test: %s: FAIL" % msg)
+    if not gold_bad:
+        print("self-test: %d gold pairings pass the gate, gold text is "
+              "refused: OK" % len(gold_pairs))
+
+    # Type scale: the doc's STEPn lines match, steps ascend, and each lands
+    # inside a web range the doc names.
+    doc = open(IDENTITY_DOC, encoding="utf-8").read()
+    doc_steps = {k.lower(): float(v) for k, v in
+                 re.findall(r"^(STEP\d+)\s*=\s*([0-9.]+)", doc, re.M)}
+    steps = list(TYPE_STEP_REM.values())
+    in_range = all(any(lo <= s * 16 <= hi for lo, hi in TYPE_RANGES_WEB_PX.values())
+                   for s in steps)
+    if (doc_steps != TYPE_STEP_REM
+            or steps != sorted(set(steps)) or not in_range):
+        ok = False
+        print("self-test: type scale differs from the doc, repeats a step or "
+              "leaves the doc's ranges: FAIL")
+    else:
+        print("self-test: %d type steps match the doc and its ranges: OK"
+              % len(steps))
+
+    # --emit: both files carry this module's tokens, and a rerun is identical.
+    with tempfile.TemporaryDirectory() as tmp:
+        runs = []
+        for _ in range(2):
+            emit(tmp)
+            runs.append([open(os.path.join(tmp, n), encoding="utf-8").read()
+                         for n in ("tokens.json", "tokens.css")])
+    js = json.loads(runs[0][0])
+    css = dict(re.findall(r"--([a-z0-9-]+): ([^;]+);", runs[0][1]))
+    want_css = {"color-" + k.replace("_", "-"): v for k, v in js["color"].items()}
+    want_css.update(js["type"])
+    if (set(js) != {"color", "type"} or runs[0] != runs[1] or css != want_css
+            or any(js["color"][k] != v for k, v in COLOR.items())
+            or list(js["type"]) != list(TYPE_STEP_REM)):
+        ok = False
+        print("self-test: --emit output drifts from the module: FAIL")
+    else:
+        print("self-test: --emit writes %d colors and %d type steps, twice "
+              "the same: OK" % (len(js["color"]), len(js["type"])))
+
     print("self-test:", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -361,9 +482,15 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Photon Mountain brand tokens")
     parser.add_argument("--self-test", action="store_true",
                         help="verify the tokens against brand_identity.md")
+    parser.add_argument("--emit", metavar="DIR",
+                        help="write tokens.json and tokens.css into DIR")
     args = parser.parse_args(argv)
     if args.self_test:
         return self_test()
+    if args.emit:
+        emit(args.emit)
+        print("wrote tokens.json and tokens.css to %s" % args.emit)
+        return 0
     for name, value in sorted(COLOR.items()):
         print("%-16s %s" % (name, value))
     print()
