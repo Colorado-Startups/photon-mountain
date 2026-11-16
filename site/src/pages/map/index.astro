@@ -1,13 +1,116 @@
 ---
-// Launch plan wave 2 or 3 replaces this stub page; its route is already in e2e/routes.ts.
+// The corridor map. The still poster, drawn at build, paints first; the live MapLibre map joins it in launch
+// plan step 2.4, second half. The legend and the site list work without script.
 import Base from "../../layouts/Base.astro";
+import MapPoster from "../../components/map/MapPoster.astro";
+import { sites } from "../../data/corridor";
+import { BUILDING_TIER, CATS, ordered } from "../../lib/mapdata";
+
+const counts = Object.fromEntries(CATS.map((c) => [c.id, sites.filter((s) => s.category === c.id).length]));
+const list = ordered(sites);
+const trace = "https://github.com/Colorado-Startups/coloradostartups.org/blob/37232431f9bab6a2a3cb2e09701642f40b446187/data/geo/regions.geojson";
+const roads = ["CO-93 / Broadway", "Pearl St / Pearl Pkwy", "Foothills Pkwy (CO-157)", "US-36", "I-25", "Park Ave / Park Ave West", "Broadway (Denver)", "6th Ave / US-6"];
 ---
 <Base title="The corridor map" description="Every lab, campus, fab and station in the Photon Mountain corridor, on one map.">
-  <section class="wrap stub-page">
+  <section class="head wrap">
+    <p class="eyebrow">Boulder · Golden · Arvada · Denver</p>
     <h1>The corridor map</h1>
-    <p>Every lab, campus, fab and station in the Photon Mountain corridor, on one map.</p>
+    <ul class="figs" role="list">
+      <li><b>170</b><span>square miles inside the loop</span></li>
+      <li><b>25.4</b><span>miles across, at its widest</span></li>
+      <li><b>1.79×</b><span>Silicon Valley's US-101 and I-280 loop</span></li>
+      <li><b>{sites.length}</b><span>sites built with light, energy and compute</span></li>
+    </ul>
+    <p class="src">Area and width per <a href={trace}>Colorado Startups' trace of the same eight roads on US Census road lines</a>, measured 2026-11-15, with Silicon Valley's loop measured the same way. A proposal, not a legal line.</p>
   </section>
+
+  <div class="stage wrap">
+    <div class="mapbox" data-map>
+      <MapPoster />
+    </div>
+
+    <aside class="panel" aria-label="Map key and site list">
+      <fieldset class="legend" data-legend>
+        <legend class="eyebrow">Show</legend>
+        {CATS.map((c) => (
+          <label><input type="checkbox" checked data-cat={c.id} /><span class={`sw c-${c.key}`} aria-hidden="true"></span>{c.id}<span class="count">{counts[c.id]}</span></label>
+        ))}
+        <label><input type="checkbox" checked data-boundary /><span class="sw line" aria-hidden="true"></span>Corridor boundary<span class="count">8 roads</span></label>
+      </fieldset>
+      <details class="roads">
+        <summary>Eight roads draw the line</summary>
+        <ol>{roads.map((r) => <li>{r}</li>)}</ol>
+      </details>
+      <h2 class="eyebrow" id="sites-h">Sites</h2>
+      <ul class="sites" aria-labelledby="sites-h" data-sites>
+        {list.map((s) => (
+          <li data-cat={s.category}>
+            <button type="button" data-site={s.name} data-lon={s.lon} data-lat={s.lat} data-building={BUILDING_TIER.includes(s.name) ? "1" : undefined}>
+              <span class={`sw c-${CATS.find((c) => c.id === s.category)?.key}`} aria-hidden="true"></span>
+              <span><span class="n">{s.name}</span><span class="t">{s.category}</span><span class="note">{s.note}</span></span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p class="credits">Boundary and markers derived from OpenStreetMap: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL 1.0. Basemap: <a href="https://openfreemap.org">OpenFreeMap</a>, © OpenMapTiles. Relief: <a href="https://mapterhorn.com/attribution">Mapterhorn</a>. Method: <a href="https://github.com/Colorado-Startups/photon-mountain/blob/main/03_deliverables/maps/MAP_NOTES.md">MAP_NOTES.md</a>.</p>
+    </aside>
+  </div>
 </Base>
+
+<script>
+  // Legend filtering for the poster and the list; works before and without the live map.
+  const legend = document.querySelector<HTMLElement>("[data-legend]");
+  legend?.addEventListener("change", () => {
+    const on = new Set([...legend.querySelectorAll<HTMLInputElement>("[data-cat]")].filter((b) => b.checked).map((b) => b.dataset.cat));
+    document.querySelectorAll<HTMLElement>("[data-sites] li").forEach((li) => (li.hidden = !on.has(li.dataset.cat)));
+    document.querySelectorAll<SVGElement>(".poster [data-cat]").forEach((dot) => dot.classList.toggle("off", !on.has(dot.dataset.cat ?? "")));
+    document.querySelectorAll<SVGElement>(".poster .ring, .poster .glow").forEach((p) => p.classList.toggle("off", !legend.querySelector<HTMLInputElement>("[data-boundary]")?.checked));
+    document.dispatchEvent(new CustomEvent("pm:filter", { detail: { cats: [...on], boundary: legend.querySelector<HTMLInputElement>("[data-boundary]")?.checked } }));
+  });
+  // A site in the list lights its dot on the poster; the live map adds fly-to in its own step.
+  document.querySelector("[data-sites]")?.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-site]");
+    if (!b) return;
+    document.querySelectorAll(".poster .dot.on").forEach((d) => d.classList.remove("on"));
+    const dot = [...document.querySelectorAll<SVGElement>(".poster .dot")].find((d) => d.dataset.name === b.dataset.site);
+    dot?.classList.add("on");
+    document.querySelectorAll("[data-sites] button[aria-pressed]").forEach((x) => x.removeAttribute("aria-pressed"));
+    b.setAttribute("aria-pressed", "true");
+  });
+</script>
+
 <style>
-  .stub-page { display: grid; gap: 1rem; padding-block: 4rem; }
+  .head { display: grid; gap: 1rem; padding-block: 2.5rem 1.5rem; }
+  .figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.75rem; padding: 0; margin: 0; list-style: none; }
+  .figs li { display: grid; gap: 0.2rem; padding: 0.9rem 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); }
+  .figs b { font: 700 var(--step5) / 1 var(--font-display); font-variant-numeric: tabular-nums; }
+  .figs span, .src, .credits { color: var(--ink-2); font-size: var(--step0); }
+  .stage { display: grid; gap: 1rem; padding-bottom: 3rem; }
+  @media (min-width: 60rem) { .stage { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; } }
+  .mapbox { position: relative; min-height: 26rem; border-radius: 1rem; overflow: hidden; border: var(--hairline) solid var(--rule); background: var(--surface); }
+  @media (min-width: 60rem) { .mapbox { position: sticky; top: 1rem; height: calc(100vh - 2rem); } }
+  .panel { display: grid; gap: 1rem; align-content: start; }
+  .legend { display: grid; gap: 0.35rem; margin: 0; padding: 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); }
+  .legend label { display: flex; gap: 0.5rem; align-items: center; min-height: 2rem; cursor: pointer; }
+  .count { margin-left: auto; font-family: var(--font-mono); font-size: var(--step0); color: var(--ink-2); }
+  .sw { flex: none; width: 0.875rem; height: 0.875rem; border-radius: 50%; border: 0.125rem solid; }
+  .sw.line { border-radius: 0.2rem; border-color: var(--color-laser-violet); background: var(--color-dawn-tint); }
+  .c-natlab { background: var(--color-alpenglow-deep); border-color: var(--color-white); box-shadow: 0 0 0 var(--hairline) var(--rule); }
+  .c-univlab { background: var(--color-laser-violet); border-color: var(--color-white); box-shadow: 0 0 0 var(--hairline) var(--rule); }
+  .c-fab { background: var(--color-dawn-tint); border-color: var(--color-alpenglow-deep); }
+  .c-innov { background: var(--color-violet-bright); border-color: var(--color-white); box-shadow: 0 0 0 var(--hairline) var(--rule); }
+  .c-campus { background: var(--color-violet-deep); border-color: var(--color-violet-bright); }
+  .c-gov { background: var(--color-snowfield); border-color: var(--color-summit-night); }
+  .c-transit { background: var(--color-granite); border-color: var(--color-snowfield); box-shadow: 0 0 0 var(--hairline) var(--rule); }
+  .roads { padding: 0.75rem 1rem; border: var(--hairline) solid var(--rule); border-radius: 0.75rem; background: var(--surface); font-size: var(--step0); }
+  .roads summary { cursor: pointer; font-weight: 600; }
+  .sites { display: grid; gap: 0.25rem; max-height: 36rem; overflow: auto; padding: 0; margin: 0; list-style: none; }
+  .sites li[hidden] { display: none; }
+  .sites button { display: flex; gap: 0.6rem; width: 100%; padding: 0.55rem 0.6rem; border: var(--hairline) solid transparent; border-radius: 0.5rem; background: transparent; color: var(--ink); text-align: left; font: inherit; cursor: pointer; }
+  .sites button:hover, .sites button[aria-pressed="true"] { border-color: var(--rule); background: var(--surface); }
+  .sites button[aria-pressed="true"] { border-color: var(--gold); }
+  .sites .sw { margin-top: 0.3rem; }
+  .n { display: block; font-weight: 600; }
+  .t { display: block; font-family: var(--font-mono); font-size: var(--step0); color: var(--ink-2); }
+  .note { display: block; font-size: var(--step0); color: var(--ink-2); }
 </style>

@@ -1,0 +1,39 @@
+---
+// A still of the corridor, drawn at build from the same GeoJSON the live map reads: the road-drawn boundary
+// and the 53 sites in their category colors. It is the map's first frame, and its fallback without script.
+import { geojson, sites } from "../../data/corridor";
+import { BUILDING_TIER, catOf, projector, ringPath } from "../../lib/mapdata";
+
+const ring = geojson.features.find((f: { geometry: { type: string } }) => f.geometry.type === "Polygon").geometry.coordinates[0];
+const { width, height, xy } = projector(ring);
+const d = ringPath(ring, xy);
+const dots = sites
+  .filter((s) => !BUILDING_TIER.includes(s.name))
+  .map((s) => ({ ...s, at: xy(s.lon, s.lat), cat: catOf(s.category) }));
+---
+<svg class="poster" viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="poster-title poster-desc">
+  <title id="poster-title">The Photon Mountain corridor</title>
+  <desc id="poster-desc">The boundary drawn by eight roads around Boulder, Golden, Arvada and Denver, with {dots.length} sites marked by category. The site list beside the map holds the same information.</desc>
+  <path class="glow" d={d} />
+  <path class="ring" d={d} />
+  {dots.map((s) => (
+    <circle class={`dot c-${s.cat?.key}`} data-cat={s.category} data-name={s.name} cx={s.at[0]} cy={s.at[1]} r={s.cat?.big ? 9 : 6.5} />
+  ))}
+</svg>
+
+<style>
+  .poster { display: block; width: 100%; height: 100%; background: var(--surface); }
+  .glow { fill: none; stroke: var(--color-violet-bright); stroke-width: 14; stroke-opacity: 0.35; stroke-linejoin: round; }
+  .ring { fill: var(--color-laser-violet); fill-opacity: 0.12; stroke: var(--color-laser-violet); stroke-width: 3; stroke-linejoin: round; }
+  .dot { stroke-width: 1.5; }
+  .off { display: none; }
+  .dot.on { stroke: var(--color-gold); stroke-width: 5; r: 12; }
+  @media (prefers-reduced-motion: no-preference) { .dot { transition: r 0.2s ease, stroke-width 0.2s ease; } }
+  .c-natlab { fill: var(--color-alpenglow-deep); stroke: var(--color-white); }
+  .c-univlab { fill: var(--color-laser-violet); stroke: var(--color-white); }
+  .c-fab { fill: var(--color-dawn-tint); stroke: var(--color-alpenglow-deep); stroke-width: 3; }
+  .c-innov { fill: var(--color-violet-bright); stroke: var(--color-white); }
+  .c-campus { fill: var(--color-violet-deep); stroke: var(--color-violet-bright); stroke-width: 2; }
+  .c-gov { fill: var(--color-snowfield); stroke: var(--color-summit-night); stroke-width: 2; }
+  .c-transit { fill: var(--color-granite); stroke: var(--color-snowfield); stroke-width: 2; }
+</style>
