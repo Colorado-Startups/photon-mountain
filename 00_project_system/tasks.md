@@ -9,7 +9,7 @@
 
 1. **Follow-up · Felt map notes.** The live Felt map still carries the pre-2026-11-12 text for four marker notes (NCAR Mesa Lab, Glo Park, Quantum Commons Labs, the NIST Gebbie lab). Apply `MAP_NOTES.md` Rev 7z there.
 2. **Follow-up · Adopt Git Crafter.** The house rules expect every repo to call Git Crafter's `ci-standard.yml` and carry a Git Crafter pin; this repo runs its own five workflows and has no pin. Adopt it per Git Crafter's README, and tell the Git Crafter session so the repo joins its adopters metric.
-3. **Standing · Roster additions.** The row-by-row re-verification is closed (see Done, 2026-10-08). What remains is additions, not verification: Oblate Optics (Longmont-area meta-optics), Google Quantum AI's Boulder neutral-atom program, and the watchlist already in the roster's section 10. The CPIA member directory loads via JavaScript and has never been scraped end to end, which is the best single source of missing small firms.
+3. **Standing · Roster additions.** The row-by-row re-verification is closed (see Done, 2026-10-08). What remains is additions, not verification: the watchlist already in the roster's section 10. Oblate Optics proved to be outside Colorado, and Google Quantum AI's Boulder program is listed in section 8 (both 2026-11-16). The CPIA member directory loads via JavaScript and has never been scraped end to end, which is the best single source of missing small firms.
 
 ## Done
 
