@@ -19,9 +19,22 @@ export interface LiveMap {
   fit(): void;
 }
 
+// The stylesheet comes in as a URL and a <link> made on request: a plain CSS import here would be hoisted into
+// the page's <head> by Astro, so every visit would fetch it before anyone opens the map.
+async function loadStyles(): Promise<void> {
+  const { default: href } = await import("maplibre-gl/dist/maplibre-gl.css?url");
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  await new Promise<void>((resolve, reject) => {
+    const link = Object.assign(document.createElement("link"), { rel: "stylesheet", href });
+    link.onload = () => resolve();
+    link.onerror = () => reject(new Error("the map's styles did not load"));
+    document.head.append(link);
+  });
+}
+
 export async function openLiveMap(container: HTMLElement, say: (msg: string) => void): Promise<LiveMap> {
   const [gl, data] = await Promise.all([
-    import("maplibre-gl").then(async (m) => { await import("maplibre-gl/dist/maplibre-gl.css"); return m; }),
+    Promise.all([import("maplibre-gl"), loadStyles()]).then(([m]) => m),
     fetch("/data/corridor.geojson").then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
   ]);
   const points = (data.features as Feature[]).filter((f) => f.geometry.type === "Point") as Point[];
