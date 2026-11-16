@@ -27,7 +27,7 @@ async function loadStyles(): Promise<void> {
   await new Promise<void>((resolve, reject) => {
     const link = Object.assign(document.createElement("link"), { rel: "stylesheet", href });
     link.onload = () => resolve();
-    link.onerror = () => reject(new Error("the map's styles did not load"));
+    link.onerror = () => { link.remove(); reject(new Error("the map's styles did not load")); };
     document.head.append(link);
   });
 }
@@ -101,16 +101,21 @@ export async function openLiveMap(container: HTMLElement, say: (msg: string) => 
     map.fitBounds(b, { padding: 36, duration: 600 });
   }
 
-  // Resolve only once the map has drawn; a style or network failure before that rejects, so the page keeps
-  // its poster and says why.
+  // Resolve once the style is in and the corridor layers sit on it (the style.load handler above runs first);
+  // tiles stream in after. A tile or source error is never fatal. Only a style or network failure before
+  // then, or 20 seconds with no style, rejects: the map is removed and the page keeps its poster.
+  let styled = false;
   await new Promise<void>((resolve, reject) => {
-    map.once("load", () => resolve());
-    map.on("error", (e) => {
-      // A missing tile after the style has loaded is not fatal; the map draws around it.
-      if (map.loaded() || map.isStyleLoaded()) return;
+    const fail = (err: unknown) => {
+      if (styled) return;
+      styled = true;
+      clearTimeout(timer);
       map.remove();
-      reject(e?.error instanceof Error ? e.error : new Error("the map could not draw"));
-    });
+      reject(err instanceof Error ? err : new Error("the map could not draw"));
+    };
+    const timer = setTimeout(() => fail(new Error("the map took too long to load")), 20_000);
+    map.once("style.load", () => { if (styled) return; styled = true; clearTimeout(timer); resolve(); });
+    map.on("error", (e: { error?: unknown; sourceId?: string; tile?: unknown }) => { if (!e.sourceId && !e.tile) fail(e.error); });
   });
 
   return {
