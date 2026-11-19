@@ -129,14 +129,4 @@ Builds and renders run in the cloud, never on the maintainers' MacBook Air (Paul
 gh workflow run cloud-test.yml --ref <your branch> -f script=selftests
 ```
 
-If your account has a large set of claude.ai connectors, they load into every session and crowd the context. Three settings turn that off for Claude Code only, leaving Chat and Cowork untouched. They go in `.claude/settings.local.json`, which is gitignored and per-user:
-
-```json
-{
-  "disableClaudeAiConnectors": true,
-  "syncClaudeAiSkills": false,
-  "syncClaudeAiPlugins": false
-}
-```
-
-This cannot be committed for you. A `false` for the two `sync` keys is ignored in the shared `.claude/settings.json`; only the local file or your user settings work.
+Every plugin, skill and connector stays on in the Claude desktop app, for every session; never turn one off (`CLAUDE.md`, Plugins and connectors).
