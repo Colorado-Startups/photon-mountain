@@ -111,6 +111,12 @@ local/               Gitignored operational files
 | GitHub Actions `ci` (Git Crafter's `ci-standard.yml` at v7.0.2), `voice-check`, `secret-scan` | **Fire** on pull requests and on pushes to `main`. The short job of `ci` runs the six gate self-tests and the marker parity check on every change. Its standard job runs the comparison-map geometry check when the infographics change. `secret-scan` also runs weekly | Required on every pull request: `ci / ci-ok`, `voice-check`, `secret scan` and the DCO app's `DCO`. `ci-ok` fails on a failed job or a workflow that breaks the CI standard. `voice-check` fails only on a voice FAIL |
 | GitHub Actions `cloud-test` (`.github/workflows/cloud-test.yml`, a caller of the shared workflow in Colorado-Startups/.github) | **Waits** for a dispatch: `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` runs a name from `.github/cloud-test.json` on a hosted runner. **Fires** on a pull request that changes the caller or the allowlist | No, advisory |
 
+## Plugins and connectors
+
+| Topic | Rule |
+| --- | --- |
+| Plugins, skills, connectors, agents, tools | All stay on in the Claude desktop app for every Cowork and Code session. A session ignores what it does not need by not loading it; sub-sessions get the full suite too. Never turn one off app-wide or in this repo's settings ([Claudius: All on, app-wide](https://github.com/Colorado-Startups/claudius/blob/main/templates/claude/README.md#all-on-app-wide)) |
+
 ## Voice
 
 Plain and direct, one idea per sentence. No em dashes, ever (use commas, semicolons, periods, or parentheses). Honest framing: name what is operating today versus what opens in 2026 versus what is on the horizon. Attribute every figure to a credible source or label it a goal; do not invent figures, and search before stating any current status. Full conventions in `01_doctrine/voice.md`. The tone layer locked with the identity on 2026-07-05: inspire by showing, speak to the builder, warm-technical, horizon statements labeled. The full version, with the lexicon and boilerplate, is in `01_doctrine/brand_identity.md`.
